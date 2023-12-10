@@ -109,9 +109,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    // backgroundColor: 'lightblue',
-    // gap: 14,
-    // marginVertical: 8,
-    // backgroundColor: 'green',
   },
 })

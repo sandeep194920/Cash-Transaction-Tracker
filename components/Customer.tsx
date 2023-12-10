@@ -7,7 +7,7 @@ type Customer = {
   customer_id: string
   balance: number
 }
-
+const order_price = 10
 const Customer = ({ name, balance, customer_id }: Customer) => {
   return (
     <Pressable
@@ -24,10 +24,22 @@ const Customer = ({ name, balance, customer_id }: Customer) => {
           <Text style={styles.text}>{name}</Text>
           <Text style={styles.smallText}>({customer_id})</Text>
         </View>
-        <Text style={{ ...styles.text, color: balance > 0 ? 'green' : 'red' }}>
-          {balance > 0 ? 'Owes you    ' : 'You owe    '}
-          {balance}
-        </Text>
+
+        <View style={styles.rightContainer}>
+          <View style={styles.textContainer}>
+            <View
+              style={{
+                ...styles.tag,
+                backgroundColor: balance >= 0 ? '#8aaf05' : '#bc412b',
+              }}
+            >
+              <Text style={styles.tagText}>
+                {balance >= 0 ? 'Overpayment ' : 'Outstanding'}
+              </Text>
+            </View>
+            <Text style={{ fontWeight: '500' }}>${balance}</Text>
+          </View>
+        </View>
       </View>
     </Pressable>
   )
@@ -52,9 +64,33 @@ const styles = StyleSheet.create({
   text: {
     color: '#121111',
     fontSize: 17.2,
+    fontWeight: '500',
   },
   smallText: {
     color: '#777474',
     fontSize: 13,
+    marginTop: 10,
+  },
+  rightContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    gap: 16,
+  },
+  textContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  tagText: {
+    color: 'white',
+    fontSize: 11,
+  },
+  tag: {
+    borderRadius: 30,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    marginRight: 15,
   },
 })
