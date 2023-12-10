@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { router } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
+import { colors, styleUtils } from '../utils/styles'
 
 type Order = {
   order_id: string
@@ -13,39 +14,39 @@ type Order = {
 
 const Order = ({ order_id, order_price, order_date, items }: Order) => {
   return (
-    <Pressable
-      style={styles.container}
-      onPress={() => router.push(`/customers/${order_id}`)}
-    >
-      <View style={styles.itemContainer}>
-        <View style={styles.leftContainer}>
+    <Pressable onPress={() => router.push(`/customers/${order_id}`)}>
+      <View style={styleUtils.itemContainer}>
+        <View style={styleUtils.columnContainer}>
           <View>
-            <Text style={styles.dateText}>{order_date}</Text>
+            <Text style={styleUtils.smallText}>{order_date}</Text>
           </View>
-          <View style={{ ...styles.textContainer, justifyContent: 'center' }}>
-            <Ionicons name="pricetag" size={20} color="#8aaf05" />
+          <View style={{ ...styleUtils.flexRow, justifyContent: 'center' }}>
+            <Ionicons name="pricetag" size={20} color={colors.lightGreen1} />
             <Text style={{ marginLeft: 10, fontWeight: 'bold' }}>$10</Text>
           </View>
         </View>
-        <View style={styles.rightContainer}>
-          <View style={styles.textContainer}>
-            <View style={{ ...styles.tag, backgroundColor: '#1caa5c' }}>
-              <Text style={styles.tagText}>Given</Text>
+        <View style={styleUtils.columnContainer}>
+          <View style={styleUtils.flexRow}>
+            <View
+              style={{ ...styleUtils.tag, backgroundColor: colors.lightGreen1 }}
+            >
+              <Text style={styleUtils.tagText}>Given</Text>
             </View>
-            <Text style={{ fontWeight: '500' }}>${order_price}</Text>
+            <Text style={styleUtils.mediumText}>${order_price}</Text>
           </View>
-          <View style={styles.textContainer}>
+          <View style={styleUtils.flexRow}>
             <View
               style={{
-                ...styles.tag,
-                backgroundColor: order_price >= 0 ? '#1caaaa' : '#bc412b',
+                ...styleUtils.tag,
+                backgroundColor:
+                  order_price >= 0 ? colors.lightBlue1 : colors.red,
               }}
             >
-              <Text style={styles.tagText}>{`${
+              <Text style={styleUtils.tagText}>{`${
                 order_price >= 0 ? 'Overpayment' : 'Outstanding'
               }`}</Text>
             </View>
-            <Text style={{ fontWeight: '500' }}>${order_price}</Text>
+            <Text style={styleUtils.mediumText}>${order_price}</Text>
           </View>
         </View>
       </View>
@@ -55,59 +56,4 @@ const Order = ({ order_id, order_price, order_date, items }: Order) => {
 
 export default Order
 
-const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    backgroundColor: '#dddddd',
-    marginBottom: 10,
-    padding: 18,
-  },
-  rightContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    gap: 16,
-  },
-
-  leftContainer: {
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    gap: 16,
-  },
-  itemContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-
-  dateText: {
-    fontSize: 11.2,
-  },
-  text: {
-    color: '#121111',
-    fontSize: 17.2,
-  },
-  smallText: {
-    color: '#777474',
-    fontSize: 13,
-  },
-  tagText: {
-    color: 'white',
-    fontSize: 11,
-  },
-  tag: {
-    borderRadius: 30,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    marginRight: 15,
-  },
-
-  textContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-})
+const styles = StyleSheet.create({})
