@@ -1,26 +1,19 @@
-import { View, Text, Pressable, FlatList } from 'react-native'
+import { View, FlatList } from 'react-native'
 import React from 'react'
-import { router } from 'expo-router'
-import data, { CustomerType } from '../data'
+import data from '../data'
 import Customer from '../components/Customer'
 
-const Users = () => {
+const Customers = () => {
   const { customers } = data
 
   return (
     <View>
       <FlatList
         data={customers}
-        renderItem={({ item }) => (
-          <Customer
-            name={item.name}
-            balance={item.balance}
-            customer_id={item.customer_id}
-          />
-        )}
+        renderItem={({ item }) => <Customer {...item} />}
       />
     </View>
   )
 }
 
-export default Users
+export default Customers

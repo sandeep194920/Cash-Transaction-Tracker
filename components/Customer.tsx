@@ -2,15 +2,23 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { router } from 'expo-router'
 
-type ListItems = {
+type Customer = {
   name: string
-  customer_id: number
+  customer_id: string
   balance: number
 }
 
-const ListItems = ({ name, balance, customer_id }: ListItems) => {
+const Customer = ({ name, balance, customer_id }: Customer) => {
   return (
-    <Pressable style={styles.container} onPress={() => router.push('/users/1')}>
+    <Pressable
+      style={styles.container}
+      onPress={() =>
+        router.push({
+          pathname: `/customers/${customer_id}`,
+          params: { customer_name: name },
+        })
+      }
+    >
       <View style={styles.itemContainer}>
         <View>
           <Text style={styles.text}>{name}</Text>
@@ -25,7 +33,7 @@ const ListItems = ({ name, balance, customer_id }: ListItems) => {
   )
 }
 
-export default ListItems
+export default Customer
 
 const styles = StyleSheet.create({
   container: {
