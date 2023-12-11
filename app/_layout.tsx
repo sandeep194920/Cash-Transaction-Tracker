@@ -23,6 +23,16 @@ export default function Layout() {
           headerTintColor: 'white',
         }}
       />
+      <Stack.Screen
+        name="customers/orders/[order_id]"
+        options={{
+          headerTitle: 'Details',
+          headerStyle: {
+            backgroundColor: '#191d1d',
+          },
+          headerTintColor: 'white',
+        }}
+      />
     </Stack>
   )
 }

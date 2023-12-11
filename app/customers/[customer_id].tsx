@@ -1,8 +1,8 @@
 import { View, FlatList, Text, StyleSheet } from 'react-native'
 import React from 'react'
 import { useLocalSearchParams } from 'expo-router/src/hooks'
-import data, { OrdersType } from '../../data'
-import Order from '../../components/Order'
+import data from '../../data'
+import CustomerTransaction from '../../components/CustomerTransaction'
 
 const Customer = () => {
   const { customer_id, customer_name } = useLocalSearchParams()
@@ -17,7 +17,9 @@ const Customer = () => {
       </View>
       <FlatList
         data={customerOrders}
-        renderItem={({ item }) => <Order {...item} />}
+        renderItem={({ item }) => (
+          <CustomerTransaction {...item} customer_id={customerIdString} />
+        )}
       />
     </View>
   )

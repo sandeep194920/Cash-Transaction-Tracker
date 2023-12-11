@@ -39,7 +39,7 @@ export type OrdersType = {
   [customerId: string]: OrderItem[]
 }
 
-const orders: OrdersType = {
+export const orders: OrdersType = {
   '123': [
     {
       order_id: 'order_123',

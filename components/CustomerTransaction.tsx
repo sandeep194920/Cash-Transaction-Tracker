@@ -5,16 +5,29 @@ import { router } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { colors, styleUtils } from '../utils/styles'
 
-type Order = {
+type CustomerTransaction = {
   order_id: string
+  customer_id: string
   order_price: number
   order_date: string
   items: {}
 }
 
-const Order = ({ order_id, order_price, order_date, items }: Order) => {
+const CustomerTransaction = ({
+  order_id,
+  order_price,
+  order_date,
+  customer_id,
+}: CustomerTransaction) => {
   return (
-    <Pressable onPress={() => router.push(`/customers/${order_id}`)}>
+    <Pressable
+      onPress={() =>
+        router.push({
+          pathname: `/customers/orders/${order_id}`,
+          params: { customer_id },
+        })
+      }
+    >
       <View style={styleUtils.itemContainer}>
         <View style={styleUtils.columnContainer}>
           <View>
@@ -54,6 +67,6 @@ const Order = ({ order_id, order_price, order_date, items }: Order) => {
   )
 }
 
-export default Order
+export default CustomerTransaction
 
 const styles = StyleSheet.create({})
