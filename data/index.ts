@@ -1,10 +1,15 @@
+import React from 'react'
+
 export type CustomerType = {
   customer_id: string
   name: string
   address: string
   signed_up_on: string
   balance: number
-  // key: string
+}
+
+export type AddButton = {
+  children: React.ReactNode
 }
 
 const customers: CustomerType[] = [

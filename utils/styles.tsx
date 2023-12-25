@@ -15,6 +15,7 @@ export const dimensions = {
   paddingSmall1: 2,
   paddingSmall2: 6,
   paddingMedium: 18,
+  paddingExtraLarge: 50,
   noMargin: 0,
   marginMedium: 10,
   marginLarge: 16,
@@ -23,6 +24,7 @@ export const dimensions = {
   mediumFont: 14.5,
   largeFont: 17.2,
   extraLargeFont: 20,
+  extraLargeFont2: 24,
   tagFont: 11,
   borderRadiusRound: 30,
   smallGap: 4,
@@ -112,4 +114,30 @@ export const styleUtils = StyleSheet.create({
     alignItems: 'center',
   },
   /* <---ORIENTATION RELATED STYLES */
+
+  /* ADD BUTTON RELATED STYLES */
+  // wrap any view that has add-button inside this addBtnCotainer
+  addBtnContainer: {
+    flex: 1,
+    justifyContent: 'space-between',
+    paddingBottom: dimensions.paddingExtraLarge,
+  },
+  buttonContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    margin: 'auto',
+    alignItems: 'center',
+  },
+  addButton: {
+    backgroundColor: colors.lightGreen2,
+    borderRadius: dimensions.borderRadiusRound,
+    width: dimensions.paddingExtraLarge,
+    height: dimensions.paddingExtraLarge,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: dimensions.extraLargeFont2,
+  },
 })

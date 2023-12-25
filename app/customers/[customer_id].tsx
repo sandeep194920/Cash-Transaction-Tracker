@@ -4,6 +4,7 @@ import { useLocalSearchParams } from 'expo-router/src/hooks'
 import data from '../../data'
 import CustomerTransaction from '../../components/CustomerTransaction'
 import { styleUtils } from '../../utils/styles'
+import WithAddButton from '../../components/WithAddButton'
 
 const Customer = () => {
   const { customer_id, customer_name } = useLocalSearchParams()
@@ -12,22 +13,24 @@ const Customer = () => {
   const { orders } = data
   const customerOrders = orders[customerIdString] || []
   return (
-    <View>
-      <View style={styleUtils.headerTextContainer}>
-        <Text style={styleUtils.headerText}>{customer_name}</Text>
-        <Text style={styleUtils.smallText}>({customer_id})</Text>
+    <WithAddButton>
+      <View>
+        <View style={styleUtils.headerTextContainer}>
+          <Text style={styleUtils.headerText}>{customer_name}</Text>
+          <Text style={styleUtils.smallText}>({customer_id})</Text>
+        </View>
+        <FlatList
+          data={customerOrders}
+          renderItem={({ item }) => (
+            <CustomerTransaction
+              {...item}
+              customer_id={customerIdString}
+              customer_name={customerName}
+            />
+          )}
+        />
       </View>
-      <FlatList
-        data={customerOrders}
-        renderItem={({ item }) => (
-          <CustomerTransaction
-            {...item}
-            customer_id={customerIdString}
-            customer_name={customerName}
-          />
-        )}
-      />
-    </View>
+    </WithAddButton>
   )
 }
 
