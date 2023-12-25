@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { colors, styleUtils } from '../utils/styles'
 
 type CustomerTransaction = {
+  customer_name: string
   order_id: string
   customer_id: string
   order_price: number
@@ -18,13 +19,14 @@ const CustomerTransaction = ({
   order_price,
   order_date,
   customer_id,
+  customer_name,
 }: CustomerTransaction) => {
   return (
     <Pressable
       onPress={() =>
         router.push({
           pathname: `/customers/orders/${order_id}`,
-          params: { customer_id },
+          params: { customer_id, customer_name },
         })
       }
     >

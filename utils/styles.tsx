@@ -1,6 +1,7 @@
 import { StyleSheet } from 'react-native'
 
 export const colors = {
+  white: '#fff',
   darkGray1: '#666567',
   lightGray1: '#dddddd',
   lightGreen1: '#8aaf05',
@@ -14,14 +15,17 @@ export const dimensions = {
   paddingSmall1: 2,
   paddingSmall2: 6,
   paddingMedium: 18,
-  marginSmall: 0,
+  noMargin: 0,
   marginMedium: 10,
   marginLarge: 16,
   smallFont1: 13,
   smallFont2: 13,
+  mediumFont: 14.5,
   largeFont: 17.2,
+  extraLargeFont: 20,
   tagFont: 11,
   borderRadiusRound: 30,
+  smallGap: 4,
 }
 
 export const styleUtils = StyleSheet.create({
@@ -79,11 +83,26 @@ export const styleUtils = StyleSheet.create({
     marginTop: dimensions.marginMedium,
   },
 
-  // used for date
-  smallText: {
-    fontSize: dimensions.smallFont2,
-  },
   /* <--- TEXT RELATED STYLES */
+  // Header text related
+  headerTextContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: dimensions.smallGap,
+    marginVertical: dimensions.marginLarge,
+  },
+
+  headerText: {
+    color: '#171414',
+    fontSize: dimensions.extraLargeFont,
+    fontWeight: 'bold',
+  },
+
+  smallText: {
+    fontSize: dimensions.smallFont1,
+  },
 
   /* ORIENTATION RELATED STYLES ---> */
   flexRow: {
