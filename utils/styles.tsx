@@ -128,7 +128,7 @@ export const styleUtils = StyleSheet.create({
     margin: 'auto',
     alignItems: 'center',
   },
-  addButton: {
+  button: {
     backgroundColor: colors.lightGreen2,
     borderRadius: dimensions.borderRadiusRound,
     width: dimensions.paddingExtraLarge,
