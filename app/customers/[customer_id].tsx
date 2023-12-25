@@ -14,7 +14,7 @@ const Customer = () => {
   const { orders } = data
   const customerOrders = orders[customerIdString] || []
   return (
-    <Button type="EDIT">
+    <Button type="ADD">
       <View>
         <View style={styleUtils.headerTextContainer}>
           <Text style={styleUtils.headerText}>{customer_name}</Text>

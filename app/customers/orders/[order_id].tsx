@@ -3,6 +3,7 @@ import React from 'react'
 import { useLocalSearchParams } from 'expo-router'
 import { orders } from '../../../data'
 import { colors, dimensions, styleUtils } from '../../../utils/styles'
+import Button from '../../../components/Buttons/Button'
 
 const CustomerOrder = () => {
   const { customer_id, order_id, customer_name } = useLocalSearchParams()
@@ -24,81 +25,83 @@ const CustomerOrder = () => {
   }
 
   return (
-    <View>
-      {/* Header to show date and price */}
-      <View style={styleUtils.headerTextContainer}>
-        <Text style={styleUtils.headerText}>{order_date}</Text>
-        <Text style={styleUtils.smallText}>(Monday)</Text>
-      </View>
-      {/* Items */}
-      <View style={styles.itemsContainer}>
-        <FlatList
-          data={items}
-          renderItem={({ item }) => <ItemDetails {...item} />}
-        />
-      </View>
+    <Button type="EDIT">
+      <View>
+        {/* Header to show date and price */}
+        <View style={styleUtils.headerTextContainer}>
+          <Text style={styleUtils.headerText}>{order_date}</Text>
+          <Text style={styleUtils.smallText}>(Monday)</Text>
+        </View>
+        {/* Items */}
+        <View style={styles.itemsContainer}>
+          <FlatList
+            data={items}
+            renderItem={({ item }) => <ItemDetails {...item} />}
+          />
+        </View>
 
-      {/* Customer Price Details */}
+        {/* Customer Price Details */}
 
-      {/* total */}
-      <View style={styles.priceContainer}>
-        <Text style={styleUtils.mediumText}>Total </Text>
-        <View style={styleUtils.flexRow}>
-          <View
-            style={{
-              ...styleUtils.tag,
-              backgroundColor: colors.lightBlue1,
-            }}
-          >
-            <Text
+        {/* total */}
+        <View style={styles.priceContainer}>
+          <Text style={styleUtils.mediumText}>Total </Text>
+          <View style={styleUtils.flexRow}>
+            <View
               style={{
-                ...styleUtils.tagText,
-                fontSize: dimensions.mediumFont,
+                ...styleUtils.tag,
+                backgroundColor: colors.lightBlue1,
               }}
-            >{` $ ${order_price} `}</Text>
+            >
+              <Text
+                style={{
+                  ...styleUtils.tagText,
+                  fontSize: dimensions.mediumFont,
+                }}
+              >{` $ ${order_price} `}</Text>
+            </View>
+          </View>
+        </View>
+        {/* paid by customer */}
+        <View style={styles.priceContainer}>
+          <Text style={styleUtils.mediumText}>{customer_name} paid</Text>
+          <View style={styleUtils.flexRow}>
+            <View
+              style={{
+                ...styleUtils.tag,
+                backgroundColor: colors.lightGreen1,
+              }}
+            >
+              <Text
+                style={{
+                  ...styleUtils.tagText,
+                  fontSize: dimensions.mediumFont,
+                }}
+              >{` $ ${paid_by_customer} `}</Text>
+            </View>
+          </View>
+        </View>
+        {/* carryover */}
+        <View style={styles.priceContainer}>
+          <Text style={styleUtils.mediumText}>{type}</Text>
+          <View style={styleUtils.flexRow}>
+            <View
+              style={{
+                ...styleUtils.tag,
+                backgroundColor:
+                  type === 'Overpayment' ? colors.lightGreen2 : colors.red,
+              }}
+            >
+              <Text
+                style={{
+                  ...styleUtils.tagText,
+                  fontSize: dimensions.mediumFont,
+                }}
+              >{` $ ${carry_over} `}</Text>
+            </View>
           </View>
         </View>
       </View>
-      {/* paid by customer */}
-      <View style={styles.priceContainer}>
-        <Text style={styleUtils.mediumText}>{customer_name} paid</Text>
-        <View style={styleUtils.flexRow}>
-          <View
-            style={{
-              ...styleUtils.tag,
-              backgroundColor: colors.lightGreen1,
-            }}
-          >
-            <Text
-              style={{
-                ...styleUtils.tagText,
-                fontSize: dimensions.mediumFont,
-              }}
-            >{` $ ${paid_by_customer} `}</Text>
-          </View>
-        </View>
-      </View>
-      {/* carryover */}
-      <View style={styles.priceContainer}>
-        <Text style={styleUtils.mediumText}>{type}</Text>
-        <View style={styleUtils.flexRow}>
-          <View
-            style={{
-              ...styleUtils.tag,
-              backgroundColor:
-                type === 'Overpayment' ? colors.lightGreen2 : colors.red,
-            }}
-          >
-            <Text
-              style={{
-                ...styleUtils.tagText,
-                fontSize: dimensions.mediumFont,
-              }}
-            >{` $ ${carry_over} `}</Text>
-          </View>
-        </View>
-      </View>
-    </View>
+    </Button>
   )
 }
 
