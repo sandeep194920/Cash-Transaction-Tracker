@@ -17,7 +17,6 @@ const EditableViewWrapper = ({ children }: { children: React.ReactNode }) => {
       style={{
         flex: 1,
         opacity: fadeAnim,
-        backgroundColor: 'lightblue', // Customize the background color as needed
         paddingTop: 0, // Adjust as needed to avoid overlap with the status bar
         paddingBottom: 0, // Adjust as needed to avoid overlap with the status bar
       }}

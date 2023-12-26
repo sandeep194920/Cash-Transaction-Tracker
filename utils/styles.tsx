@@ -107,6 +107,10 @@ export const styleUtils = StyleSheet.create({
   },
 
   /* ORIENTATION RELATED STYLES ---> */
+  // for all containers that have button in the bottom
+  flexContainer: {
+    flex: 1,
+  },
   flexRow: {
     display: 'flex',
     flexDirection: 'row',
@@ -122,7 +126,6 @@ export const styleUtils = StyleSheet.create({
     justifyContent: 'center',
     margin: 'auto',
     alignItems: 'center',
-    backgroundColor: 'orange',
     gap: 100,
   },
   addButton: {

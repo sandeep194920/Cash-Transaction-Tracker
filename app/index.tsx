@@ -5,17 +5,17 @@ import Customer from '../components/Customer'
 import AddEditButton from '../components/Buttons/AddEditButton'
 import AddCustomer from '../components/EditableViews/AddCustomer'
 import { useGlobalContext } from '../utils/AppContext'
+import { styleUtils } from '../utils/styles'
 
 const Customers = () => {
   const { customers } = data
   const { inputView } = useGlobalContext()
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={styleUtils.flexContainer}>
       {!inputView.isInput && (
         <>
           <FlatList
-            style={{ backgroundColor: 'lightgreen' }}
             data={customers}
             renderItem={({ item }) => <Customer {...item} />}
           />

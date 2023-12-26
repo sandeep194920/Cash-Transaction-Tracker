@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native'
+import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { useLocalSearchParams } from 'expo-router'
 import { orders } from '../../../data'
@@ -25,8 +25,8 @@ const CustomerOrder = () => {
   }
 
   return (
-    <Button type="EDIT">
-      <View>
+    <SafeAreaView style={styleUtils.flexContainer}>
+      <View style={styleUtils.flexContainer}>
         {/* Header to show date and price */}
         <View style={styleUtils.headerTextContainer}>
           <Text style={styleUtils.headerText}>{order_date}</Text>
@@ -101,7 +101,8 @@ const CustomerOrder = () => {
           </View>
         </View>
       </View>
-    </Button>
+      <Button type="EDIT" />
+    </SafeAreaView>
   )
 }
 

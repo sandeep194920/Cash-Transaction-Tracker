@@ -1,4 +1,4 @@
-import { View, FlatList, Text, StyleSheet } from 'react-native'
+import { View, FlatList, Text, StyleSheet, SafeAreaView } from 'react-native'
 import React from 'react'
 import { useLocalSearchParams } from 'expo-router/src/hooks'
 import data from '../../data'
@@ -15,8 +15,7 @@ const Customer = () => {
   const { orders } = data
   const customerOrders = orders[customerIdString] || []
   return (
-    // <Button type="ADD">
-    <View>
+    <SafeAreaView style={styleUtils.flexContainer}>
       <View style={styleUtils.headerTextContainer}>
         <Text style={styleUtils.headerText}>{customer_name}</Text>
         <Text style={styleUtils.smallText}>({customer_id})</Text>
@@ -31,8 +30,8 @@ const Customer = () => {
           />
         )}
       />
-      {/* <Button type="ADD"></Button> */}
-    </View>
+      <Button type="ADD" />
+    </SafeAreaView>
   )
 }
 

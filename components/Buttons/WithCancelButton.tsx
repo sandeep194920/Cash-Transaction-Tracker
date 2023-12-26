@@ -17,8 +17,8 @@ const WithCancelButton = () => {
 
   return (
     <View style={styleUtils.buttonContainer}>
-      <Button title="Hello" />
-      <Button title="Hello" />
+      <Button title="Add" />
+      <Button title="Cancel" />
     </View>
   )
 }
