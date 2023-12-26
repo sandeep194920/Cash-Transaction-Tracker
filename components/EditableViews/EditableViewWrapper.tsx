@@ -1,6 +1,7 @@
 import {
   Animated,
   Dimensions,
+  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
@@ -14,14 +15,11 @@ const EditableViewWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
     <Animated.View
       style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height,
+        flex: 1,
         opacity: fadeAnim,
-        backgroundColor: 'white', // Customize the background color as needed
-        paddingTop: 50, // Adjust as needed to avoid overlap with the status bar
+        backgroundColor: 'lightblue', // Customize the background color as needed
+        paddingTop: 0, // Adjust as needed to avoid overlap with the status bar
+        paddingBottom: 0, // Adjust as needed to avoid overlap with the status bar
       }}
     >
       {children}

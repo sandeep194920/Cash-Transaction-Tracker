@@ -116,19 +116,16 @@ export const styleUtils = StyleSheet.create({
   /* <---ORIENTATION RELATED STYLES */
 
   /* ADD BUTTON RELATED STYLES */
-  // wrap any view that has add-button inside this addBtnCotainer
-  addBtnContainer: {
-    flex: 1,
-    justifyContent: 'space-between',
-    paddingBottom: dimensions.paddingExtraLarge,
-  },
   buttonContainer: {
     display: 'flex',
+    flexDirection: 'row',
     justifyContent: 'center',
     margin: 'auto',
     alignItems: 'center',
+    backgroundColor: 'orange',
+    gap: 100,
   },
-  button: {
+  addButton: {
     backgroundColor: colors.lightGreen2,
     borderRadius: dimensions.borderRadiusRound,
     width: dimensions.paddingExtraLarge,

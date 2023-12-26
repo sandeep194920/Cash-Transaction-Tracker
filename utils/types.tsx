@@ -9,7 +9,6 @@ export type CustomerType = {
 }
 
 export type ButtonType = {
-  children: React.ReactNode
   type: 'ADD' | 'EDIT'
 }
 

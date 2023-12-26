@@ -1,13 +1,17 @@
-import { StyleSheet, Text } from 'react-native'
+import { SafeAreaView, StyleSheet, Text } from 'react-native'
 import React from 'react'
 import { useGlobalContext } from '../../utils/AppContext'
 import EditableViewWrapper from './EditableViewWrapper'
+import WithCancelButton from '../Buttons/WithCancelButton'
 
 const AddCustomer = () => {
   return (
-    <EditableViewWrapper>
-      <Text>Customer</Text>
-    </EditableViewWrapper>
+    <SafeAreaView style={{ flex: 1 }}>
+      <EditableViewWrapper>
+        <Text>Customer</Text>
+      </EditableViewWrapper>
+      <WithCancelButton />
+    </SafeAreaView>
   )
 }
 

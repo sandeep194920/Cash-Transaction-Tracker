@@ -4,8 +4,8 @@ import { useLocalSearchParams } from 'expo-router/src/hooks'
 import data from '../../data'
 import CustomerTransaction from '../../components/CustomerTransaction'
 import { styleUtils } from '../../utils/styles'
-import WithAddButton from '../../components/Buttons/Button'
-import Button from '../../components/Buttons/Button'
+import WithAddButton from '../../components/Buttons/AddEditButton'
+import Button from '../../components/Buttons/AddEditButton'
 import AddCustomer from '../../components/EditableViews/AddCustomer'
 
 const Customer = () => {
@@ -15,24 +15,24 @@ const Customer = () => {
   const { orders } = data
   const customerOrders = orders[customerIdString] || []
   return (
-    <Button type="ADD">
-      <View>
-        <View style={styleUtils.headerTextContainer}>
-          <Text style={styleUtils.headerText}>{customer_name}</Text>
-          <Text style={styleUtils.smallText}>({customer_id})</Text>
-        </View>
-        <FlatList
-          data={customerOrders}
-          renderItem={({ item }) => (
-            <CustomerTransaction
-              {...item}
-              customer_id={customerIdString}
-              customer_name={customerName}
-            />
-          )}
-        />
+    // <Button type="ADD">
+    <View>
+      <View style={styleUtils.headerTextContainer}>
+        <Text style={styleUtils.headerText}>{customer_name}</Text>
+        <Text style={styleUtils.smallText}>({customer_id})</Text>
       </View>
-    </Button>
+      <FlatList
+        data={customerOrders}
+        renderItem={({ item }) => (
+          <CustomerTransaction
+            {...item}
+            customer_id={customerIdString}
+            customer_name={customerName}
+          />
+        )}
+      />
+      {/* <Button type="ADD"></Button> */}
+    </View>
   )
 }
 

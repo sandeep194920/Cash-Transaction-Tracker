@@ -3,7 +3,7 @@ import React from 'react'
 import { useLocalSearchParams } from 'expo-router'
 import { orders } from '../../../data'
 import { colors, dimensions, styleUtils } from '../../../utils/styles'
-import Button from '../../../components/Buttons/Button'
+import Button from '../../../components/Buttons/AddEditButton'
 
 const CustomerOrder = () => {
   const { customer_id, order_id, customer_name } = useLocalSearchParams()
