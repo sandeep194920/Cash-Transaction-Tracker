@@ -31,3 +31,8 @@ type OrderItem = {
 export type OrdersType = {
   [customerId: string]: OrderItem[]
 }
+
+export type InputViewType = {
+  isInput: boolean
+  inputType: null | 'ADD' | 'EDIT'
+}

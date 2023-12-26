@@ -6,6 +6,7 @@ import CustomerTransaction from '../../components/CustomerTransaction'
 import { styleUtils } from '../../utils/styles'
 import WithAddButton from '../../components/Buttons/Button'
 import Button from '../../components/Buttons/Button'
+import AddCustomer from '../../components/EditableViews/AddCustomer'
 
 const Customer = () => {
   const { customer_id, customer_name } = useLocalSearchParams()

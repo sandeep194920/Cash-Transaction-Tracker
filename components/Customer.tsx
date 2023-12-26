@@ -1,7 +1,8 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { router } from 'expo-router'
-import { colors, dimensions, styleUtils } from '../utils/styles'
+import { colors, styleUtils } from '../utils/styles'
+import { useGlobalContext } from '../utils/AppContext'
 
 type Customer = {
   name: string
@@ -9,6 +10,7 @@ type Customer = {
   balance: number
 }
 const Customer = ({ name, balance, customer_id }: Customer) => {
+  const ctx = useGlobalContext()
   return (
     <Pressable
       onPress={() =>

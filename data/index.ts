@@ -6,7 +6,6 @@ const customers: CustomerType[] = [
     name: 'Anirban',
     address: '22-565 Sherbourne street, Toronto, M4X1N1',
     signed_up_on: '23 Nov, 2023',
-    // key: '123',
     balance: 30,
   },
   {
@@ -14,7 +13,6 @@ const customers: CustomerType[] = [
     name: 'John',
     address: '52-700 Bleeker street, Toronto, M4X1N1',
     signed_up_on: '24 Nov, 2023',
-    // key: '234',
     balance: -10,
   },
 ]
