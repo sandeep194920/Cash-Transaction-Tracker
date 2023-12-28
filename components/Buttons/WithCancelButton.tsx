@@ -13,12 +13,12 @@ import { Entypo, Ionicons } from '@expo/vector-icons'
 import { useGlobalContext } from '../../utils/AppContext'
 
 const WithCancelButton = () => {
-  const {} = useGlobalContext()
+  const { toggleAddView } = useGlobalContext()
 
   return (
     <View style={styleUtils.buttonContainer}>
       <Button title="Add" />
-      <Button title="Cancel" />
+      <Button title="Cancel" onPress={toggleAddView} />
     </View>
   )
 }
