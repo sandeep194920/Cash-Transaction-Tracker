@@ -1,5 +1,5 @@
 import { SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useGlobalContext } from '../../utils/AppContext'
 import EditableViewWrapper from './EditableViewWrapper'
 import WithCancelButton from '../Buttons/WithCancelButton'
@@ -13,6 +13,17 @@ import {
 } from '@expo/vector-icons'
 
 const AddCustomer = () => {
+  const { addNewCustomer } = useGlobalContext()
+  const [newCustomer, setNewCustomer] = useState({})
+
+  useEffect(() => {
+    console.log('The new customer is ', newCustomer)
+  }, [newCustomer])
+
+  // const handleChange = (e: any, inputType: string) => {
+  //   console.log('The name is ', inputType)
+  // }
+
   return (
     <SafeAreaView style={styleUtils.flexContainer}>
       <EditableViewWrapper>
@@ -24,17 +35,29 @@ const AddCustomer = () => {
           {/* Name */}
           <View style={styles.flexItem}>
             <Ionicons name="person" size={24} color={colors.darkGray1} />
-            <TextInput style={styles.textInput} placeholder="Name" />
+            <TextInput
+              // onChange={(e) => handleChange(e, 'name')}
+              style={styles.textInput}
+              placeholder="Name"
+            />
           </View>
           {/* Phone */}
           <View style={styles.flexItem}>
             <Entypo name="phone" size={24} color={colors.darkGray1} />
-            <TextInput style={styles.textInput} placeholder="Phone" />
+            <TextInput
+              // onChange={(e) => handleChange(e, 'phone')}
+              style={styles.textInput}
+              placeholder="Phone"
+            />
           </View>
           {/* Email */}
           <View style={styles.flexItem}>
             <MaterialIcons name="email" size={21} color={colors.darkGray1} />
-            <TextInput style={styles.textInput} placeholder="Email" />
+            <TextInput
+              style={styles.textInput}
+              // onChange={(e) => handleChange(e, 'email')}
+              placeholder="Email"
+            />
           </View>
           {/* Address */}
           <View style={styles.flexItem}>
@@ -43,12 +66,16 @@ const AddCustomer = () => {
               size={24}
               color={colors.darkGray1}
             />
-            <TextInput style={styles.textInput} placeholder="Address" />
+            <TextInput
+              style={styles.textInput}
+              // onChange={(e) => handleChange(e, 'address')}
+              placeholder="Address"
+            />
           </View>
         </View>
         {/* <--- ADD CUSTOMER */}
       </EditableViewWrapper>
-      <WithCancelButton />
+      <WithCancelButton addFn={addNewCustomer} />
     </SafeAreaView>
   )
 }

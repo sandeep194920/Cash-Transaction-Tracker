@@ -7,8 +7,13 @@ import { styleUtils } from '../../utils/styles'
 import WithAddButton from '../../components/Buttons/AddEditButton'
 import Button from '../../components/Buttons/AddEditButton'
 import AddCustomer from '../../components/EditableViews/AddCustomer'
+import { useQuery, useRealm } from '@realm/react'
 
 const Customer = () => {
+  const realm = useQuery('Profile')
+
+  console.log('The log is', realm)
+
   const { customer_id, customer_name } = useLocalSearchParams()
   const customerIdString = customer_id as string // Type assertion. This is required for useLocalSearchParams
   const customerName = customer_name as string

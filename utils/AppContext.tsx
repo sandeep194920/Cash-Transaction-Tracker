@@ -8,11 +8,26 @@ import React, {
 import { InputViewType } from './types'
 import { Animated } from 'react-native'
 
-interface AppContextProps {
+type newCustomerType = {
+  name: string
+  phone: string
+  email: string
+  address: string
+}
+type AppContextProps = {
   inputView: InputViewType
   setInputView: React.Dispatch<React.SetStateAction<InputViewType>>
   toggleAddView: () => void
   fadeAnim: Animated.Value
+  addNewCustomer: () => void
+  setNewCustomer: React.Dispatch<React.SetStateAction<newCustomerType>>
+}
+
+const initNewCustomer = {
+  name: '',
+  phone: '',
+  email: '',
+  address: '',
 }
 
 const AppProvider = createContext<AppContextProps | undefined>(undefined)
@@ -25,6 +40,9 @@ function AppContext({ children }: { children: React.ReactNode }) {
 
   const fadeAnim = useRef(new Animated.Value(0)).current
 
+  const [newCustomer, setNewCustomer] =
+    useState<newCustomerType>(initNewCustomer)
+
   const toggleAddView = () => {
     console.log('Pressed ADD button')
     setInputView((prevInputView) => ({
@@ -32,6 +50,11 @@ function AppContext({ children }: { children: React.ReactNode }) {
       isInput: !prevInputView.isInput,
       inputType: 'ADD',
     }))
+  }
+
+  // to add new customer
+  const addNewCustomer = () => {
+    console.log('Customer added')
   }
 
   const toggleEditView = () => {
@@ -57,6 +80,8 @@ function AppContext({ children }: { children: React.ReactNode }) {
     toggleAddView,
     toggleEditView,
     fadeAnim,
+    addNewCustomer,
+    setNewCustomer,
   }
 
   return (
