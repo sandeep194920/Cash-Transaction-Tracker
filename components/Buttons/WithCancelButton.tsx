@@ -1,23 +1,15 @@
-import {
-  View,
-  StyleSheet,
-  Pressable,
-  Text,
-  Button,
-  SafeAreaView,
-} from 'react-native'
+import { View, StyleSheet, Button } from 'react-native'
 import React from 'react'
-import { colors, styleUtils } from '../../utils/styles'
-import { ButtonType, WithCancelButtonType } from '../../utils/types'
-import { Entypo, Ionicons } from '@expo/vector-icons'
+import { styleUtils } from '../../utils/styles'
+import { WithCancelButtonType } from '../../utils/types'
 import { useGlobalContext } from '../../utils/AppContext'
 
-const WithCancelButton: React.FC<WithCancelButtonType> = ({ addFn }) => {
+const WithCancelButton: React.FC<WithCancelButtonType> = ({ onAdd }) => {
   const { toggleAddView } = useGlobalContext()
 
   return (
     <View style={styleUtils.buttonContainer}>
-      <Button onPress={addFn} title="Add" />
+      <Button onPress={onAdd} title="Add" />
       <Button title="Cancel" onPress={toggleAddView} />
     </View>
   )

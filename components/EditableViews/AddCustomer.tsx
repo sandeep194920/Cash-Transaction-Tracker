@@ -1,11 +1,10 @@
 import { SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useGlobalContext } from '../../utils/AppContext'
 import EditableViewWrapper from './EditableViewWrapper'
 import WithCancelButton from '../Buttons/WithCancelButton'
 import { colors, styleUtils } from '../../utils/styles'
 import {
-  AntDesign,
   MaterialIcons,
   Ionicons,
   Entypo,
@@ -13,16 +12,7 @@ import {
 } from '@expo/vector-icons'
 
 const AddCustomer = () => {
-  const { addNewCustomer } = useGlobalContext()
-  const [newCustomer, setNewCustomer] = useState({})
-
-  useEffect(() => {
-    console.log('The new customer is ', newCustomer)
-  }, [newCustomer])
-
-  // const handleChange = (e: any, inputType: string) => {
-  //   console.log('The name is ', inputType)
-  // }
+  const { addNewCustomerHandler, formik } = useGlobalContext()
 
   return (
     <SafeAreaView style={styleUtils.flexContainer}>
@@ -36,29 +26,50 @@ const AddCustomer = () => {
           <View style={styles.flexItem}>
             <Ionicons name="person" size={24} color={colors.darkGray1} />
             <TextInput
-              // onChange={(e) => handleChange(e, 'name')}
+              onChangeText={formik.handleChange('name')}
+              onBlur={formik.handleBlur('name')}
+              value={formik.values.name}
               style={styles.textInput}
               placeholder="Name"
             />
+          </View>
+          <View>
+            {/* Display validation errors if touched */}
+            <Text style={styles.error}>
+              {formik.touched.name && formik.errors.name}
+            </Text>
           </View>
           {/* Phone */}
           <View style={styles.flexItem}>
             <Entypo name="phone" size={24} color={colors.darkGray1} />
             <TextInput
-              // onChange={(e) => handleChange(e, 'phone')}
+              // onChangeText={(text) => handleCustomerFormInput(text, 'phone')} // if we dont use formik
+              onChangeText={formik.handleChange('phone')}
+              onBlur={formik.handleBlur('phone')}
+              value={formik.values.phone}
               style={styles.textInput}
               placeholder="Phone"
             />
           </View>
+          {/* Display validation errors if touched */}
+          <Text style={styles.error}>
+            {formik.touched.phone && formik.errors.phone}
+          </Text>
           {/* Email */}
           <View style={styles.flexItem}>
             <MaterialIcons name="email" size={21} color={colors.darkGray1} />
             <TextInput
+              onChangeText={formik.handleChange('email')}
+              onBlur={formik.handleBlur('email')}
+              value={formik.values.email}
               style={styles.textInput}
-              // onChange={(e) => handleChange(e, 'email')}
               placeholder="Email"
             />
           </View>
+          {/* Display validation errors if touched */}
+          <Text style={styles.error}>
+            {formik.touched.email && formik.errors.email}
+          </Text>
           {/* Address */}
           <View style={styles.flexItem}>
             <FontAwesome
@@ -67,15 +78,21 @@ const AddCustomer = () => {
               color={colors.darkGray1}
             />
             <TextInput
+              onChangeText={formik.handleChange('address')}
+              onBlur={formik.handleBlur('address')}
+              value={formik.values.address}
               style={styles.textInput}
-              // onChange={(e) => handleChange(e, 'address')}
               placeholder="Address"
             />
           </View>
+          {/* Display validation errors if touched */}
+          <Text style={styles.error}>
+            {formik.touched.address && formik.errors.address}
+          </Text>
         </View>
         {/* <--- ADD CUSTOMER */}
       </EditableViewWrapper>
-      <WithCancelButton addFn={addNewCustomer} />
+      <WithCancelButton onAdd={addNewCustomerHandler} />
     </SafeAreaView>
   )
 }
@@ -97,5 +114,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.4,
     borderBottomColor: colors.darkGray1,
     minWidth: 200,
+  },
+  error: {
+    color: colors.red,
+    marginLeft: 45,
   },
 })

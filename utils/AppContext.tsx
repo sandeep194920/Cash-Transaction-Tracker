@@ -7,6 +7,8 @@ import React, {
 } from 'react'
 import { InputViewType } from './types'
 import { Animated } from 'react-native'
+import { useFormik } from 'formik'
+import { customerValidationSchema } from './FormValidators'
 
 type newCustomerType = {
   name: string
@@ -19,8 +21,8 @@ type AppContextProps = {
   setInputView: React.Dispatch<React.SetStateAction<InputViewType>>
   toggleAddView: () => void
   fadeAnim: Animated.Value
-  addNewCustomer: () => void
-  setNewCustomer: React.Dispatch<React.SetStateAction<newCustomerType>>
+  addNewCustomerHandler: () => void
+  formik: any
 }
 
 const initNewCustomer = {
@@ -43,6 +45,20 @@ function AppContext({ children }: { children: React.ReactNode }) {
   const [newCustomer, setNewCustomer] =
     useState<newCustomerType>(initNewCustomer)
 
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      phone: '',
+      email: '',
+      address: '',
+    },
+    validationSchema: customerValidationSchema,
+    onSubmit: () => {
+      // Handle form submission here (e.g., call addNewCustomerHandler)
+      addNewCustomerHandler()
+    },
+  })
+
   const toggleAddView = () => {
     console.log('Pressed ADD button')
     setInputView((prevInputView) => ({
@@ -52,10 +68,8 @@ function AppContext({ children }: { children: React.ReactNode }) {
     }))
   }
 
-  // to add new customer
-  const addNewCustomer = () => {
-    console.log('Customer added')
-  }
+  const addNewCustomerHandler = () => {}
+  /* <-- to add new customer */
 
   const toggleEditView = () => {
     console.log('Pressed EDIT button')
@@ -80,8 +94,9 @@ function AppContext({ children }: { children: React.ReactNode }) {
     toggleAddView,
     toggleEditView,
     fadeAnim,
-    addNewCustomer,
     setNewCustomer,
+    addNewCustomerHandler,
+    formik,
   }
 
   return (

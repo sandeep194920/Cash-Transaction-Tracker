@@ -37,5 +37,5 @@ export type InputViewType = {
 }
 
 export type WithCancelButtonType = {
-  addFn: () => void
+  onAdd: () => void
 }
