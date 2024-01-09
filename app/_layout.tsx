@@ -1,18 +1,11 @@
 import { Stack } from 'expo-router/stack'
 import AppContext from '../utils/AppContext'
 import { RealmProvider } from '@realm/react'
-import { Profile } from './Task'
+import { Customer } from '../data/CustomerSchema'
 
 export default function Layout() {
-  // // Create a configuration object
-  // const realmConfig: Realm.Configuration = {
-  //   schema: [Profile],
-  // }
-  // // Create a realm context
-  // const { RealmProvider, useRealm, useObject, useQuery } =
-  //   createRealmContext(realmConfig)
   return (
-    <RealmProvider schema={[Profile as any]}>
+    <RealmProvider schema={[Customer as any]} deleteRealmIfMigrationNeeded>
       <AppContext>
         <Stack>
           <Stack.Screen

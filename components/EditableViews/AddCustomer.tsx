@@ -12,7 +12,7 @@ import {
 } from '@expo/vector-icons'
 
 const AddCustomer = () => {
-  const { addNewCustomerHandler, formik } = useGlobalContext()
+  const { formik } = useGlobalContext()
 
   return (
     <SafeAreaView style={styleUtils.flexContainer}>
@@ -64,6 +64,7 @@ const AddCustomer = () => {
               value={formik.values.email}
               style={styles.textInput}
               placeholder="Email"
+              autoCapitalize="none"
             />
           </View>
           {/* Display validation errors if touched */}
@@ -92,7 +93,7 @@ const AddCustomer = () => {
         </View>
         {/* <--- ADD CUSTOMER */}
       </EditableViewWrapper>
-      <WithCancelButton onAdd={addNewCustomerHandler} />
+      <WithCancelButton />
     </SafeAreaView>
   )
 }

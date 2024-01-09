@@ -35,7 +35,3 @@ export type InputViewType = {
   isInput: boolean
   inputType: null | 'ADD' | 'EDIT'
 }
-
-export type WithCancelButtonType = {
-  onAdd: () => void
-}

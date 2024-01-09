@@ -7,29 +7,24 @@ import React, {
 } from 'react'
 import { InputViewType } from './types'
 import { Animated } from 'react-native'
-import { useFormik } from 'formik'
+import { FormikConfig, useFormik } from 'formik'
 import { customerValidationSchema } from './FormValidators'
+import { useRealm } from '@realm/react'
+import Realm from 'realm'
 
-type newCustomerType = {
+type FormValues = {
   name: string
   phone: string
   email: string
   address: string
 }
+
 type AppContextProps = {
   inputView: InputViewType
   setInputView: React.Dispatch<React.SetStateAction<InputViewType>>
   toggleAddView: () => void
   fadeAnim: Animated.Value
-  addNewCustomerHandler: () => void
-  formik: any
-}
-
-const initNewCustomer = {
-  name: '',
-  phone: '',
-  email: '',
-  address: '',
+  formik: ReturnType<typeof useFormik<FormValues>>
 }
 
 const AppProvider = createContext<AppContextProps | undefined>(undefined)
@@ -42,10 +37,7 @@ function AppContext({ children }: { children: React.ReactNode }) {
 
   const fadeAnim = useRef(new Animated.Value(0)).current
 
-  const [newCustomer, setNewCustomer] =
-    useState<newCustomerType>(initNewCustomer)
-
-  const formik = useFormik({
+  const formikConfig: FormikConfig<FormValues> = {
     initialValues: {
       name: '',
       phone: '',
@@ -57,7 +49,9 @@ function AppContext({ children }: { children: React.ReactNode }) {
       // Handle form submission here (e.g., call addNewCustomerHandler)
       addNewCustomerHandler()
     },
-  })
+  }
+
+  const formik = useFormik(formikConfig)
 
   const toggleAddView = () => {
     console.log('Pressed ADD button')
@@ -67,9 +61,20 @@ function AppContext({ children }: { children: React.ReactNode }) {
       inputType: 'ADD',
     }))
   }
-
-  const addNewCustomerHandler = () => {}
-  /* <-- to add new customer */
+  const realm = useRealm()
+  /*  add new customer */
+  const addNewCustomerHandler = () => {
+    const { name, phone, email, address } = formik.values
+    realm.write(() => {
+      realm.create('Customer', {
+        name,
+        phone,
+        email,
+        address,
+        _id: new Realm.BSON.ObjectId(),
+      })
+    })
+  }
 
   const toggleEditView = () => {
     console.log('Pressed EDIT button')
@@ -94,8 +99,6 @@ function AppContext({ children }: { children: React.ReactNode }) {
     toggleAddView,
     toggleEditView,
     fadeAnim,
-    setNewCustomer,
-    addNewCustomerHandler,
     formik,
   }
 

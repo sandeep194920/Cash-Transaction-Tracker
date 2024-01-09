@@ -10,7 +10,7 @@ import AddCustomer from '../../components/EditableViews/AddCustomer'
 import { useQuery, useRealm } from '@realm/react'
 
 const Customer = () => {
-  const realm = useQuery('Profile')
+  const realm = useQuery('Customer')
 
   console.log('The log is', realm)
 
