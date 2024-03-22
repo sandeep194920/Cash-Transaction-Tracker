@@ -14,11 +14,16 @@ export const colors = {
 export const dimensions = {
   paddingSmall1: 2,
   paddingSmall2: 6,
+  paddingSmall3: 10,
   paddingMedium: 18,
   paddingExtraLarge: 50,
+  smallWidth1: 0.4,
+  largeWidth1: 200,
   noMargin: 0,
   marginMedium: 10,
-  marginLarge: 16,
+  marginLarge1: 16,
+  marginLarge2: 20,
+  marginExtraLarge1: 45,
   smallFont1: 13,
   smallFont2: 13,
   mediumFont: 14.5,
@@ -28,6 +33,7 @@ export const dimensions = {
   tagFont: 11,
   borderRadiusRound: 30,
   smallGap: 4,
+  largeGap: 20,
 }
 
 export const styleUtils = StyleSheet.create({
@@ -48,7 +54,7 @@ export const styleUtils = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    gap: dimensions.marginLarge,
+    gap: dimensions.marginLarge1,
   },
 
   /* <--- EACH ITEM STYLES */
@@ -59,7 +65,7 @@ export const styleUtils = StyleSheet.create({
     borderRadius: dimensions.borderRadiusRound,
     paddingHorizontal: dimensions.paddingSmall2,
     paddingVertical: dimensions.paddingSmall1,
-    marginRight: dimensions.marginLarge,
+    marginRight: dimensions.marginLarge1,
   },
   tagText: {
     color: 'white',
@@ -93,7 +99,7 @@ export const styleUtils = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     gap: dimensions.smallGap,
-    marginVertical: dimensions.marginLarge,
+    marginVertical: dimensions.marginLarge1,
   },
 
   headerText: {
@@ -139,5 +145,27 @@ export const styleUtils = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontSize: dimensions.extraLargeFont2,
+  },
+})
+
+export const userFormStyles = StyleSheet.create({
+  flexContainer: {
+    padding: dimensions.paddingExtraLarge,
+  },
+  flexItem: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: dimensions.largeGap,
+    marginVertical: dimensions.marginLarge1,
+  },
+  textInput: {
+    paddingBottom: dimensions.paddingSmall3,
+    borderBottomWidth: dimensions.smallWidth1,
+    borderBottomColor: colors.darkGray1,
+    minWidth: dimensions.largeWidth1,
+  },
+  error: {
+    color: colors.red,
+    marginLeft: dimensions.marginExtraLarge1,
   },
 })

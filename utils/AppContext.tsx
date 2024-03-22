@@ -9,14 +9,15 @@ import { InputViewType } from './types'
 import { Animated } from 'react-native'
 import { FormikConfig, useFormik } from 'formik'
 import { customerValidationSchema } from './FormValidators'
-import { useRealm } from '@realm/react'
-import Realm from 'realm'
+// import { useRealm } from '@realm/react'
+// import Realm from 'realm'
 
 type FormValues = {
   name: string
   phone: string
   email: string
   address: string
+  password: string
 }
 
 type AppContextProps = {
@@ -24,7 +25,8 @@ type AppContextProps = {
   setInputView: React.Dispatch<React.SetStateAction<InputViewType>>
   toggleAddView: () => void
   fadeAnim: Animated.Value
-  formik: ReturnType<typeof useFormik<FormValues>>
+  formikAddCustomer: ReturnType<typeof useFormik<Partial<FormValues>>>
+  formikAuthenticate: ReturnType<typeof useFormik<Partial<FormValues>>>
 }
 
 const AppProvider = createContext<AppContextProps | undefined>(undefined)
@@ -37,7 +39,8 @@ function AppContext({ children }: { children: React.ReactNode }) {
 
   const fadeAnim = useRef(new Animated.Value(0)).current
 
-  const formikConfig: FormikConfig<FormValues> = {
+  // Formik to add customer form
+  const formikConfigAddCustomer: FormikConfig<Partial<FormValues>> = {
     initialValues: {
       name: '',
       phone: '',
@@ -47,11 +50,26 @@ function AppContext({ children }: { children: React.ReactNode }) {
     validationSchema: customerValidationSchema,
     onSubmit: () => {
       // Handle form submission here (e.g., call addNewCustomerHandler)
-      addNewCustomerHandler()
+      // addNewCustomerHandler()
     },
   }
 
-  const formik = useFormik(formikConfig)
+  const formikAddCustomer = useFormik(formikConfigAddCustomer)
+
+  // Formik for Authenticate form
+  const formikConfigAuthenticate: FormikConfig<Partial<FormValues>> = {
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema: customerValidationSchema,
+    onSubmit: () => {
+      // Handle form submission here (e.g., call addNewCustomerHandler)
+      // addNewCustomerHandler()
+    },
+  }
+
+  const formikAuthenticate = useFormik(formikConfigAuthenticate)
 
   const toggleAddView = () => {
     console.log('Pressed ADD button')
@@ -61,20 +79,21 @@ function AppContext({ children }: { children: React.ReactNode }) {
       inputType: 'ADD',
     }))
   }
-  const realm = useRealm()
+
+  // const realm = useRealm()
   /*  add new customer */
-  const addNewCustomerHandler = () => {
-    const { name, phone, email, address } = formik.values
-    realm.write(() => {
-      realm.create('Customer', {
-        name,
-        phone,
-        email,
-        address,
-        _id: new Realm.BSON.ObjectId(),
-      })
-    })
-  }
+  // const addNewCustomerHandler = () => {
+  //   const { name, phone, email, address } = formik.values
+  //   realm.write(() => {
+  //     realm.create('Customer', {
+  //       name,
+  //       phone,
+  //       email,
+  //       address,
+  //       _id: new Realm.BSON.ObjectId(),
+  //     })
+  //   })
+  // }
 
   const toggleEditView = () => {
     console.log('Pressed EDIT button')
@@ -99,7 +118,8 @@ function AppContext({ children }: { children: React.ReactNode }) {
     toggleAddView,
     toggleEditView,
     fadeAnim,
-    formik,
+    formikAddCustomer,
+    formikAuthenticate,
   }
 
   return (

@@ -11,4 +11,8 @@ export const customerValidationSchema = yup.object().shape({
     .email('Invalid email format')
     .required('Email is required'),
   address: yup.string().required('Address is required'),
+  password: yup
+    .string()
+    .required('Password is required')
+    .min(6, 'Password must be at least 6 characters long'),
 })

@@ -12,6 +12,7 @@ import { useGlobalContext } from '../../utils/AppContext'
 
 const EditableViewWrapper = ({ children }: { children: React.ReactNode }) => {
   const { fadeAnim } = useGlobalContext()
+
   return (
     <Animated.View
       style={{

@@ -1,5 +1,3 @@
-import React from 'react'
-
 export type CustomerType = {
   customer_id: string
   name: string

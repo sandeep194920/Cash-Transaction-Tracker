@@ -3,7 +3,7 @@ import React from 'react'
 import { useGlobalContext } from '../../utils/AppContext'
 import EditableViewWrapper from './EditableViewWrapper'
 import WithCancelButton from '../Buttons/WithCancelButton'
-import { colors, styleUtils } from '../../utils/styles'
+import { colors, styleUtils, userFormStyles } from '../../utils/styles'
 import {
   MaterialIcons,
   Ionicons,
@@ -12,86 +12,91 @@ import {
 } from '@expo/vector-icons'
 
 const AddCustomer = () => {
-  const { formik } = useGlobalContext()
+  const { formikAddCustomer } = useGlobalContext()
 
   return (
     <SafeAreaView style={styleUtils.flexContainer}>
       <EditableViewWrapper>
-        {/* ADD CUSTOMER ---> */}
+        {/* ADD CUSTOMER FORM---> */}
+
+        {/* Page Header */}
         <View style={styleUtils.headerTextContainer}>
           <Text style={styleUtils.headerText}>Add New Customer</Text>
         </View>
-        <View style={styles.flexContainer}>
+
+        {/* Form */}
+        <View style={userFormStyles.flexContainer}>
           {/* Name */}
-          <View style={styles.flexItem}>
+          <View style={userFormStyles.flexItem}>
             <Ionicons name="person" size={24} color={colors.darkGray1} />
             <TextInput
-              onChangeText={formik.handleChange('name')}
-              onBlur={formik.handleBlur('name')}
-              value={formik.values.name}
-              style={styles.textInput}
+              onChangeText={formikAddCustomer.handleChange('name')}
+              onBlur={formikAddCustomer.handleBlur('name')}
+              value={formikAddCustomer.values.name}
+              style={userFormStyles.textInput}
               placeholder="Name"
             />
           </View>
           <View>
             {/* Display validation errors if touched */}
-            <Text style={styles.error}>
-              {formik.touched.name && formik.errors.name}
+            <Text style={userFormStyles.error}>
+              {formikAddCustomer.touched.name && formikAddCustomer.errors.name}
             </Text>
           </View>
           {/* Phone */}
-          <View style={styles.flexItem}>
+          <View style={userFormStyles.flexItem}>
             <Entypo name="phone" size={24} color={colors.darkGray1} />
             <TextInput
               // onChangeText={(text) => handleCustomerFormInput(text, 'phone')} // if we dont use formik
-              onChangeText={formik.handleChange('phone')}
-              onBlur={formik.handleBlur('phone')}
-              value={formik.values.phone}
-              style={styles.textInput}
+              onChangeText={formikAddCustomer.handleChange('phone')}
+              onBlur={formikAddCustomer.handleBlur('phone')}
+              value={formikAddCustomer.values.phone}
+              style={userFormStyles.textInput}
               placeholder="Phone"
             />
           </View>
           {/* Display validation errors if touched */}
-          <Text style={styles.error}>
-            {formik.touched.phone && formik.errors.phone}
+          <Text style={userFormStyles.error}>
+            {formikAddCustomer.touched.phone && formikAddCustomer.errors.phone}
           </Text>
           {/* Email */}
-          <View style={styles.flexItem}>
+          <View style={userFormStyles.flexItem}>
             <MaterialIcons name="email" size={21} color={colors.darkGray1} />
             <TextInput
-              onChangeText={formik.handleChange('email')}
-              onBlur={formik.handleBlur('email')}
-              value={formik.values.email}
-              style={styles.textInput}
+              onChangeText={formikAddCustomer.handleChange('email')}
+              onBlur={formikAddCustomer.handleBlur('email')}
+              value={formikAddCustomer.values.email}
+              style={userFormStyles.textInput}
               placeholder="Email"
               autoCapitalize="none"
             />
           </View>
           {/* Display validation errors if touched */}
-          <Text style={styles.error}>
-            {formik.touched.email && formik.errors.email}
+          <Text style={userFormStyles.error}>
+            {formikAddCustomer.touched.email && formikAddCustomer.errors.email}
           </Text>
           {/* Address */}
-          <View style={styles.flexItem}>
+          <View style={userFormStyles.flexItem}>
             <FontAwesome
               name="address-card"
               size={24}
               color={colors.darkGray1}
             />
             <TextInput
-              onChangeText={formik.handleChange('address')}
-              onBlur={formik.handleBlur('address')}
-              value={formik.values.address}
-              style={styles.textInput}
+              onChangeText={formikAddCustomer.handleChange('address')}
+              onBlur={formikAddCustomer.handleBlur('address')}
+              value={formikAddCustomer.values.address}
+              style={userFormStyles.textInput}
               placeholder="Address"
             />
           </View>
           {/* Display validation errors if touched */}
-          <Text style={styles.error}>
-            {formik.touched.address && formik.errors.address}
+          <Text style={userFormStyles.error}>
+            {formikAddCustomer.touched.address &&
+              formikAddCustomer.errors.address}
           </Text>
         </View>
-        {/* <--- ADD CUSTOMER */}
+        {/* <--- ADD CUSTOMER FORM*/}
       </EditableViewWrapper>
       <WithCancelButton />
     </SafeAreaView>
@@ -100,24 +105,4 @@ const AddCustomer = () => {
 
 export default AddCustomer
 
-const styles = StyleSheet.create({
-  flexContainer: {
-    padding: 50,
-  },
-  flexItem: {
-    display: 'flex',
-    flexDirection: 'row',
-    gap: 20,
-    marginVertical: 20,
-  },
-  textInput: {
-    paddingBottom: 10,
-    borderBottomWidth: 0.4,
-    borderBottomColor: colors.darkGray1,
-    minWidth: 200,
-  },
-  error: {
-    color: colors.red,
-    marginLeft: 45,
-  },
-})
+const styles = StyleSheet.create({})

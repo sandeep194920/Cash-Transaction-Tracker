@@ -2,25 +2,25 @@ import { Stack } from 'expo-router/stack'
 import AppContext from '../utils/AppContext'
 import { RealmProvider, AppProvider, UserProvider } from '@realm/react'
 import { Customer } from '../data/CustomerSchema'
-import Login from '../components/Login'
+import Authenticate from '../components/Authenticate'
 
 export default function Layout() {
   return (
-    <AppProvider id={'devicesync-xogdi'}>
-      <UserProvider fallback={<Login />}>
-        <RealmProvider
-          schema={[Customer as any]}
-          // deleteRealmIfMigrationNeeded // for local development when below sync is not used
-          sync={{
-            flexible: true,
-            initialSubscriptions: {
-              update(subs, realm) {
-                subs.add(realm.objects(Customer))
+    <AppContext>
+      <AppProvider id={'devicesync-xogdi'}>
+        <UserProvider fallback={<Authenticate />}>
+          <RealmProvider
+            schema={[Customer as any]}
+            // deleteRealmIfMigrationNeeded // for local development when below sync is not used
+            sync={{
+              flexible: true,
+              initialSubscriptions: {
+                update(subs, realm) {
+                  subs.add(realm.objects(Customer))
+                },
               },
-            },
-          }}
-        >
-          <AppContext>
+            }}
+          >
             <Stack>
               <Stack.Screen
                 name="index"
@@ -53,9 +53,9 @@ export default function Layout() {
                 }}
               />
             </Stack>
-          </AppContext>
-        </RealmProvider>
-      </UserProvider>
-    </AppProvider>
+          </RealmProvider>
+        </UserProvider>
+      </AppProvider>
+    </AppContext>
   )
 }
