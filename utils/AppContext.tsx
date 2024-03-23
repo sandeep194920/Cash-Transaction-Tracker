@@ -27,6 +27,8 @@ type AppContextT = {
   fadeAnim: Animated.Value
   // formikAddCustomer: ReturnType<typeof useFormik<Partial<FormValues>>>
   formikAuthenticate: ReturnType<typeof useFormik<Partial<FormValues>>>
+  handleAuthSwitch: () => void
+  showLoginPage: boolean
 }
 
 const AppProvider = createContext<AppContextT | undefined>(undefined)
@@ -37,7 +39,15 @@ function AppContext({ children }: { children: React.ReactNode }) {
     inputType: null,
   })
 
+  const [showLoginPage, setShowLoginPage] = useState(true)
+
   const fadeAnim = useRef(new Animated.Value(0)).current
+
+  // authSwitch switches from login to register or vice-versa
+
+  const handleAuthSwitch = () => {
+    setShowLoginPage((pre) => !pre)
+  }
 
   // Formik to add customer form
   // const formikConfigAddCustomer: FormikConfig<Partial<FormValues>> = {
@@ -119,6 +129,8 @@ function AppContext({ children }: { children: React.ReactNode }) {
     toggleEditView,
     fadeAnim,
     // formikAddCustomer,
+    showLoginPage,
+    handleAuthSwitch,
     formikAuthenticate,
   }
 

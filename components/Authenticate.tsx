@@ -16,22 +16,25 @@ import EditableViewWrapper from './EditableViews/EditableViewWrapper'
 import { useGlobalContext } from '../utils/AppContext'
 import WithCancelButton from './Buttons/WithCancelButton'
 import { useAuth } from '@realm/react'
+import { Link } from 'expo-router'
+import Colors from '../constants/Colors'
 // import { useRealmContext } from '../utils/RealmContext'
 
 const Authenticate = () => {
-  // const { formik } = useGlobalContext()
+  const { showLoginPage, handleAuthSwitch } = useGlobalContext()
 
   return (
     <SafeAreaView style={styleUtils.flexContainer}>
       {/* REGISTER OR LOGIN FORM */}
-      <RegisterForm />
+      <RegisterLoginForm />
     </SafeAreaView>
   )
 }
 
-const RegisterForm = () => {
+const RegisterLoginForm = () => {
   const { formikAuthenticate } = useGlobalContext()
   const { logInWithEmailPassword } = useAuth()
+  const { showLoginPage, handleAuthSwitch } = useGlobalContext()
 
   const handleSignup = () => {
     logInWithEmailPassword({
@@ -44,7 +47,9 @@ const RegisterForm = () => {
     <>
       {/* Page Header */}
       <View style={styleUtils.headerTextContainer}>
-        <Text style={styleUtils.headerText}>Create an account</Text>
+        <Text style={styleUtils.headerText}>
+          {showLoginPage ? 'Login to your account' : 'Create an account'}
+        </Text>
       </View>
 
       {/* Form */}
@@ -86,7 +91,21 @@ const RegisterForm = () => {
         </Text>
         <View style={styleUtils.buttonContainer}>
           <Pressable onPress={handleSignup} style={styles.authBtn}>
-            <Text style={styles.authBtnText}>SIGN IN</Text>
+            <Text style={styles.authBtnText}>
+              {showLoginPage ? 'SIGN IN' : 'SIGN UP'}
+            </Text>
+          </Pressable>
+        </View>
+        <View style={userFormStyles.flexContainer}>
+          <Text>
+            {showLoginPage
+              ? `You don't have an account?`
+              : 'Already have an account?'}
+          </Text>
+          <Pressable onPress={handleAuthSwitch} style={styles.link}>
+            <Text style={styles.linkText}>
+              {showLoginPage ? 'SIGN UP' : 'SIGN IN'}
+            </Text>
           </Pressable>
         </View>
       </View>
@@ -109,5 +128,11 @@ const styles = StyleSheet.create({
   },
   authBtnText: {
     color: 'white',
+  },
+  link: {
+    marginVertical: dimensions.marginMedium,
+  },
+  linkText: {
+    color: colors.lightGreen2,
   },
 })

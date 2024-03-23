@@ -152,6 +152,7 @@ export const styleUtils = StyleSheet.create({
 export const userFormStyles = StyleSheet.create({
   flexContainer: {
     padding: dimensions.paddingExtraLarge,
+    alignItems: 'center',
   },
   flexItem: {
     display: 'flex',
