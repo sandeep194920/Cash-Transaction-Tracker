@@ -10,9 +10,10 @@ import {
   Entypo,
   FontAwesome,
 } from '@expo/vector-icons'
+import { useRealmContext } from '../../utils/RealmContext'
 
 const AddCustomer = () => {
-  const { formikAddCustomer } = useGlobalContext()
+  const { formikAddCustomer } = useRealmContext()
 
   return (
     <SafeAreaView style={styleUtils.flexContainer}>

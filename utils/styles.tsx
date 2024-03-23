@@ -34,6 +34,7 @@ export const dimensions = {
   borderRadiusRound: 30,
   smallGap: 4,
   largeGap: 20,
+  borderRadius: 100,
 }
 
 export const styleUtils = StyleSheet.create({

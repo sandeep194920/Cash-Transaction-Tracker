@@ -3,9 +3,12 @@ import AppContext from '../utils/AppContext'
 import { RealmProvider, AppProvider, UserProvider } from '@realm/react'
 import { Customer } from '../data/CustomerSchema'
 import Authenticate from '../components/Authenticate'
+import { View } from 'react-native'
+import RealmContext from '../utils/RealmContext'
 
 export default function Layout() {
   return (
+    //  AppContext will not have access to realm
     <AppContext>
       <AppProvider id={'devicesync-xogdi'}>
         <UserProvider fallback={<Authenticate />}>
@@ -21,38 +24,45 @@ export default function Layout() {
               },
             }}
           >
-            <Stack>
-              <Stack.Screen
-                name="index"
-                options={{
-                  headerTitle: 'Customers',
-                  headerStyle: {
-                    backgroundColor: '#030303',
-                  },
-                  headerTintColor: 'white',
-                }}
-              />
-              <Stack.Screen
-                name="customers/[customer_id]"
-                options={{
-                  headerTitle: 'Transactions',
-                  headerStyle: {
-                    backgroundColor: '#191d1d',
-                  },
-                  headerTintColor: 'white',
-                }}
-              />
-              <Stack.Screen
-                name="customers/orders/[order_id]"
-                options={{
-                  headerTitle: 'Details',
-                  headerStyle: {
-                    backgroundColor: '#191d1d',
-                  },
-                  headerTintColor: 'white',
-                }}
-              />
-            </Stack>
+            {/* RealmContext will have access to realm */}
+            <RealmContext>
+              <Stack
+              // screenOptions={{
+              //   contentStyle: { backgroundColor: 'black' },
+              // }}
+              >
+                <Stack.Screen
+                  name="index"
+                  options={{
+                    headerTitle: 'Customers',
+                    headerStyle: {
+                      backgroundColor: '#030303',
+                    },
+                    headerTintColor: 'white',
+                  }}
+                />
+                <Stack.Screen
+                  name="customers/[customer_id]"
+                  options={{
+                    headerTitle: 'Transactions',
+                    headerStyle: {
+                      backgroundColor: '#191d1d',
+                    },
+                    headerTintColor: 'white',
+                  }}
+                />
+                <Stack.Screen
+                  name="customers/orders/[order_id]"
+                  options={{
+                    headerTitle: 'Details',
+                    headerStyle: {
+                      backgroundColor: '#191d1d',
+                    },
+                    headerTintColor: 'white',
+                  }}
+                />
+              </Stack>
+            </RealmContext>
           </RealmProvider>
         </UserProvider>
       </AppProvider>

@@ -1,11 +1,22 @@
-import { SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native'
+import {
+  Button,
+  Pressable,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native'
 import React from 'react'
 // import { useGlobalContext } from '../utils/AppContext'
-import { colors, styleUtils, userFormStyles } from '../utils/styles'
+import { colors, dimensions, styleUtils, userFormStyles } from '../utils/styles'
 // import EditableViewWrapper from './EditableViews/EditableViewWrapper'
 import { Entypo, Ionicons, MaterialIcons } from '@expo/vector-icons'
 import EditableViewWrapper from './EditableViews/EditableViewWrapper'
 import { useGlobalContext } from '../utils/AppContext'
+import WithCancelButton from './Buttons/WithCancelButton'
+import { useAuth } from '@realm/react'
+// import { useRealmContext } from '../utils/RealmContext'
 
 const Authenticate = () => {
   // const { formik } = useGlobalContext()
@@ -20,6 +31,14 @@ const Authenticate = () => {
 
 const RegisterForm = () => {
   const { formikAuthenticate } = useGlobalContext()
+  const { logInWithEmailPassword } = useAuth()
+
+  const handleSignup = () => {
+    logInWithEmailPassword({
+      email: 'sandeepmscanada@gmail.com',
+      password: 'Mongodb@123',
+    })
+  }
 
   return (
     <>
@@ -27,6 +46,7 @@ const RegisterForm = () => {
       <View style={styleUtils.headerTextContainer}>
         <Text style={styleUtils.headerText}>Create an account</Text>
       </View>
+
       {/* Form */}
       <View style={userFormStyles.flexContainer}>
         {/* Email */}
@@ -61,9 +81,14 @@ const RegisterForm = () => {
         </View>
         {/* Display validation errors if touched */}
         <Text style={userFormStyles.error}>
-          {formikAuthenticate.touched.email &&
+          {formikAuthenticate.touched.password &&
             formikAuthenticate.errors.password}
         </Text>
+        <View style={styleUtils.buttonContainer}>
+          <Pressable onPress={handleSignup} style={styles.authBtn}>
+            <Text style={styles.authBtnText}>SIGN IN</Text>
+          </Pressable>
+        </View>
       </View>
     </>
   )
@@ -71,4 +96,18 @@ const RegisterForm = () => {
 
 export default Authenticate
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  authBtn: {
+    backgroundColor: colors.lightGreen2,
+    padding: dimensions.paddingSmall3,
+    display: 'flex',
+    flexGrow: 1,
+    borderRadius: dimensions.borderRadius,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: dimensions.marginMedium,
+  },
+  authBtnText: {
+    color: 'white',
+  },
+})

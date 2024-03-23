@@ -20,16 +20,16 @@ type FormValues = {
   password: string
 }
 
-type AppContextProps = {
+type AppContextT = {
   inputView: InputViewType
   setInputView: React.Dispatch<React.SetStateAction<InputViewType>>
   toggleAddView: () => void
   fadeAnim: Animated.Value
-  formikAddCustomer: ReturnType<typeof useFormik<Partial<FormValues>>>
+  // formikAddCustomer: ReturnType<typeof useFormik<Partial<FormValues>>>
   formikAuthenticate: ReturnType<typeof useFormik<Partial<FormValues>>>
 }
 
-const AppProvider = createContext<AppContextProps | undefined>(undefined)
+const AppProvider = createContext<AppContextT | undefined>(undefined)
 
 function AppContext({ children }: { children: React.ReactNode }) {
   const [inputView, setInputView] = useState<InputViewType>({
@@ -40,21 +40,21 @@ function AppContext({ children }: { children: React.ReactNode }) {
   const fadeAnim = useRef(new Animated.Value(0)).current
 
   // Formik to add customer form
-  const formikConfigAddCustomer: FormikConfig<Partial<FormValues>> = {
-    initialValues: {
-      name: '',
-      phone: '',
-      email: '',
-      address: '',
-    },
-    validationSchema: customerValidationSchema,
-    onSubmit: () => {
-      // Handle form submission here (e.g., call addNewCustomerHandler)
-      // addNewCustomerHandler()
-    },
-  }
+  // const formikConfigAddCustomer: FormikConfig<Partial<FormValues>> = {
+  //   initialValues: {
+  //     name: '',
+  //     phone: '',
+  //     email: '',
+  //     address: '',
+  //   },
+  //   validationSchema: customerValidationSchema,
+  //   onSubmit: () => {
+  //     // Handle form submission here (e.g., call addNewCustomerHandler)
+  //     // addNewCustomerHandler()
+  //   },
+  // }
 
-  const formikAddCustomer = useFormik(formikConfigAddCustomer)
+  // const formikAddCustomer = useFormik(formikConfigAddCustomer)
 
   // Formik for Authenticate form
   const formikConfigAuthenticate: FormikConfig<Partial<FormValues>> = {
@@ -118,7 +118,7 @@ function AppContext({ children }: { children: React.ReactNode }) {
     toggleAddView,
     toggleEditView,
     fadeAnim,
-    formikAddCustomer,
+    // formikAddCustomer,
     formikAuthenticate,
   }
 
