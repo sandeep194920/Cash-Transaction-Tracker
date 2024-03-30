@@ -1,6 +1,5 @@
 import { View, FlatList, Text, StyleSheet, SafeAreaView } from 'react-native'
 import React from 'react'
-import { useLocalSearchParams } from 'expo-router/src/hooks'
 import data from '../../data'
 import CustomerTransaction from '../../components/CustomerTransaction'
 import { styleUtils } from '../../utils/styles'
@@ -8,6 +7,7 @@ import WithAddButton from '../../components/Buttons/AddEditButton'
 import Button from '../../components/Buttons/AddEditButton'
 import AddCustomer from '../../components/EditableViews/AddCustomer'
 import { useQuery, useRealm } from '@realm/react'
+import { useLocalSearchParams } from 'expo-router'
 
 const Customer = () => {
   const realm = useQuery('Customer')
