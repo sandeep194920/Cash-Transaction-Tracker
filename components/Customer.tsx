@@ -3,6 +3,7 @@ import React from 'react'
 import { router } from 'expo-router'
 import { colors, styleUtils } from '../utils/styles'
 import { useGlobalContext } from '../utils/AppContext'
+import { useUser } from '@realm/react'
 
 type Customer = {
   name: string
@@ -10,7 +11,8 @@ type Customer = {
   balance: number
 }
 const Customer = ({ name, balance, customer_id }: Customer) => {
-  const ctx = useGlobalContext()
+  const user = useUser()
+  console.log('The user data is', user.id)
   return (
     <Pressable
       onPress={() =>
