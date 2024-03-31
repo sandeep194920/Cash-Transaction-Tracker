@@ -4,6 +4,7 @@ import { Item } from './ItemSchema'
 export class Order extends Object<Order> {
   _id!: BSON.UUID
   customer_id!: string
+  user_id!: string
   order_id!: string
   order_price!: number
   paid_by_customer!: number
@@ -16,6 +17,7 @@ export class Order extends Object<Order> {
     properties: {
       _id: 'objectId',
       customer_id: 'string',
+      user_id: 'string',
       order_id: 'string',
       order_price: 'double',
       paid_by_customer: 'double',

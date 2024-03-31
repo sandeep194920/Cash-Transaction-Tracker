@@ -49,7 +49,6 @@ function RealmContext({ children }: { children: React.ReactNode }) {
   /*  add new customer */
   const addNewCustomerHandler = () => {
     const { name, phone, email, address } = formikAddCustomer.values
-    console.log('REACHED REALM ADD')
     realm.write(() => {
       realm.create('Customer', {
         name,

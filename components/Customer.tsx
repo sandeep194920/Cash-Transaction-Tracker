@@ -1,9 +1,10 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View, Button } from 'react-native'
 import React from 'react'
 import { router } from 'expo-router'
 import { colors, styleUtils } from '../utils/styles'
 import { useGlobalContext } from '../utils/AppContext'
-import { useUser } from '@realm/react'
+import { useQuery, useUser } from '@realm/react'
+import { Customer as CustomerSchema } from '../models/CustomerSchema'
 
 type Customer = {
   name: string
@@ -13,38 +14,45 @@ type Customer = {
 const Customer = ({ name, balance, customer_id }: Customer) => {
   const user = useUser()
   console.log('The user data is', user.id)
-  return (
-    <Pressable
-      onPress={() =>
-        router.push({
-          pathname: `/customers/${customer_id}`,
-          params: { customer_name: name },
-        })
-      }
-    >
-      <View style={styleUtils.itemContainer}>
-        <View>
-          <Text style={styleUtils.largeText}>{name}</Text>
-          <Text style={styleUtils.subText}>({customer_id})</Text>
-        </View>
+  const query = useQuery(CustomerSchema, (customers) => {
+    return customers.filtered('user_id = $0', user.id)
+  })
 
-        <View style={styleUtils.columnContainer}>
-          <View style={styleUtils.flexRow}>
-            <View
-              style={{
-                ...styleUtils.tag,
-                backgroundColor: balance >= 0 ? colors.lightGreen1 : colors.red,
-              }}
-            >
-              <Text style={styleUtils.tagText}>
-                {balance >= 0 ? 'Overpayment ' : 'Outstanding'}
-              </Text>
+  return (
+    <View>
+      <Pressable
+        onPress={() =>
+          router.push({
+            pathname: `/customers/${customer_id}`,
+            params: { customer_name: name },
+          })
+        }
+      >
+        <View style={styleUtils.itemContainer}>
+          <View>
+            <Text style={styleUtils.largeText}>{name}</Text>
+            <Text style={styleUtils.subText}>({customer_id})</Text>
+          </View>
+
+          <View style={styleUtils.columnContainer}>
+            <View style={styleUtils.flexRow}>
+              <View
+                style={{
+                  ...styleUtils.tag,
+                  backgroundColor:
+                    balance >= 0 ? colors.lightGreen1 : colors.red,
+                }}
+              >
+                <Text style={styleUtils.tagText}>
+                  {balance >= 0 ? 'Overpayment ' : 'Outstanding'}
+                </Text>
+              </View>
+              <Text style={{ fontWeight: '500' }}>${balance}</Text>
             </View>
-            <Text style={{ fontWeight: '500' }}>${balance}</Text>
           </View>
         </View>
-      </View>
-    </Pressable>
+      </Pressable>
+    </View>
   )
 }
 
