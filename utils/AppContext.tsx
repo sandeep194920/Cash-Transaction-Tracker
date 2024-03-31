@@ -68,7 +68,7 @@ function AppContext({ children }: { children: React.ReactNode }) {
   const formikAuthenticate = useFormik(formikConfigAuthenticate)
 
   const toggleAddView = () => {
-    console.log('Pressed ADD button')
+    console.log('Pressed Plus button')
     setInputView((prevInputView) => ({
       ...prevInputView,
       isInput: !prevInputView.isInput,

@@ -2,7 +2,8 @@ import { FormikConfig, useFormik } from 'formik'
 import React, { createContext, useContext, useState } from 'react'
 import { customerValidationSchema } from './FormValidators'
 import { InputViewType } from './types'
-import { useRealm } from '@realm/react'
+import { useRealm, useUser } from '@realm/react'
+import Realm from 'realm'
 
 type FormValues = {
   name: string
@@ -15,6 +16,7 @@ type FormValues = {
 type RealmContextT = {
   formikAddCustomer: ReturnType<typeof useFormik<Partial<FormValues>>>
   formikAuthenticate: ReturnType<typeof useFormik<Partial<FormValues>>>
+  addNewCustomerHandler: () => void
   //   toggleAddView: () => void
 }
 
@@ -27,6 +29,7 @@ function RealmContext({ children }: { children: React.ReactNode }) {
   })
 
   const realm = useRealm()
+  const user = useUser()
 
   // Formik to add customer form
   const formikConfigAddCustomer: FormikConfig<Partial<FormValues>> = {
@@ -39,19 +42,23 @@ function RealmContext({ children }: { children: React.ReactNode }) {
     validationSchema: customerValidationSchema,
     onSubmit: () => {
       // Handle form submission here (e.g., call addNewCustomerHandler)
-      addNewCustomerHandler()
+      // addNewCustomerHandler()
     },
   }
 
   /*  add new customer */
   const addNewCustomerHandler = () => {
     const { name, phone, email, address } = formikAddCustomer.values
+    console.log('REACHED REALM ADD')
     realm.write(() => {
       realm.create('Customer', {
         name,
         phone,
         email,
         address,
+        signed_up_on: new Date(),
+        balance: 0,
+        user_id: user.id,
         _id: new Realm.BSON.ObjectId(),
       })
     })
@@ -77,6 +84,7 @@ function RealmContext({ children }: { children: React.ReactNode }) {
     inputView,
     formikAddCustomer,
     formikAuthenticate,
+    addNewCustomerHandler,
   }
 
   return (

@@ -2,7 +2,7 @@ import { BSON, ObjectSchema, Object } from 'realm'
 import { Item } from './ItemSchema'
 
 export class Order extends Object<Order> {
-  _id!: BSON.ObjectId
+  _id!: BSON.UUID
   customer_id!: string
   order_id!: string
   order_price!: number

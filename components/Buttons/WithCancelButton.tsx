@@ -6,11 +6,17 @@ import { useRealmContext } from '../../utils/RealmContext'
 
 const WithCancelButton: React.FC = () => {
   const { toggleAddView } = useGlobalContext()
-  const { formikAddCustomer } = useRealmContext()
+  const { addNewCustomerHandler } = useRealmContext()
+
+  const addHandler = () => {
+    // console.log('REACHED ADD HAANDLER')
+    // formikAddCustomer.handleSubmit()
+    addNewCustomerHandler()
+  }
 
   return (
     <View style={styleUtils.buttonContainer}>
-      <Button onPress={() => formikAddCustomer.handleSubmit()} title="Add" />
+      <Button onPress={addHandler} title="Add" />
       <Button title="Cancel" onPress={toggleAddView} />
     </View>
   )
