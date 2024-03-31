@@ -141,7 +141,7 @@ const ItemDetails = (props: ItemDetails) => {
 const styles = StyleSheet.create({
   itemsContainer: {
     backgroundColor: colors.lightGray1,
-    marginBottom: dimensions.marginLarge,
+    marginBottom: dimensions.marginLarge1,
   },
   itemContainerExtended: {
     ...styleUtils.itemContainer,

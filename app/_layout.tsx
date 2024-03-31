@@ -1,7 +1,10 @@
 import { Stack } from 'expo-router/stack'
 import AppContext from '../utils/AppContext'
 import { RealmProvider, AppProvider, UserProvider } from '@realm/react'
-import { Customer } from '../data/CustomerSchema'
+// import { Customer } from '../data/CustomerSchema'
+import { Customer } from '../models/CustomerSchema'
+import { Order } from '../models/OrderSchema'
+import { Item } from '../models/ItemSchema'
 import Authenticate from '../components/Authenticate'
 import { View } from 'react-native'
 import RealmContext from '../utils/RealmContext'
@@ -13,13 +16,15 @@ export default function Layout() {
       <AppProvider id={'devicesync-xogdi'}>
         <UserProvider fallback={<Authenticate />}>
           <RealmProvider
-            schema={[Customer as any]}
-            // deleteRealmIfMigrationNeeded // for local development when below sync is not used
+            schema={[Customer, Order, Item]}
+            // deleteRealmIfMigrationNeeded={true} // for local development when below sync is not used
             sync={{
               flexible: true,
               initialSubscriptions: {
                 update(subs, realm) {
                   subs.add(realm.objects(Customer))
+                  subs.add(realm.objects(Order))
+                  subs.add(realm.objects(Item))
                 },
               },
             }}

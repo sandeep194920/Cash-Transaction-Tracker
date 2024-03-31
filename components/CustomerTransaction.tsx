@@ -45,7 +45,7 @@ const CustomerTransaction = ({
             <View
               style={{ ...styleUtils.tag, backgroundColor: colors.lightGreen1 }}
             >
-              <Text style={styleUtils.tagText}>Given</Text>
+              <Text style={styleUtils.tagText}>Paid</Text>
             </View>
             <Text style={styleUtils.mediumText}>${order_price}</Text>
           </View>
