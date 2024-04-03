@@ -1,7 +1,7 @@
 import { BSON, ObjectSchema, Object } from 'realm'
 
 export class Item extends Object<Item> {
-  _id!: BSON.UUID
+  _id: BSON.ObjectId = new BSON.ObjectId()
   name!: string
   quantity!: number
   price_per_item!: number

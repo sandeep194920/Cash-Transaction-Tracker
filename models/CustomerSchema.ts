@@ -1,7 +1,7 @@
 import { BSON, ObjectSchema, Object } from 'realm'
 
 export class Customer extends Object<Customer> {
-  _id!: BSON.ObjectId
+  _id: BSON.ObjectID = new BSON.ObjectId()
   name!: string
   address!: string
   signed_up_on!: Date

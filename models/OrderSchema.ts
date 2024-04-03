@@ -2,7 +2,7 @@ import { BSON, ObjectSchema, Object } from 'realm'
 import { Item } from './ItemSchema'
 
 export class Order extends Object<Order> {
-  _id!: BSON.UUID
+  _id: BSON.ObjectID = new BSON.ObjectId()
   customer_id!: string
   user_id!: string
   order_id!: string
@@ -13,9 +13,9 @@ export class Order extends Object<Order> {
   items!: Item[] // Reference to the Item schema
 
   static schema: ObjectSchema = {
-    name: 'Order',
+    name: 'objectId',
     properties: {
-      _id: 'objectId',
+      _id: 'int',
       customer_id: 'string',
       user_id: 'string',
       order_id: 'string',

@@ -12,6 +12,7 @@ const WithCancelButton: React.FC = () => {
     // console.log('REACHED ADD HAANDLER')
     // formikAddCustomer.handleSubmit()
     addNewCustomerHandler()
+    toggleAddView()
   }
 
   return (
