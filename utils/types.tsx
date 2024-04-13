@@ -1,11 +1,20 @@
-export type CustomerType = {
-  customer_id: string
-  name: string
-  address: string
-  signed_up_on: string
-  balance: number
-}
+// export type CustomerType = {
+//   _id: string
+//   name: string
+//   address: string
+//   signed_up_on: string
+//   balance: number
+//   user_id: string
+// }
 
+export type CustomerType = {
+  _id: string // Assuming _id is represented as a string (e.g., ObjectId converted to string)
+  address: string
+  balance: number
+  name: string
+  signed_up_on: Date
+  user_id: string
+}
 export type ButtonType = {
   type: 'ADD' | 'EDIT'
 }

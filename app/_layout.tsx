@@ -6,7 +6,6 @@ import { Customer } from '../models/CustomerSchema'
 import { Order } from '../models/OrderSchema'
 import { Item } from '../models/ItemSchema'
 import Authenticate from '../components/Authenticate'
-import { View } from 'react-native'
 import RealmContext from '../utils/RealmContext'
 
 export default function Layout() {
@@ -20,6 +19,9 @@ export default function Layout() {
             // deleteRealmIfMigrationNeeded={true} // for local development when below sync is not used
             sync={{
               flexible: true,
+              onError: (e) => {
+                console.log('Error from realm is', e)
+              },
               initialSubscriptions: {
                 update(subs, realm) {
                   subs.add(realm.objects(Customer))

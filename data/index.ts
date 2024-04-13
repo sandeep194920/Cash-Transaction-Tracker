@@ -1,6 +1,6 @@
 import { CustomerType, OrdersType } from '../utils/types'
 
-const customers: CustomerType[] = [
+const customers = [
   {
     customer_id: '123',
     name: 'Anirban',
