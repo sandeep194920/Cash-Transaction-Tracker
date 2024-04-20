@@ -1,18 +1,20 @@
 import { Stack } from 'expo-router/stack'
 import AppContext from '../utils/AppContext'
-import { RealmProvider, AppProvider, UserProvider } from '@realm/react'
+import { AppProvider, RealmProvider, UserProvider } from '@realm/react'
 // import { Customer } from '../data/CustomerSchema'
 import { Customer } from '../models/CustomerSchema'
 import { Order } from '../models/OrderSchema'
 import { Item } from '../models/ItemSchema'
 import Authenticate from '../components/Authenticate'
 import RealmContext from '../utils/RealmContext'
-
+// ctt_sync-dqgiscj
 export default function Layout() {
   return (
     //  AppContext will not have access to realm
+    //
+    // ctt_sync-dqgiscj
     <AppContext>
-      <AppProvider id={'devicesync-xogdi'}>
+      <AppProvider id={'application-0-kawjqqk'}>
         <UserProvider fallback={<Authenticate />}>
           <RealmProvider
             schema={[Customer, Order, Item]}

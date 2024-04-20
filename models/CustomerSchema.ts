@@ -1,4 +1,5 @@
 import { BSON, ObjectSchema, Object } from 'realm'
+import { Order } from './OrderSchema'
 
 export class Customer extends Object<Customer> {
   _id: BSON.ObjectID = new BSON.ObjectId()
@@ -7,6 +8,7 @@ export class Customer extends Object<Customer> {
   signed_up_on!: Date
   balance!: number
   user_id!: string
+  orders!: Realm.List<Order>
 
   static schema: ObjectSchema = {
     name: 'Customer',
@@ -17,6 +19,7 @@ export class Customer extends Object<Customer> {
       signed_up_on: 'date',
       balance: 'double',
       user_id: 'string',
+      orders: 'Order[]',
     },
     primaryKey: '_id',
   }
