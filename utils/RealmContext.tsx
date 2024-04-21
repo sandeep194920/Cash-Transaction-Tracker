@@ -58,7 +58,27 @@ function RealmContext({ children }: { children: React.ReactNode }) {
         signed_up_on: new Date(),
         balance: 0,
         user_id: user.id,
+        orders: [],
         _id: new Realm.BSON.ObjectId(),
+      })
+    })
+    // TODO: this is just to test Order and Item creation. It works fine. Remove this later
+    realm.write(() => {
+      realm.create('Order', {
+        _id: new Realm.BSON.ObjectId(),
+        user_id: user.id,
+        order_id: 'remove_later',
+        order_price: 20,
+        paid_by_customer: 10,
+        carry_over: -10,
+        order_date: new Date(),
+        items: [
+          {
+            name: 'Roti',
+            quantity: 10,
+            price_per_item: 1,
+          },
+        ],
       })
     })
   }

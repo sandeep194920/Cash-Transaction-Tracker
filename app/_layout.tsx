@@ -3,10 +3,12 @@ import AppContext from '../utils/AppContext'
 import { AppProvider, RealmProvider, UserProvider } from '@realm/react'
 // import { Customer } from '../data/CustomerSchema'
 import { Customer } from '../models/CustomerSchema'
-import { Order } from '../models/OrderSchema'
-import { Item } from '../models/ItemSchema'
+import { Order, Item } from '../models/OrderSchema'
+// import { Item } from '../models/ItemSchema'
 import Authenticate from '../components/Authenticate'
 import RealmContext from '../utils/RealmContext'
+import { AppConstants } from '../constants'
+
 // ctt_sync-dqgiscj
 export default function Layout() {
   return (
@@ -14,7 +16,7 @@ export default function Layout() {
     //
     // ctt_sync-dqgiscj
     <AppContext>
-      <AppProvider id={'application-0-kawjqqk'}>
+      <AppProvider id={AppConstants.APP_ID}>
         <UserProvider fallback={<Authenticate />}>
           <RealmProvider
             schema={[Customer, Order, Item]}
@@ -24,11 +26,12 @@ export default function Layout() {
               onError: (e) => {
                 console.log('Error from realm is', e)
               },
+
               initialSubscriptions: {
                 update(subs, realm) {
                   subs.add(realm.objects(Customer))
                   subs.add(realm.objects(Order))
-                  subs.add(realm.objects(Item))
+                  // subs.add(realm.objects(Item)) // this is not necessary as it is embedded collection, but make sure you add it in schema above
                 },
               },
             }}
