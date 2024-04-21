@@ -1,25 +1,20 @@
 import { Stack } from 'expo-router/stack'
 import AppContext from '../utils/AppContext'
 import { AppProvider, RealmProvider, UserProvider } from '@realm/react'
-// import { Customer } from '../data/CustomerSchema'
 import { Customer } from '../models/CustomerSchema'
 import { Order, Item } from '../models/OrderSchema'
-// import { Item } from '../models/ItemSchema'
 import Authenticate from '../components/Authenticate'
 import RealmContext from '../utils/RealmContext'
 import { AppConstants } from '../constants'
 
-// ctt_sync-dqgiscj
 export default function Layout() {
   return (
     //  AppContext will not have access to realm
-    //
-    // ctt_sync-dqgiscj
     <AppContext>
       <AppProvider id={AppConstants.APP_ID}>
         <UserProvider fallback={<Authenticate />}>
           <RealmProvider
-            schema={[Customer, Order, Item]}
+            schema={[Customer, Order, Item]} // Item is required here even though it is embedded
             // deleteRealmIfMigrationNeeded={true} // for local development when below sync is not used
             sync={{
               flexible: true,

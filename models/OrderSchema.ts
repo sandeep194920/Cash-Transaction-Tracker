@@ -1,7 +1,6 @@
 import { BSON, ObjectSchema, Object } from 'realm'
-// import { Item } from './ItemSchema'
-// import { Customer } from './CustomerSchema'
 
+// Item (Embedded Model) is used inside Order which is defined in this file, so adding Item here itself.
 export class Item extends Object {
   name!: string
   quantity!: number
@@ -9,7 +8,7 @@ export class Item extends Object {
 
   static schema: ObjectSchema = {
     name: 'Item',
-    embedded: true, // THIS IS AN EMBEDDED SCHEMA
+    embedded: true, // ITEM IS AN EMBEDDED SCHEMA USED IN ORDER
     properties: {
       name: 'string',
       quantity: 'int',
@@ -25,7 +24,7 @@ export class Order extends Object<Order> {
   paid_by_customer!: number
   carry_over!: number
   order_date!: Date
-  // items!: Realm.List<Item> // Reference to the Item schema
+  // items!: Realm.List<Item> // Same as below line
   items!: { type: 'list'; objectType: 'Item' }
 
   static schema: ObjectSchema = {
