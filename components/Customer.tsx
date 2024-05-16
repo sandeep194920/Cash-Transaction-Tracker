@@ -12,11 +12,10 @@ type Customer = {
   balance: number
 }
 const Customer = ({ name, balance, customer_id }: Customer) => {
-  const user = useUser()
-  console.log('The user data is', user.id)
-  const query = useQuery(CustomerSchema, (customers) => {
-    return customers.filtered('user_id = $0', user.id)
-  })
+  const user = useUser();
+  // const customers = useQuery(CustomerSchema, (customers) => {
+  //   return customers.filtered("user_id = $0", user.id, customer_id);
+  // });
 
   return (
     <View>
@@ -39,21 +38,20 @@ const Customer = ({ name, balance, customer_id }: Customer) => {
               <View
                 style={{
                   ...styleUtils.tag,
-                  backgroundColor:
-                    balance >= 0 ? colors.lightGreen1 : colors.red,
+                  backgroundColor: 100 >= 0 ? colors.lightGreen1 : colors.red,
                 }}
               >
                 <Text style={styleUtils.tagText}>
-                  {balance >= 0 ? 'Overpayment ' : 'Outstanding'}
+                  {100 >= 0 ? "Overpayment " : "Outstanding"}
                 </Text>
               </View>
-              <Text style={{ fontWeight: '500' }}>${balance}</Text>
+              <Text style={{ fontWeight: "500" }}>$100</Text>
             </View>
           </View>
         </View>
       </Pressable>
     </View>
-  )
+  );
 }
 
 export default Customer

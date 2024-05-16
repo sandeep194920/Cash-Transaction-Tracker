@@ -1,34 +1,34 @@
-import { FlatList, Pressable, SafeAreaView, View, Text } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import data from '../data'
-import Customer from '../components/Customer'
-import { Customer as CustomerSchema } from '../models/CustomerSchema'
-import AddEditButton from '../components/Buttons/AddEditButton'
-import AddCustomer from '../components/EditableViews/AddCustomer'
-import { useGlobalContext } from '../utils/AppContext'
-import { colors, dimensions, styleUtils } from '../utils/styles'
-import { StyleSheet } from 'react-native'
-import { useAuth, useQuery, useUser } from '@realm/react'
+// SCREEN 1
+
+import { FlatList, Pressable, SafeAreaView, View, Text } from "react-native";
+import React, { useEffect, useState } from "react";
+import data from "../data";
+import Customer from "../components/Customer";
+import { Customer as CustomerSchema } from "../models/CustomerSchema";
+import AddEditButton from "../components/Buttons/AddEditButton";
+import AddCustomer from "../components/EditableViews/AddCustomer";
+import { useGlobalContext } from "../utils/AppContext";
+import { colors, dimensions, styleUtils } from "../utils/styles";
+import { StyleSheet } from "react-native";
+import { useAuth, useQuery, useUser } from "@realm/react";
 // import { CustomerType } from '../utils/types'
-import { BSON } from 'realm'
+import { BSON } from "realm";
 
 interface CustomerType {
-  _id: BSON.ObjectID
-  name: string
-  address: string
-  signed_up_on: Date
-  balance: number
-  user_id: string
+  _id: BSON.ObjectID;
+  name: string;
+  address: string;
+  signed_up_on: Date;
+  balance: number;
+  user_id: string;
 }
 
 const Customers = () => {
   // const { customers } = data
-  const { inputView } = useGlobalContext()
-  const { logOut } = useAuth()
-  const customersData = useQuery(CustomerSchema)
-  const [customers, setCustomers] = useState<CustomerType[]>([])
-
-  console.log('the db customers are', customersData)
+  const { inputView } = useGlobalContext();
+  const { logOut } = useAuth();
+  const customersData = useQuery(CustomerSchema);
+  const [customers, setCustomers] = useState<CustomerType[]>([]);
 
   useEffect(() => {
     // setCustomers(customersData)
@@ -43,12 +43,12 @@ const Customers = () => {
           balance: customer.balance,
           user_id: customer.user_id,
         })
-      )
+      );
 
       // Update the customers state with extracted customers
-      setCustomers(extractedCustomers)
+      setCustomers(extractedCustomers);
     }
-  }, [customersData])
+  }, [customersData]);
 
   return (
     <SafeAreaView style={styleUtils.flexContainer}>
@@ -69,17 +69,17 @@ const Customers = () => {
           <AddEditButton type="ADD" />
         </>
       )}
-      {inputView.isInput && inputView.inputType === 'ADD' && <AddCustomer />}
+      {inputView.isInput && inputView.inputType === "ADD" && <AddCustomer />}
     </SafeAreaView>
-  )
-}
+  );
+};
 
-export default Customers
+export default Customers;
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
+    flexDirection: "row",
+    justifyContent: "flex-end",
     margin: 10,
   },
   buttonText: {
@@ -89,4 +89,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: dimensions.paddingSmall3,
     borderRadius: dimensions.borderRadius,
   },
-})
+});

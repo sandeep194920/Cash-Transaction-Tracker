@@ -4,15 +4,16 @@ import React from 'react'
 import { router } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { colors, styleUtils } from '../utils/styles'
+import { useQuery } from "@realm/react";
 
 type CustomerTransaction = {
-  customer_name: string
-  order_id: string
-  customer_id: string
-  order_price: number
-  order_date: string
-  items: {}
-}
+  customer_name: string;
+  order_id: string;
+  customer_id: string;
+  order_price: number;
+  order_date: string;
+  items: {};
+};
 
 const CustomerTransaction = ({
   order_id,
@@ -21,6 +22,16 @@ const CustomerTransaction = ({
   customer_id,
   customer_name,
 }: CustomerTransaction) => {
+  //   const customers = useQuery(CustomerSc, (customers) => {
+  //   return customers.filtered("user_id = $0", user.id, customer_id);
+  // });
+  console.log("The logs are");
+
+  console.log("The order_id ", order_id);
+  console.log("The customer_id ", customer_id);
+  console.log("The order_price ", order_price);
+  console.log("The order_date ", order_date);
+
   return (
     <Pressable
       onPress={() =>
@@ -35,9 +46,9 @@ const CustomerTransaction = ({
           <View>
             <Text style={styleUtils.smallText}>{order_date}</Text>
           </View>
-          <View style={{ ...styleUtils.flexRow, justifyContent: 'center' }}>
+          <View style={{ ...styleUtils.flexRow, justifyContent: "center" }}>
             <Ionicons name="pricetag" size={20} color={colors.lightGreen1} />
-            <Text style={{ marginLeft: 10, fontWeight: 'bold' }}>$10</Text>
+            <Text style={{ marginLeft: 10, fontWeight: "bold" }}>$10</Text>
           </View>
         </View>
         <View style={styleUtils.columnContainer}>
@@ -58,7 +69,7 @@ const CustomerTransaction = ({
               }}
             >
               <Text style={styleUtils.tagText}>{`${
-                order_price >= 0 ? 'Overpayment' : 'Outstanding'
+                order_price >= 0 ? "Overpayment" : "Outstanding"
               }`}</Text>
             </View>
             <Text style={styleUtils.mediumText}>${order_price}</Text>
@@ -66,8 +77,8 @@ const CustomerTransaction = ({
         </View>
       </View>
     </Pressable>
-  )
-}
+  );
+};
 
 export default CustomerTransaction
 

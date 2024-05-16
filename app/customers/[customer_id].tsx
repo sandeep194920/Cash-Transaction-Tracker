@@ -1,24 +1,28 @@
-import { View, FlatList, Text, StyleSheet, SafeAreaView } from 'react-native'
-import React from 'react'
-import data from '../../data'
-import CustomerTransaction from '../../components/CustomerTransaction'
-import { styleUtils } from '../../utils/styles'
-import WithAddButton from '../../components/Buttons/AddEditButton'
-import Button from '../../components/Buttons/AddEditButton'
-import AddCustomer from '../../components/EditableViews/AddCustomer'
-import { useQuery, useRealm } from '@realm/react'
-import { useLocalSearchParams } from 'expo-router'
+// SCREEN 2
+import { View, FlatList, Text, StyleSheet, SafeAreaView } from "react-native";
+import React from "react";
+import data from "../../data";
+import CustomerTransaction from "../../components/CustomerTransaction";
+import { styleUtils } from "../../utils/styles";
+import WithAddButton from "../../components/Buttons/AddEditButton";
+import Button from "../../components/Buttons/AddEditButton";
+import AddCustomer from "../../components/EditableViews/AddCustomer";
+import { useQuery, useRealm } from "@realm/react";
+import { useLocalSearchParams } from "expo-router";
 
 const Customer = () => {
-  const realm = useQuery('Customer')
+  const realm = useQuery("Customer");
 
-  console.log('The log is', realm)
+  console.log("The log is", realm);
 
-  const { customer_id, customer_name } = useLocalSearchParams()
-  const customerIdString = customer_id as string // Type assertion. This is required for useLocalSearchParams
-  const customerName = customer_name as string
-  const { orders } = data
-  const customerOrders = orders[customerIdString] || []
+  const { customer_id, customer_name } = useLocalSearchParams();
+  console.log("The customer_id here is", customer_id);
+
+  const customerIdString = customer_id as string; // Type assertion. This is required for useLocalSearchParams
+  const customerName = customer_name as string;
+  const { orders } = data;
+  const customerOrders = orders[customerIdString] || [];
+
   return (
     <SafeAreaView style={styleUtils.flexContainer}>
       <View style={styleUtils.headerTextContainer}>
@@ -37,9 +41,9 @@ const Customer = () => {
       />
       <Button type="ADD" />
     </SafeAreaView>
-  )
-}
+  );
+};
 
-export default Customer
+export default Customer;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

@@ -58,12 +58,11 @@ const RegisterLoginForm = () => {
     email,
     password,
   }: {
-    email: string
-    password: string
+    email: string;
+    password: string;
   }) => {
-    console.log('The email is', email, 'and pass is', password)
-    register({ email, password })
-  }
+    register({ email, password });
+  };
 
   // Log in the user after successful registration
   useEffect(() => {
@@ -73,8 +72,7 @@ const RegisterLoginForm = () => {
       creds.email &&
       creds.password
     ) {
-      console.log('The logged in user is', creds.email, creds.password)
-      logIn({ email: creds.email, password: creds.password })
+      logIn({ email: creds.email, password: creds.password });
     }
   }, [result, logIn])
 

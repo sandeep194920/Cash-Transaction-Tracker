@@ -9,11 +9,10 @@ const WithCancelButton: React.FC = () => {
   const { addNewCustomerHandler } = useRealmContext()
 
   const addHandler = () => {
-    // console.log('REACHED ADD HAANDLER')
     // formikAddCustomer.handleSubmit()
-    addNewCustomerHandler()
-    toggleAddView()
-  }
+    addNewCustomerHandler();
+    toggleAddView();
+  };
 
   return (
     <View style={styleUtils.buttonContainer}>
