@@ -4,47 +4,27 @@ import React from 'react'
 import { router } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { colors, styleUtils } from '../utils/styles'
-import { useQuery } from "@realm/react";
+import { useQuery, useUser } from "@realm/react";
+// import { OrdersType } from "../utils/types";
+import { OrderType } from "../models/OrderSchema";
 
-type CustomerTransaction = {
-  customer_name: string;
-  order_id: string;
-  customer_id: string;
-  order_price: number;
-  order_date: string;
-  items: {};
-};
-
-const CustomerTransaction = ({
-  order_id,
-  order_price,
-  order_date,
-  customer_id,
-  customer_name,
-}: CustomerTransaction) => {
-  //   const customers = useQuery(CustomerSc, (customers) => {
-  //   return customers.filtered("user_id = $0", user.id, customer_id);
-  // });
-  console.log("The logs are");
-
-  console.log("The order_id ", order_id);
-  console.log("The customer_id ", customer_id);
-  console.log("The order_price ", order_price);
-  console.log("The order_date ", order_date);
-
+const CustomerTransaction: React.FC<OrderType> = (props) => {
+  const { order_price, order_date, _id: order_id } = props;
   return (
     <Pressable
-      onPress={() =>
-        router.push({
-          pathname: `/customers/orders/${order_id}`,
-          params: { customer_id, customer_name },
-        })
-      }
+    // onPress={() =>
+    //   router.push({
+    //     pathname: `/customers/orders/${order_id}`,
+    //     params: { customer_id, customer_name },
+    //   })
+    // }
     >
       <View style={styleUtils.itemContainer}>
         <View style={styleUtils.columnContainer}>
           <View>
-            <Text style={styleUtils.smallText}>{order_date}</Text>
+            <Text style={styleUtils.smallText}>
+              {order_date.toDateString()}
+            </Text>
           </View>
           <View style={{ ...styleUtils.flexRow, justifyContent: "center" }}>
             <Ionicons name="pricetag" size={20} color={colors.lightGreen1} />
@@ -64,15 +44,14 @@ const CustomerTransaction = ({
             <View
               style={{
                 ...styleUtils.tag,
-                backgroundColor:
-                  order_price >= 0 ? colors.lightBlue1 : colors.red,
+                backgroundColor: 10 >= 0 ? colors.lightBlue1 : colors.red,
               }}
             >
               <Text style={styleUtils.tagText}>{`${
-                order_price >= 0 ? "Overpayment" : "Outstanding"
+                10 >= 0 ? "Overpayment" : "Outstanding"
               }`}</Text>
             </View>
-            <Text style={styleUtils.mediumText}>${order_price}</Text>
+            <Text style={styleUtils.mediumText}>${10}</Text>
           </View>
         </View>
       </View>
