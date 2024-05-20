@@ -41,10 +41,10 @@ export const styleUtils = StyleSheet.create({
   /* EACH ITEM STYLES ---> */
   // Each item in the list
   itemContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     padding: dimensions.paddingMedium,
     backgroundColor: colors.lightGray1,
     marginBottom: dimensions.marginMedium,
@@ -52,9 +52,10 @@ export const styleUtils = StyleSheet.create({
 
   // Each item in the list
   columnContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
     gap: dimensions.marginLarge1,
   },
 
@@ -69,7 +70,7 @@ export const styleUtils = StyleSheet.create({
     marginRight: dimensions.marginLarge1,
   },
   tagText: {
-    color: 'white',
+    color: "white",
     fontSize: dimensions.tagFont,
   },
 
@@ -77,12 +78,12 @@ export const styleUtils = StyleSheet.create({
   largeText: {
     color: colors.black,
     fontSize: dimensions.largeFont,
-    fontWeight: '500',
+    fontWeight: "500",
   },
 
   // for something like Price
   mediumText: {
-    fontWeight: '500',
+    fontWeight: "500",
   },
 
   // used for displaying customer id and such sub texts
@@ -95,18 +96,18 @@ export const styleUtils = StyleSheet.create({
   /* <--- TEXT RELATED STYLES */
   // Header text related
   headerTextContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
     gap: dimensions.smallGap,
     marginVertical: dimensions.marginLarge1,
   },
 
   headerText: {
-    color: '#171414',
+    color: "#171414",
     fontSize: dimensions.extraLargeFont,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 
   smallText: {
@@ -119,20 +120,20 @@ export const styleUtils = StyleSheet.create({
     flex: 1,
   },
   flexRow: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   /* <---ORIENTATION RELATED STYLES */
 
   /* ADD BUTTON RELATED STYLES */
   buttonContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    margin: 'auto',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    margin: "auto",
+    alignItems: "center",
     gap: 100,
   },
   addButton: {
@@ -140,14 +141,14 @@ export const styleUtils = StyleSheet.create({
     borderRadius: dimensions.borderRadiusRound,
     width: dimensions.paddingExtraLarge,
     height: dimensions.paddingExtraLarge,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   buttonText: {
-    color: 'white',
+    color: "white",
     fontSize: dimensions.extraLargeFont2,
   },
-})
+});
 
 export const userFormStyles = StyleSheet.create({
   flexContainer: {

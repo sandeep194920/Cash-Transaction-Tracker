@@ -1,8 +1,5 @@
-import { Double } from "react-native/Libraries/Types/CodegenTypes";
 import { BSON, ObjectSchema, Object } from "realm";
-import { CustomerType } from "./CustomerSchema";
 
-// Item (Embedded Model) is used inside Order which is defined in this file, so adding Item here itself.
 export class Item extends Object {
   name!: string;
   quantity!: number;
@@ -50,15 +47,15 @@ export class Order extends Object<Order> {
   };
 }
 
-export type OrderType = {
-  _id: string;
-  user_id: string;
-  customer_id: string;
-  order_price: Double;
-  paid_by_customer: Double;
-  carry_over: Double;
-  order_date: Date;
-  items: Realm.List<Item>;
-  // TODO: Add customer which is linking object. Know the type of it and add it here
-  // customer: CustomerType;
-};
+// INFO: Not required as I'm using the interface CustomerTransactionProps in CustomerTransaction comp to recieve the prop transaction
+
+// export type OrderType = {
+//   _id: string;
+//   user_id: string;
+//   customer_id: string;
+//   order_price: Double;
+//   paid_by_customer: Double;
+//   carry_over: Double;
+//   order_date: Date;
+//   items: Realm.List<Item>;
+// };

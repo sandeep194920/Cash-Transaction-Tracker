@@ -1,49 +1,57 @@
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { useLocalSearchParams } from 'expo-router'
-import { orders } from '../../../data'
-import { colors, dimensions, styleUtils } from '../../../utils/styles'
-import Button from '../../../components/Buttons/AddEditButton'
+import { useLocalSearchParams } from "expo-router";
+import { colors, dimensions, styleUtils } from "../../../utils/styles";
+import Button from "../../../components/Buttons/AddEditButton";
+import { useObject, useQuery } from "@realm/react";
+import { Order } from "../../../models/OrderSchema";
 
 const CustomerOrder = () => {
-  const { customer_id, order_id, customer_name } = useLocalSearchParams()
+  const { customer_id, order_id, customer_name } = useLocalSearchParams();
 
-  const order = orders[customer_id as string].find(
-    (order) => order.order_id === order_id
-  )
+  // const order = orders[customer_id as string].find(
+  //   (order) => order.order_id === order_id
+  // )
 
-  const { order_date, order_price, items, paid_by_customer, carry_over } =
-    order ?? {
-      order_price: 0,
-      paid_by_customer: 0,
-      carry_over: 0,
-    }
-  let type = 'CarryOver'
+  // const order = useObject(Order, order_id.toString());
+  // const order = useQuery(Order, (orders) => {
+  //   return orders.filtered("_id == $0", order_id);
+  // });
+  // const { order_date, order_price, items, paid_by_customer, carry_over } =
+  //   order ?? {
+  //     order_price: 0,
+  //     paid_by_customer: 0,
+  //     carry_over: 0,
+  //   };
+  // let type = "CarryOver";
 
-  if (order_price - paid_by_customer <= 0) {
-    type = 'Overpayment'
-  }
+  // if (order_price - paid_by_customer <= 0) {
+  //   type = "Overpayment";
+  // }
 
   return (
     <SafeAreaView style={styleUtils.flexContainer}>
       <View style={styleUtils.flexContainer}>
         {/* Header to show date and price */}
-        <View style={styleUtils.headerTextContainer}>
-          <Text style={styleUtils.headerText}>{order_date}</Text>
+        <Text>HELLO</Text>
+        {/* <View style={styleUtils.headerTextContainer}>
+          <Text style={styleUtils.headerText}>
+            {order_date?.toDateString()}
+          </Text>
           <Text style={styleUtils.smallText}>(Monday)</Text>
-        </View>
+        </View> */}
         {/* Items */}
-        <View style={styles.itemsContainer}>
+        {/* <View style={styles.itemsContainer}>
           <FlatList
             data={items}
             renderItem={({ item }) => <ItemDetails {...item} />}
           />
-        </View>
+        </View> */}
 
         {/* Customer Price Details */}
 
         {/* total */}
-        <View style={styles.priceContainer}>
+        {/* <View style={styles.priceContainer}>
           <Text style={styleUtils.mediumText}>Total </Text>
           <View style={styleUtils.flexRow}>
             <View
@@ -60,9 +68,9 @@ const CustomerOrder = () => {
               >{` $ ${order_price} `}</Text>
             </View>
           </View>
-        </View>
+        </View> */}
         {/* paid by customer */}
-        <View style={styles.priceContainer}>
+        {/* <View style={styles.priceContainer}>
           <Text style={styleUtils.mediumText}>{customer_name} paid</Text>
           <View style={styleUtils.flexRow}>
             <View
@@ -79,16 +87,16 @@ const CustomerOrder = () => {
               >{` $ ${paid_by_customer} `}</Text>
             </View>
           </View>
-        </View>
+        </View> */}
         {/* carryover */}
-        <View style={styles.priceContainer}>
+        {/* <View style={styles.priceContainer}>
           <Text style={styleUtils.mediumText}>{type}</Text>
           <View style={styleUtils.flexRow}>
             <View
               style={{
                 ...styleUtils.tag,
                 backgroundColor:
-                  type === 'Overpayment' ? colors.lightGreen2 : colors.red,
+                  type === "Overpayment" ? colors.lightGreen2 : colors.red,
               }}
             >
               <Text
@@ -99,12 +107,12 @@ const CustomerOrder = () => {
               >{` $ ${carry_over} `}</Text>
             </View>
           </View>
-        </View>
+        </View> */}
       </View>
       <Button type="EDIT" />
     </SafeAreaView>
-  )
-}
+  );
+};
 
 export default CustomerOrder
 

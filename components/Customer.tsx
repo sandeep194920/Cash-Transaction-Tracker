@@ -2,11 +2,14 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { router } from "expo-router";
 import { colors, styleUtils } from "../utils/styles";
-// import { CustomerType } from "../utils/types";
-import { CustomerType } from "../models/CustomerSchema";
+import { Customer as CustomerSchema } from "../models/CustomerSchema";
 
-const Customer: React.FC<CustomerType> = (props) => {
-  const { name, _id: customer_id, balance } = props;
+interface CustomerProps {
+  customer: CustomerSchema;
+}
+
+const Customer: React.FC<CustomerProps> = ({ customer }) => {
+  const { name, _id: customer_id, balance } = customer;
   return (
     <View>
       <Pressable

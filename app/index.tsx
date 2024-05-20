@@ -29,8 +29,9 @@ const Customers = () => {
           <FlatList
             data={customers}
             renderItem={({ item }) => {
-              const customerProps = { ...item, _id: item._id.toString() };
-              return <Customer {...customerProps} />;
+              // const customerProps = { ...item, _id: item._id.toString() };
+              // return <Customer {...customerProps} />;
+              return <Customer customer={item} />;
             }}
           />
           <AddEditButton type="ADD" />

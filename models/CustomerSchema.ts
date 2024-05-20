@@ -25,13 +25,14 @@ export class Customer extends Object<Customer> {
   };
 }
 
-// Extract the instance type of the Customer class
-export type CustomerType = {
-  _id: string; // this is BSON.ObjectID but marking it as string so we dont have to do .toString() while using it in CustomerTransaction file
-  user_id: string;
-  name: string;
-  address: string;
-  signed_up_on: Date;
-  balance: number;
-  orders: Realm.List<Order>;
-};
+// INFO: Not required as I'm using the interface in CustomerTransaction to recieve the prop customer
+
+// export type CustomerType = {
+//   _id: string; // this is BSON.ObjectID but marking it as string so we dont have to do .toString() while using it in CustomerTransaction file
+//   user_id: string;
+//   name: string;
+//   address: string;
+//   signed_up_on: Date;
+//   balance: number;
+//   orders: Realm.List<Order>;
+// };

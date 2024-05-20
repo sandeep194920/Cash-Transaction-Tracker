@@ -16,18 +16,17 @@ const CustomerTransactions = () => {
   const { customer_id, customer_name } = useLocalSearchParams();
   console.log("The customer_id here is", customer_id);
 
-  const customerIdString = customer_id as string; // Type assertion. This is required for useLocalSearchParams
-  const { orders } = data;
   const user = useUser();
 
-  const customerTransactions = useQuery(Order, (orders) => {
-    return orders.filtered(
-      "user_id = $0 && customer_id = $1",
-      user.id,
-      "66243e727f36f32ada6fe261"
-    );
-  });
+  // const customerTransactions = useQuery(Order, (orders) => {
+  //   return orders.filtered(
+  //     "user_id = $0 && customer_id = $1",
+  //     user.id,
+  //     "66243e727f36f32ada6fe261"
+  //   );
+  // });
 
+  const customerTransactions = useQuery(Order);
   console.log("The customer's transaction is", customerTransactions[0]);
 
   return (
@@ -39,10 +38,13 @@ const CustomerTransactions = () => {
       <FlatList
         data={customerTransactions}
         renderItem={({ item }) => {
-          console.log("The item is", item);
-
-          const transactionProps = { ...item, _id: item._id.toString() };
-          return <CustomerTransaction {...transactionProps} />;
+          return (
+            <CustomerTransaction
+              transaction={item}
+              customer_id={customer_id.toString()}
+              customer_name={customer_name.toString()}
+            />
+          );
         }}
       />
       <Button type="ADD" />
