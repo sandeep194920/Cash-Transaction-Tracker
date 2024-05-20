@@ -18,15 +18,14 @@ const CustomerTransactions = () => {
 
   const user = useUser();
 
-  // const customerTransactions = useQuery(Order, (orders) => {
-  //   return orders.filtered(
-  //     "user_id = $0 && customer_id = $1",
-  //     user.id,
-  //     "66243e727f36f32ada6fe261"
-  //   );
-  // });
+  const customerTransactions = useQuery(Order, (orders) => {
+    return orders.filtered(
+      "user_id = $0 && customer_id = $1",
+      user.id,
+      customer_id
+    );
+  });
 
-  const customerTransactions = useQuery(Order);
   console.log("The customer's transaction is", customerTransactions[0]);
 
   return (

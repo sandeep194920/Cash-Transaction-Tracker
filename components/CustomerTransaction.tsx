@@ -36,13 +36,11 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
 
   const getLinkedCustomer = (order: Order) => {
     console.log("The order is", order);
-
+    
     const customers = order.linkingObjects<CustomerSchema>(
       "Customer",
       "orders"
     );
-    // Returns 'Nissan', as only one manufacturer is linked
-    // to this car object.
     if (customers.length > 0) return customers[0];
     else return null;
   };

@@ -2,8 +2,9 @@ import { FormikConfig, useFormik } from 'formik'
 import React, { createContext, useContext, useRef, useState } from "react";
 import { customerValidationSchema } from "./FormValidators";
 import { InputViewType } from "./types";
-import { useRealm, useUser } from "@realm/react";
+import { useQuery, useRealm, useUser } from "@realm/react";
 import Realm from "realm";
+import { Order } from "../models/OrderSchema";
 
 type FormValues = {
   name: string;
@@ -46,11 +47,15 @@ function RealmContext({ children }: { children: React.ReactNode }) {
     },
   };
 
+  const orders = useQuery(Order);
+  console.log("The orders retreived are", orders);
+
   const createdCustomerRef = useRef("");
 
   /*  add new customer */
   const addNewCustomerHandler = async () => {
     const { name, phone, email, address } = formikAddCustomer.values;
+
     realm.write(() => {
       const createdCustomer = realm.create("Customer", {
         name,
@@ -60,7 +65,7 @@ function RealmContext({ children }: { children: React.ReactNode }) {
         signed_up_on: new Date(),
         balance: 0,
         user_id: user.id,
-        orders: [],
+        orders: orders,
         _id: new Realm.BSON.ObjectId(),
       });
       console.log("The created customer is", createdCustomer);
@@ -68,24 +73,24 @@ function RealmContext({ children }: { children: React.ReactNode }) {
     });
 
     // TODO: this is just to test Order and Item creation. It works fine. Remove this later
-    realm.write(() => {
-      realm.create("Order", {
-        _id: new Realm.BSON.ObjectId(),
-        user_id: user.id,
-        order_price: 20,
-        paid_by_customer: 10,
-        customer_id: createdCustomerRef.current,
-        carry_over: -10,
-        order_date: new Date(),
-        items: [
-          {
-            name: "Roti",
-            quantity: 10,
-            price_per_item: 1,
-          },
-        ],
-      });
-    });
+    // realm.write(() => {
+    //   realm.create("Order", {
+    //     _id: new Realm.BSON.ObjectId(),
+    //     user_id: user.id,
+    //     order_price: 20,
+    //     paid_by_customer: 10,
+    //     customer_id: createdCustomerRef.current,
+    //     carry_over: -10,
+    //     order_date: new Date(),
+    //     items: [
+    //       {
+    //         name: "Roti",
+    //         quantity: 10,
+    //         price_per_item: 1,
+    //       },
+    //     ],
+    //   });
+    // });
   };
 
   const formikAddCustomer = useFormik(formikConfigAddCustomer);
