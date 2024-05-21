@@ -47,13 +47,15 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
 
   const result = getLinkedCustomer(transaction);
   console.log("The result is", result);
+console.log("The order id type is", typeof order_id);
 
   return (
     <Pressable
       onPress={() =>
         router.push({
-          pathname: `/customers/orders/${order_id}`,
-          params: { customer_id, customer_name, order_id: order_id.toString() },
+          pathname: `/customers/orders/[order_id]`,
+          params: { order_id: order_id.toString() },
+          // params: { customer_id, customer_name },
         })
       }
     >

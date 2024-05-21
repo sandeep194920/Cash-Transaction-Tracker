@@ -4,54 +4,59 @@ import { useLocalSearchParams } from "expo-router";
 import { colors, dimensions, styleUtils } from "../../../utils/styles";
 import Button from "../../../components/Buttons/AddEditButton";
 import { useObject, useQuery } from "@realm/react";
-import { Order } from "../../../models/OrderSchema";
+import {
+  Order as OrderSchema,
+  Item as ItemSchema,
+} from "../../../models/OrderSchema";
+import { BSON } from "realm";
 
 const CustomerOrder = () => {
-  const { customer_id, order_id, customer_name } = useLocalSearchParams();
+  const { order_id } = useLocalSearchParams<{ order_id: string }>();
 
   // const order = orders[customer_id as string].find(
   //   (order) => order.order_id === order_id
   // )
 
-  // const order = useObject(Order, order_id.toString());
+  const order = useObject(OrderSchema, new BSON.ObjectID(order_id));
   // const order = useQuery(Order, (orders) => {
-  //   return orders.filtered("_id == $0", order_id);
+  //   return orders.filtered("_id == $0", order_id.toString());
   // });
-  // const { order_date, order_price, items, paid_by_customer, carry_over } =
-  //   order ?? {
-  //     order_price: 0,
-  //     paid_by_customer: 0,
-  //     carry_over: 0,
-  //   };
-  // let type = "CarryOver";
 
-  // if (order_price - paid_by_customer <= 0) {
-  //   type = "Overpayment";
-  // }
+  const { order_date, order_price, items, paid_by_customer, carry_over } =
+    order ?? {
+      order_price: 0,
+      paid_by_customer: 0,
+      carry_over: 0,
+    };
+  let type = "CarryOver";
+
+  if (order_price - paid_by_customer <= 0) {
+    type = "Overpayment";
+  }
 
   return (
     <SafeAreaView style={styleUtils.flexContainer}>
       <View style={styleUtils.flexContainer}>
         {/* Header to show date and price */}
-        <Text>HELLO</Text>
-        {/* <View style={styleUtils.headerTextContainer}>
+        {/* <Text>HELLO</Text> */}
+        <View style={styleUtils.headerTextContainer}>
           <Text style={styleUtils.headerText}>
             {order_date?.toDateString()}
           </Text>
           <Text style={styleUtils.smallText}>(Monday)</Text>
-        </View> */}
+        </View>
         {/* Items */}
-        {/* <View style={styles.itemsContainer}>
+        <View style={styles.itemsContainer}>
           <FlatList
             data={items}
-            renderItem={({ item }) => <ItemDetails {...item} />}
+            renderItem={({ item }) => <ItemDetails item={item} />}
           />
-        </View> */}
+        </View>
 
         {/* Customer Price Details */}
 
         {/* total */}
-        {/* <View style={styles.priceContainer}>
+        <View style={styles.priceContainer}>
           <Text style={styleUtils.mediumText}>Total </Text>
           <View style={styleUtils.flexRow}>
             <View
@@ -68,10 +73,10 @@ const CustomerOrder = () => {
               >{` $ ${order_price} `}</Text>
             </View>
           </View>
-        </View> */}
+        </View>
         {/* paid by customer */}
-        {/* <View style={styles.priceContainer}>
-          <Text style={styleUtils.mediumText}>{customer_name} paid</Text>
+        <View style={styles.priceContainer}>
+          <Text style={styleUtils.mediumText}>{"customer_name"} paid</Text>
           <View style={styleUtils.flexRow}>
             <View
               style={{
@@ -87,9 +92,9 @@ const CustomerOrder = () => {
               >{` $ ${paid_by_customer} `}</Text>
             </View>
           </View>
-        </View> */}
+        </View>
         {/* carryover */}
-        {/* <View style={styles.priceContainer}>
+        <View style={styles.priceContainer}>
           <Text style={styleUtils.mediumText}>{type}</Text>
           <View style={styleUtils.flexRow}>
             <View
@@ -107,23 +112,24 @@ const CustomerOrder = () => {
               >{` $ ${carry_over} `}</Text>
             </View>
           </View>
-        </View> */}
+        </View>
       </View>
       <Button type="EDIT" />
     </SafeAreaView>
   );
 };
 
-export default CustomerOrder
+export default CustomerOrder;
 
-type ItemDetails = {
-  name: string
-  pricePerItem: number
-  quantity: number
-}
+type ItemProps = {
+  // name: string
+  // pricePerItem: number
+  // quantity: number
+  item: ItemSchema;
+};
 
-const ItemDetails = (props: ItemDetails) => {
-  const { name, pricePerItem, quantity } = props
+const ItemDetails: React.FC<ItemProps> = ({ item }) => {
+  const { name, price_per_item, quantity } = item;
   return (
     <View style={styles.itemContainerExtended}>
       <Text style={styleUtils.largeText}>
@@ -138,13 +144,13 @@ const ItemDetails = (props: ItemDetails) => {
           }}
         >
           <Text style={{ ...styleUtils.tagText, color: colors.black }}>{` $ ${
-            pricePerItem * quantity
+            price_per_item * quantity
           } `}</Text>
         </View>
       </View>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   itemsContainer: {
