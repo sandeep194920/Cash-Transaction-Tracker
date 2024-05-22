@@ -1,5 +1,5 @@
 import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect, useMemo, useState } from "react";
 import { useLocalSearchParams } from "expo-router";
 import { colors, dimensions, styleUtils } from "../../../utils/styles";
 import Button from "../../../components/Buttons/AddEditButton";
@@ -8,19 +8,46 @@ import {
   Order as OrderSchema,
   Item as ItemSchema,
 } from "../../../models/OrderSchema";
+
+import { Customer as CustomerSchema } from "../../../models/CustomerSchema";
+
 import { BSON } from "realm";
 
 const CustomerOrder = () => {
   const { order_id } = useLocalSearchParams<{ order_id: string }>();
-
-  // const order = orders[customer_id as string].find(
-  //   (order) => order.order_id === order_id
-  // )
+  const [customerDetails, setCustomerDetails] =
+    useState<CustomerSchema | null>();
 
   const order = useObject(OrderSchema, new BSON.ObjectID(order_id));
   // const order = useQuery(Order, (orders) => {
   //   return orders.filtered("_id == $0", order_id.toString());
   // });
+
+  // if (order) {
+  //   const result = getLinkedCustomer(order);
+  //   console.log("The result in orderpage is", result);
+  //   setCustomerDetails(result);
+  // }
+
+  useEffect(() => {
+    if (!order) return;
+
+    const fetchCustomerDetails = () => {
+      try {
+        const customer = order.linkingObjects<CustomerSchema>(
+          "Customer",
+          "orders"
+        )[0];
+        setCustomerDetails(customer);
+      } catch (error) {
+        console.error("Failed to fetch customer details:", error);
+      }
+    };
+
+    fetchCustomerDetails();
+  }, [order]);
+
+  const customer = useMemo(() => customerDetails, [customerDetails]);
 
   const { order_date, order_price, items, paid_by_customer, carry_over } =
     order ?? {
@@ -76,7 +103,7 @@ const CustomerOrder = () => {
         </View>
         {/* paid by customer */}
         <View style={styles.priceContainer}>
-          <Text style={styleUtils.mediumText}>{"customer_name"} paid</Text>
+          <Text style={styleUtils.mediumText}>{customer?.name} paid</Text>
           <View style={styleUtils.flexRow}>
             <View
               style={{

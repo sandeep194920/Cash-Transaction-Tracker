@@ -6,6 +6,8 @@ import { Order, Item } from '../models/OrderSchema'
 import Authenticate from '../components/Authenticate'
 import RealmContext from '../utils/RealmContext'
 import { AppConstants } from '../constants'
+import { useEffect } from "react";
+import { Alert, BackHandler } from "react-native";
 
 export default function Layout() {
   return (
@@ -19,13 +21,13 @@ export default function Layout() {
             sync={{
               flexible: true,
               onError: (e) => {
-                console.log('Error from realm is', e)
+                console.log("Error from realm is", e);
               },
 
               initialSubscriptions: {
                 update(subs, realm) {
-                  subs.add(realm.objects(Customer))
-                  subs.add(realm.objects(Order))
+                  subs.add(realm.objects(Customer));
+                  subs.add(realm.objects(Order));
                   // subs.add(realm.objects(Item)) // this is not necessary as it is embedded collection, but make sure you add it in schema above
                 },
               },
@@ -34,6 +36,7 @@ export default function Layout() {
             {/* RealmContext will have access to realm */}
             <RealmContext>
               <Stack
+
               // screenOptions={{
               //   contentStyle: { backgroundColor: 'black' },
               // }}
@@ -41,31 +44,31 @@ export default function Layout() {
                 <Stack.Screen
                   name="index"
                   options={{
-                    headerTitle: 'Customers',
+                    headerTitle: "Customers",
                     headerStyle: {
-                      backgroundColor: '#030303',
+                      backgroundColor: "#030303",
                     },
-                    headerTintColor: 'white',
+                    headerTintColor: "white",
                   }}
                 />
                 <Stack.Screen
                   name="customers/[customer_id]"
                   options={{
-                    headerTitle: 'Transactions',
+                    headerTitle: "Transactions",
                     headerStyle: {
-                      backgroundColor: '#191d1d',
+                      backgroundColor: "#191d1d",
                     },
-                    headerTintColor: 'white',
+                    headerTintColor: "white",
                   }}
                 />
                 <Stack.Screen
                   name="customers/orders/[order_id]"
                   options={{
-                    headerTitle: 'Details',
+                    headerTitle: "Details",
                     headerStyle: {
-                      backgroundColor: '#191d1d',
+                      backgroundColor: "#191d1d",
                     },
-                    headerTintColor: 'white',
+                    headerTintColor: "white",
                   }}
                 />
               </Stack>
@@ -74,5 +77,5 @@ export default function Layout() {
         </UserProvider>
       </AppProvider>
     </AppContext>
-  )
+  );
 }

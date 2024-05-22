@@ -17,30 +17,39 @@ const Customers = () => {
   const { logOut } = useAuth();
   const customers = useQuery(CustomerSchema);
 
-  return (
+  const readOnlyView = (
     <SafeAreaView style={styleUtils.flexContainer}>
       <View style={styles.buttonContainer}>
         <Pressable onPress={() => logOut()}>
           <Text style={styles.buttonText}>Sign out</Text>
         </Pressable>
       </View>
-      {!inputView.isInput && (
-        <>
-          <FlatList
-            data={customers}
-            renderItem={({ item }) => {
-              // const customerProps = { ...item, _id: item._id.toString() };
-              // return <Customer {...customerProps} />;
-              return <Customer customer={item} />;
-            }}
-          />
-          <AddEditButton type="ADD" />
-        </>
-      )}
-      {inputView.isInput && inputView.inputType === "ADD" && <AddCustomer />}
+      <>
+        <FlatList
+          data={customers}
+          renderItem={({ item }) => {
+            // const customerProps = { ...item, _id: item._id.toString() };
+            // return <Customer {...customerProps} />;
+            return <Customer customer={item} />;
+          }}
+        />
+        <AddEditButton type="ADD" />
+      </>
     </SafeAreaView>
   );
+
+  return (
+    <>
+      {inputView.isInput && inputView.inputType === "ADD" ? (
+        <AddCustomer />
+      ) : (
+        readOnlyView
+      )}
+    </>
+  );
 };
+
+
 
 export default Customers;
 

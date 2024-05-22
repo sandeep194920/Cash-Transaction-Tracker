@@ -6,92 +6,96 @@ import React, {
   useEffect,
 } from 'react'
 import { InputViewType } from './types'
-import { Animated } from 'react-native'
-import { FormikConfig, useFormik } from 'formik'
-import { customerValidationSchema } from './FormValidators'
+import { Alert, Animated, BackHandler } from "react-native";
+import { FormikConfig, useFormik } from "formik";
+import { customerValidationSchema } from "./FormValidators";
+import { useNavigation, usePathname } from "expo-router";
+import { useRoute } from "@react-navigation/native";
 
 type FormValues = {
-  name: string
-  phone: string
-  email: string
-  address: string
-  password: string
-}
+  name: string;
+  phone: string;
+  email: string;
+  address: string;
+  password: string;
+};
 
 type AppContextT = {
-  inputView: InputViewType
-  setInputView: React.Dispatch<React.SetStateAction<InputViewType>>
-  toggleAddView: () => void
-  fadeAnim: Animated.Value
-  formikAuthenticate: ReturnType<typeof useFormik<Partial<FormValues>>>
-  handleAuthSwitch: () => void
-  showLoginPage: boolean
-  creds: Partial<FormValues>
-  setCreds: React.Dispatch<React.SetStateAction<Partial<FormValues>>>
-}
+  inputView: InputViewType;
+  setInputView: React.Dispatch<React.SetStateAction<InputViewType>>;
+  toggleAddView: () => void;
+  fadeAnim: Animated.Value;
+  formikAuthenticate: ReturnType<typeof useFormik<Partial<FormValues>>>;
+  handleAuthSwitch: () => void;
+  showLoginPage: boolean;
+  creds: Partial<FormValues>;
+  setCreds: React.Dispatch<React.SetStateAction<Partial<FormValues>>>;
+};
 
-const AppProvider = createContext<AppContextT | undefined>(undefined)
-
+const AppProvider = createContext<AppContextT | undefined>(undefined);
 function AppContext({ children }: { children: React.ReactNode }) {
   const [inputView, setInputView] = useState<InputViewType>({
     isInput: false,
     inputType: null,
-  })
+  });
 
-  const [showLoginPage, setShowLoginPage] = useState(true)
+  const [showLoginPage, setShowLoginPage] = useState(true);
   const [creds, setCreds] = useState<Partial<FormValues>>({
-    email: '',
-    password: '',
-  })
+    email: "",
+    password: "",
+  });
 
-  const fadeAnim = useRef(new Animated.Value(0)).current
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
   // authSwitch switches from login to register or vice-versa
 
   const handleAuthSwitch = () => {
-    setShowLoginPage((pre) => !pre)
-  }
+    setShowLoginPage((pre) => !pre);
+  };
 
   // Formik for Authenticate form
   const formikConfigAuthenticate: FormikConfig<Partial<FormValues>> = {
     initialValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
     },
     validationSchema: customerValidationSchema,
     onSubmit: () => {
       // Handle form submission here (e.g., call addNewCustomerHandler)
       // addNewCustomerHandler()
     },
-  }
+  };
 
-  const formikAuthenticate = useFormik(formikConfigAuthenticate)
+  const formikAuthenticate = useFormik(formikConfigAuthenticate);
+
+  const pathname = usePathname();
+  const currentRoute = useRef(pathname);
 
   const toggleAddView = () => {
-    console.log('Pressed Plus button')
+    console.log("The add button pressed");
     setInputView((prevInputView) => ({
       ...prevInputView,
       isInput: !prevInputView.isInput,
-      inputType: 'ADD',
-    }))
-  }
+      inputType: "ADD",
+    }));
+  };
 
   const toggleEditView = () => {
-    console.log('Pressed EDIT button')
+    console.log("Pressed EDIT button");
     setInputView((prevInputView) => ({
       ...prevInputView,
       isInput: !prevInputView.isInput,
-      inputType: 'EDIT',
-    }))
-  }
+      inputType: "EDIT",
+    }));
+  };
 
   useEffect(() => {
     Animated.timing(fadeAnim, {
       toValue: inputView.isInput ? 1 : 0,
       duration: 500,
       useNativeDriver: true,
-    }).start()
-  }, [inputView.isInput])
+    }).start();
+  }, [inputView.isInput]);
 
   const contextValues = {
     inputView,
@@ -104,13 +108,13 @@ function AppContext({ children }: { children: React.ReactNode }) {
     formikAuthenticate,
     creds,
     setCreds,
-  }
+  };
 
   return (
     <AppProvider.Provider value={contextValues}>
       {children}
     </AppProvider.Provider>
-  )
+  );
 }
 
 export const useGlobalContext = () => {

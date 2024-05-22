@@ -1,6 +1,6 @@
 // SCREEN 2
 import { View, FlatList, Text, StyleSheet, SafeAreaView } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import data from "../../data";
 import CustomerTransaction from "../../components/CustomerTransaction";
 import { styleUtils } from "../../utils/styles";
@@ -11,6 +11,9 @@ import { useQuery, useRealm, useUser } from "@realm/react";
 import { useLocalSearchParams } from "expo-router";
 import { Customer as CustomerSchema } from "../../models/CustomerSchema";
 import { Order } from "../../models/OrderSchema";
+import AddEditButton from "../../components/Buttons/AddEditButton";
+import { useGlobalContext } from "../../utils/AppContext";
+import AddTransaction from "../../components/EditableViews/AddTransaction";
 
 const CustomerTransactions = () => {
   const { customer_id, customer_name } = useLocalSearchParams();
@@ -26,9 +29,12 @@ const CustomerTransactions = () => {
     );
   });
 
+  const { inputView } = useGlobalContext();
+  console.log("The input view is", inputView);
+
   console.log("The customer's transaction is", customerTransactions[0]);
 
-  return (
+  const readOnlyView = (
     <SafeAreaView style={styleUtils.flexContainer}>
       <View style={styleUtils.headerTextContainer}>
         <Text style={styleUtils.headerText}>{customer_name}</Text>
@@ -46,8 +52,19 @@ const CustomerTransactions = () => {
           );
         }}
       />
-      <Button type="ADD" />
+      {/* <Button type="ADD" /> */}
+      <AddEditButton type="ADD" />
     </SafeAreaView>
+  );
+
+  return (
+    <>
+      {inputView.isInput && inputView.inputType === "ADD" ? (
+        <AddTransaction />
+      ) : (
+        readOnlyView
+      )}
+    </>
   );
 };
 

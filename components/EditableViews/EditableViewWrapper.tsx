@@ -24,7 +24,7 @@ const EditableViewWrapper = ({ children }: { children: React.ReactNode }) => {
     >
       {children}
     </Animated.View>
-  )
+  );
 }
 
 export default EditableViewWrapper
