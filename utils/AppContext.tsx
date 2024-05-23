@@ -1,16 +1,8 @@
-import React, {
-  useContext,
-  createContext,
-  useState,
-  useRef,
-  useEffect,
-} from 'react'
+import React, { useContext, createContext, useState, useRef } from "react";
 import { InputViewType } from './types'
-import { Alert, Animated, BackHandler } from "react-native";
+import { Animated } from "react-native";
 import { FormikConfig, useFormik } from "formik";
 import { customerValidationSchema } from "./FormValidators";
-import { useNavigation, usePathname } from "expo-router";
-import { useRoute } from "@react-navigation/native";
 
 type FormValues = {
   name: string;
@@ -23,17 +15,33 @@ type FormValues = {
 type AppContextT = {
   inputView: InputViewType;
   setInputView: React.Dispatch<React.SetStateAction<InputViewType>>;
-  toggleAddView: () => void;
   fadeAnim: Animated.Value;
   formikAuthenticate: ReturnType<typeof useFormik<Partial<FormValues>>>;
   handleAuthSwitch: () => void;
   showLoginPage: boolean;
   creds: Partial<FormValues>;
   setCreds: React.Dispatch<React.SetStateAction<Partial<FormValues>>>;
+  isAddCustomerModalOpen: boolean;
+  showCustomerModal: (show: boolean) => void;
+  isAddTransactionModalOpen: boolean;
+  showTransactionModal: (show: boolean) => void;
 };
 
 const AppProvider = createContext<AppContextT | undefined>(undefined);
 function AppContext({ children }: { children: React.ReactNode }) {
+  const [isAddCustomerModalOpen, setIsAddCustomerModalOpen] = useState(false);
+  const [isAddTransactionModalOpen, setIsTransactionModalOpen] =
+    useState(false);
+
+  // MODALS
+  const showCustomerModal = (show: boolean) => {
+    setIsAddCustomerModalOpen(show);
+  };
+
+  const showTransactionModal = (show: boolean) => {
+    setIsTransactionModalOpen(show);
+  };
+
   const [inputView, setInputView] = useState<InputViewType>({
     isInput: false,
     inputType: null,
@@ -68,46 +76,19 @@ function AppContext({ children }: { children: React.ReactNode }) {
 
   const formikAuthenticate = useFormik(formikConfigAuthenticate);
 
-  const pathname = usePathname();
-  const currentRoute = useRef(pathname);
-
-  const toggleAddView = () => {
-    console.log("The add button pressed");
-    setInputView((prevInputView) => ({
-      ...prevInputView,
-      isInput: !prevInputView.isInput,
-      inputType: "ADD",
-    }));
-  };
-
-  const toggleEditView = () => {
-    console.log("Pressed EDIT button");
-    setInputView((prevInputView) => ({
-      ...prevInputView,
-      isInput: !prevInputView.isInput,
-      inputType: "EDIT",
-    }));
-  };
-
-  useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: inputView.isInput ? 1 : 0,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-  }, [inputView.isInput]);
-
   const contextValues = {
     inputView,
     setInputView,
-    toggleAddView,
-    toggleEditView,
     fadeAnim,
     showLoginPage,
     handleAuthSwitch,
     formikAuthenticate,
     creds,
     setCreds,
+    isAddCustomerModalOpen,
+    showCustomerModal,
+    isAddTransactionModalOpen,
+    showTransactionModal,
   };
 
   return (

@@ -1,25 +1,31 @@
-import { SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native'
-import React from 'react'
-import { useGlobalContext } from '../../utils/AppContext'
-import EditableViewWrapper from './EditableViewWrapper'
-import WithCancelButton from '../Buttons/WithCancelButton'
-import { colors, styleUtils, userFormStyles } from '../../utils/styles'
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Modal,
+} from "react-native";
+import React from "react";
+import { useGlobalContext } from "../../utils/AppContext";
+import WithCancelButton from "../Buttons/WithCancelButton";
+import { colors, styleUtils, userFormStyles } from "../../utils/styles";
 import {
   MaterialIcons,
   Ionicons,
   Entypo,
   FontAwesome,
-} from '@expo/vector-icons'
-import { useRealmContext } from '../../utils/RealmContext'
+} from "@expo/vector-icons";
+import { useRealmContext } from "../../utils/RealmContext";
 
 const AddCustomer = () => {
-  const { formikAddCustomer } = useRealmContext()
+  const { formikAddCustomer } = useRealmContext();
+  const { isAddCustomerModalOpen, showCustomerModal } = useGlobalContext();
 
   return (
-    <SafeAreaView style={styleUtils.flexContainer}>
-      <EditableViewWrapper>
+    <Modal visible={isAddCustomerModalOpen} animationType="slide">
+      <SafeAreaView style={styleUtils.flexContainer}>
         {/* ADD CUSTOMER FORM---> */}
-
         {/* Page Header */}
         <View style={styleUtils.headerTextContainer}>
           <Text style={styleUtils.headerText}>Add New Customer</Text>
@@ -31,8 +37,8 @@ const AddCustomer = () => {
           <View style={userFormStyles.flexItem}>
             <Ionicons name="person" size={24} color={colors.darkGray1} />
             <TextInput
-              onChangeText={formikAddCustomer.handleChange('name')}
-              onBlur={formikAddCustomer.handleBlur('name')}
+              onChangeText={formikAddCustomer.handleChange("name")}
+              onBlur={formikAddCustomer.handleBlur("name")}
               value={formikAddCustomer.values.name}
               style={userFormStyles.textInput}
               placeholder="Name"
@@ -49,8 +55,8 @@ const AddCustomer = () => {
             <Entypo name="phone" size={24} color={colors.darkGray1} />
             <TextInput
               // onChangeText={(text) => handleCustomerFormInput(text, 'phone')} // if we dont use formik
-              onChangeText={formikAddCustomer.handleChange('phone')}
-              onBlur={formikAddCustomer.handleBlur('phone')}
+              onChangeText={formikAddCustomer.handleChange("phone")}
+              onBlur={formikAddCustomer.handleBlur("phone")}
               value={formikAddCustomer.values.phone}
               style={userFormStyles.textInput}
               placeholder="Phone"
@@ -64,8 +70,8 @@ const AddCustomer = () => {
           <View style={userFormStyles.flexItem}>
             <MaterialIcons name="email" size={21} color={colors.darkGray1} />
             <TextInput
-              onChangeText={formikAddCustomer.handleChange('email')}
-              onBlur={formikAddCustomer.handleBlur('email')}
+              onChangeText={formikAddCustomer.handleChange("email")}
+              onBlur={formikAddCustomer.handleBlur("email")}
               value={formikAddCustomer.values.email}
               style={userFormStyles.textInput}
               placeholder="Email"
@@ -84,8 +90,8 @@ const AddCustomer = () => {
               color={colors.darkGray1}
             />
             <TextInput
-              onChangeText={formikAddCustomer.handleChange('address')}
-              onBlur={formikAddCustomer.handleBlur('address')}
+              onChangeText={formikAddCustomer.handleChange("address")}
+              onBlur={formikAddCustomer.handleBlur("address")}
               value={formikAddCustomer.values.address}
               style={userFormStyles.textInput}
               placeholder="Address"
@@ -98,12 +104,12 @@ const AddCustomer = () => {
           </Text>
         </View>
         {/* <--- ADD CUSTOMER FORM*/}
-      </EditableViewWrapper>
-      <WithCancelButton />
-    </SafeAreaView>
-  )
-}
+        <WithCancelButton cancelHandler={() => showCustomerModal(false)} />
+      </SafeAreaView>
+    </Modal>
+  );
+};
 
-export default AddCustomer
+export default AddCustomer;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

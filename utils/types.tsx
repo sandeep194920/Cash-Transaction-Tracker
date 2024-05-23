@@ -16,8 +16,9 @@ export type CustomerType = {
   user_id: string
 }
 export type ButtonType = {
-  type: 'ADD' | 'EDIT'
-}
+  type: "ADD" | "EDIT";
+  pressHandler: () => void;
+};
 
 type Item = {
   name: string

@@ -18,7 +18,6 @@ type RealmContextT = {
   formikAddCustomer: ReturnType<typeof useFormik<Partial<FormValues>>>;
   formikAuthenticate: ReturnType<typeof useFormik<Partial<FormValues>>>;
   addNewCustomerHandler: () => void;
-  //   toggleAddView: () => void
 };
 
 const RealmCtxProvider = createContext<RealmContextT | undefined>(undefined);

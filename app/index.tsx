@@ -12,12 +12,12 @@ import { StyleSheet } from "react-native";
 import { useAuth, useQuery } from "@realm/react";
 
 const Customers = () => {
-  const { inputView } = useGlobalContext();
+  const { showCustomerModal } = useGlobalContext();
   // TODO: This component is only for Customers, so please move this logout functionality to one level upper
   const { logOut } = useAuth();
   const customers = useQuery(CustomerSchema);
 
-  const readOnlyView = (
+  return (
     <SafeAreaView style={styleUtils.flexContainer}>
       <View style={styles.buttonContainer}>
         <Pressable onPress={() => logOut()}>
@@ -33,19 +33,15 @@ const Customers = () => {
             return <Customer customer={item} />;
           }}
         />
-        <AddEditButton type="ADD" />
+        <AddEditButton
+          type="ADD"
+          // pressHandler={() => showCustomerModal( true)}
+          pressHandler={showCustomerModal.bind(this, true)} // this is same as above commented code
+        />
       </>
+      {/* MODAL */}
+      <AddCustomer />
     </SafeAreaView>
-  );
-
-  return (
-    <>
-      {inputView.isInput && inputView.inputType === "ADD" ? (
-        <AddCustomer />
-      ) : (
-        readOnlyView
-      )}
-    </>
   );
 };
 

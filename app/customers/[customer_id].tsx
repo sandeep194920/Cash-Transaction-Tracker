@@ -5,8 +5,6 @@ import data from "../../data";
 import CustomerTransaction from "../../components/CustomerTransaction";
 import { styleUtils } from "../../utils/styles";
 import WithAddButton from "../../components/Buttons/AddEditButton";
-import Button from "../../components/Buttons/AddEditButton";
-import AddCustomer from "../../components/EditableViews/AddCustomer";
 import { useQuery, useRealm, useUser } from "@realm/react";
 import { useLocalSearchParams } from "expo-router";
 import { Customer as CustomerSchema } from "../../models/CustomerSchema";
@@ -29,12 +27,9 @@ const CustomerTransactions = () => {
     );
   });
 
-  const { inputView } = useGlobalContext();
-  console.log("The input view is", inputView);
+  const { showTransactionModal } = useGlobalContext();
 
-  console.log("The customer's transaction is", customerTransactions[0]);
-
-  const readOnlyView = (
+  return (
     <SafeAreaView style={styleUtils.flexContainer}>
       <View style={styleUtils.headerTextContainer}>
         <Text style={styleUtils.headerText}>{customer_name}</Text>
@@ -53,18 +48,13 @@ const CustomerTransactions = () => {
         }}
       />
       {/* <Button type="ADD" /> */}
-      <AddEditButton type="ADD" />
+      <AddEditButton
+        type="ADD"
+        pressHandler={showTransactionModal.bind(this, true)}
+      />
+      {/* MODAL */}
+      <AddTransaction />
     </SafeAreaView>
-  );
-
-  return (
-    <>
-      {inputView.isInput && inputView.inputType === "ADD" ? (
-        <AddTransaction />
-      ) : (
-        readOnlyView
-      )}
-    </>
   );
 };
 

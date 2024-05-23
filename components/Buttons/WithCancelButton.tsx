@@ -4,23 +4,29 @@ import { styleUtils } from '../../utils/styles'
 import { useGlobalContext } from '../../utils/AppContext'
 import { useRealmContext } from '../../utils/RealmContext'
 
-const WithCancelButton: React.FC = () => {
-  const { toggleAddView } = useGlobalContext()
-  const { addNewCustomerHandler } = useRealmContext()
+
+interface WithCancelButtonProps {
+  cancelHandler: () => void;
+}
+
+const WithCancelButton: React.FC<WithCancelButtonProps> = ({
+  cancelHandler,
+}) => {
+  const { showCustomerModal } = useGlobalContext();
+  const { addNewCustomerHandler } = useRealmContext();
 
   const addHandler = () => {
-    // formikAddCustomer.handleSubmit()
     addNewCustomerHandler();
-    toggleAddView();
+    showCustomerModal(false);
   };
 
   return (
     <View style={styleUtils.buttonContainer}>
       <Button onPress={addHandler} title="Add" />
-      <Button title="Cancel" onPress={toggleAddView} />
+      <Button title="Cancel" onPress={cancelHandler} />
     </View>
-  )
-}
+  );
+};
 
 export default WithCancelButton
 

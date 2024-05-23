@@ -1,7 +1,13 @@
-import { SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Modal,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 import React from "react";
 import { useGlobalContext } from "../../utils/AppContext";
-import EditableViewWrapper from "./EditableViewWrapper";
 import WithCancelButton from "../Buttons/WithCancelButton";
 import { colors, styleUtils, userFormStyles } from "../../utils/styles";
 import {
@@ -14,10 +20,12 @@ import { useRealmContext } from "../../utils/RealmContext";
 
 const AddTransaction = () => {
   const { formikAddCustomer } = useRealmContext();
+  const { isAddTransactionModalOpen, showTransactionModal } =
+    useGlobalContext();
 
   return (
-    <SafeAreaView style={styleUtils.flexContainer}>
-      <EditableViewWrapper>
+    <Modal visible={isAddTransactionModalOpen} animationType="slide">
+      <SafeAreaView style={styleUtils.flexContainer}>
         {/* ADD CUSTOMER FORM---> */}
 
         {/* Page Header */}
@@ -97,10 +105,10 @@ const AddTransaction = () => {
               formikAddCustomer.errors.address}
           </Text>
         </View>
-        {/* <--- ADD CUSTOMER FORM*/}
-      </EditableViewWrapper>
-      <WithCancelButton />
-    </SafeAreaView>
+        {/* <--- ADD Transaction FORM*/}
+        <WithCancelButton cancelHandler={() => showTransactionModal(false)} />
+      </SafeAreaView>
+    </Modal>
   );
 };
 
