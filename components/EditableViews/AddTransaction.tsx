@@ -19,7 +19,7 @@ import {
 import { useRealmContext } from "../../utils/RealmContext";
 
 const AddTransaction = () => {
-  const { formikAddCustomer } = useRealmContext();
+  // const { formikAddCustomer } = useRealmContext();
   const { isAddTransactionModalOpen, showTransactionModal } =
     useGlobalContext();
 
@@ -106,7 +106,10 @@ const AddTransaction = () => {
           </Text>
         </View>
         {/* <--- ADD Transaction FORM*/}
-        <WithCancelButton cancelHandler={() => showTransactionModal(false)} />
+        <WithCancelButton
+          onPressHandler={() => {}}
+          onCancelHandler={() => showTransactionModal(false)}
+        />
       </SafeAreaView>
     </Modal>
   );

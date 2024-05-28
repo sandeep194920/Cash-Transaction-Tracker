@@ -1,7 +1,7 @@
 import { FormikConfig, useFormik } from 'formik'
 import React, { createContext, useContext, useRef, useState } from "react";
 import { customerValidationSchema } from "./FormValidators";
-import { InputViewType } from "./types";
+import { CustomerType, InputViewType } from "./types";
 import { useQuery, useRealm, useUser } from "@realm/react";
 import Realm from "realm";
 import { Order } from "../models/OrderSchema";
@@ -15,9 +15,8 @@ type FormValues = {
 };
 
 type RealmContextT = {
-  formikAddCustomer: ReturnType<typeof useFormik<Partial<FormValues>>>;
   formikAuthenticate: ReturnType<typeof useFormik<Partial<FormValues>>>;
-  addNewCustomerHandler: () => void;
+  addNewCustomerHandler: (customerData: CustomerType) => void;
 };
 
 const RealmCtxProvider = createContext<RealmContextT | undefined>(undefined);
@@ -41,8 +40,7 @@ function RealmContext({ children }: { children: React.ReactNode }) {
     },
     validationSchema: customerValidationSchema,
     onSubmit: () => {
-      // Handle form submission here (e.g., call addNewCustomerHandler)
-      // addNewCustomerHandler()
+      console.log("GEEER");
     },
   };
 
@@ -52,8 +50,14 @@ function RealmContext({ children }: { children: React.ReactNode }) {
   const createdCustomerRef = useRef("");
 
   /*  add new customer */
-  const addNewCustomerHandler = async () => {
-    const { name, phone, email, address } = formikAddCustomer.values;
+  const addNewCustomerHandler = async (customerData: CustomerType) => {
+    console.log("ENTERED ADD CUST HADNLER");
+
+    const { name, phone, email, address } = customerData;
+
+    if (!name || !phone || !email || !address) return;
+
+    console.log("ADDING CUST TO DB");
 
     realm.write(() => {
       const createdCustomer = realm.create("Customer", {
@@ -92,8 +96,6 @@ function RealmContext({ children }: { children: React.ReactNode }) {
     // });
   };
 
-  const formikAddCustomer = useFormik(formikConfigAddCustomer);
-
   // Formik for Authenticate form
   const formikConfigAuthenticate: FormikConfig<Partial<FormValues>> = {
     initialValues: {
@@ -103,6 +105,7 @@ function RealmContext({ children }: { children: React.ReactNode }) {
     validationSchema: customerValidationSchema,
     onSubmit: () => {
       // Handle form submission here (e.g., call addNewCustomerHandler)
+      // addNewCustomerHandler;
     },
   };
 
@@ -110,7 +113,7 @@ function RealmContext({ children }: { children: React.ReactNode }) {
 
   const contextValues = {
     inputView,
-    formikAddCustomer,
+    // formikAddCustomer,
     formikAuthenticate,
     addNewCustomerHandler,
   };

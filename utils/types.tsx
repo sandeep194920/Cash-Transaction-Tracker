@@ -8,13 +8,12 @@
 // }
 
 export type CustomerType = {
-  _id: string // Assuming _id is represented as a string (e.g., ObjectId converted to string)
-  address: string
-  balance: number
-  name: string
-  signed_up_on: Date
-  user_id: string
-}
+  name: string;
+  phone: string;
+  address: string;
+  email: string;
+};
+
 export type ButtonType = {
   type: "ADD" | "EDIT";
   pressHandler: () => void;
