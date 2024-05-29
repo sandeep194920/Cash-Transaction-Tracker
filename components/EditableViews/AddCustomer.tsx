@@ -21,8 +21,8 @@ import { Formik } from "formik";
 import { customerValidationSchema } from "../../utils/FormValidators";
 import { CustomerType } from "../../utils/types";
 
+const customerInitialValues = { name: "", phone: "", email: "", address: "" };
 const AddCustomer = () => {
-  // const { formikAddCustomer } = useRealmContext();
   const { isAddCustomerModalOpen, showCustomerModal } = useGlobalContext();
   const { addNewCustomerHandler } = useRealmContext();
 
@@ -47,9 +47,9 @@ const AddCustomer = () => {
         {/* Form */}
 
         <Formik
-          initialValues={{ name: "", phone: "", email: "", address: "" }}
+          initialValues={customerInitialValues}
           validationSchema={customerValidationSchema}
-          onSubmit={(values) => console.log("The values are", values)}
+          onSubmit={(values) => addCustomerHandler(values)}
         >
           {({
             handleChange,
@@ -62,8 +62,6 @@ const AddCustomer = () => {
             return (
               <>
                 <View style={userFormStyles.flexContainer}>
-                  {/* Name */}
-
                   <View style={userFormStyles.flexItem}>
                     <Ionicons
                       name="person"
@@ -81,14 +79,10 @@ const AddCustomer = () => {
                   </View>
 
                   <View>
-                    {/* Display validation errors if touched */}
-
                     <Text style={userFormStyles.error}>
                       {touched.name && errors.name}
                     </Text>
                   </View>
-
-                  {/* Phone */}
 
                   <View style={userFormStyles.flexItem}>
                     <Entypo name="phone" size={24} color={colors.darkGray1} />
@@ -104,13 +98,9 @@ const AddCustomer = () => {
                     />
                   </View>
 
-                  {/* Display validation errors if touched */}
-
                   <Text style={userFormStyles.error}>
                     {touched.phone && errors.phone}
                   </Text>
-
-                  {/* Email */}
 
                   <View style={userFormStyles.flexItem}>
                     <MaterialIcons
@@ -129,13 +119,9 @@ const AddCustomer = () => {
                     />
                   </View>
 
-                  {/* Display validation errors if touched */}
-
                   <Text style={userFormStyles.error}>
                     {touched.email && errors.email}
                   </Text>
-
-                  {/* Address */}
 
                   <View style={userFormStyles.flexItem}>
                     <FontAwesome
@@ -153,8 +139,6 @@ const AddCustomer = () => {
                     />
                   </View>
 
-                  {/* Display validation errors if touched */}
-
                   <Text style={userFormStyles.error}>
                     {touched.address && errors.address}
                   </Text>
@@ -162,10 +146,6 @@ const AddCustomer = () => {
 
                 <WithCancelButton
                   onPressHandler={handleSubmit}
-                  // onPressHandler={formikAddCustomer.handleSubmit}
-
-                  // onPressHandler={addCustomerHandler}
-
                   onCancelHandler={cancelHandler}
                 />
               </>
