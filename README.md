@@ -32,3 +32,6 @@ For better code readability and maintenance, use the `Better Comments` extension
 // *! DANGER COMMENT - Will be in red color
 // TODO: - Will be in orange color 
 ```
+### MongoDB Resources
+
+- [Register new user, Confirm user's email, Reset password](https://www.mongodb.com/docs/atlas/device-sdks/sdk/react-native/manage-users/manage-email-password-users/#std-label-react-native-register-new-user)

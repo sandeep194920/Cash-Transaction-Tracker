@@ -16,7 +16,7 @@ import {
 import { MaterialIcons } from "@expo/vector-icons";
 
 import { AuthOperationName, useAuth, useEmailPasswordAuth } from "@realm/react";
-import { Formik, useFormikContext, Form } from "formik";
+import { Formik, useFormikContext } from "formik";
 import { AuthValidationSchema } from "../utils/FormValidators";
 
 interface AuthFormProps {
