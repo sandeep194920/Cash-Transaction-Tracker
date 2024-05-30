@@ -1,5 +1,4 @@
 import {
-  GestureResponderEvent,
   Pressable,
   SafeAreaView,
   StyleSheet,
@@ -7,7 +6,7 @@ import {
   TextInput,
   View,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   colors,
   dimensions,
@@ -15,45 +14,32 @@ import {
   userFormStyles,
 } from "../utils/styles";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useGlobalContext } from "../utils/AppContext";
 
-import { useAuth, useEmailPasswordAuth } from "@realm/react";
-import { Formik } from "formik";
+import { AuthOperationName, useAuth, useEmailPasswordAuth } from "@realm/react";
+import { Formik, useFormikContext, Form } from "formik";
 import { AuthValidationSchema } from "../utils/FormValidators";
-import { useNavigation } from "expo-router";
-import { router } from "expo-router";
+
+interface AuthFormProps {
+  email: string;
+  password: string;
+}
 
 const Authenticate = () => {
   return (
     <SafeAreaView style={styleUtils.flexContainer}>
-      {/* REGISTER OR LOGIN FORM */}
       <RegisterLoginForm />
     </SafeAreaView>
   );
 };
 
+export default Authenticate;
+
 const RegisterLoginForm = () => {
-  const { formikAuthenticate, creds, setCreds } = useGlobalContext();
+  const [showLoginPage, setShowLoginPage] = useState(true);
   const { logInWithEmailPassword } = useAuth();
-  const { showLoginPage, handleAuthSwitch } = useGlobalContext();
   const { register, result, logIn } = useEmailPasswordAuth();
 
-  const { navigate } = useNavigation();
-
-  // const user = useUser()
-  // const [userIdentities, setUserIdentities] = useState(user.identities)
-
-  const handleSignin = () => {
-    // logInWithEmailPassword({
-    //   email: 'sandeepmscanada@gmail.com',
-    //   password: 'Mongodb@123',
-    // })
-  };
-
-  // Use `result` to react to successful registration
-  // by linking credentials with the current user.
-
-  const registerAndLinkIdentities = ({
+  const performRegistration = ({
     email,
     password,
   }: {
@@ -61,75 +47,58 @@ const RegisterLoginForm = () => {
     password: string;
   }) => {
     register({ email, password });
-
-    if (result.pending) {
-      return <Text>LOADING.....</Text>;
-    }
-    if (result.error) {
-      return <Text>Error occurred {result.error.message}</Text>;
-    }
-    if (result.success) {
-      // return logInWithEmailPassword({ email, password });
-      console.log("Registered the user", result);
-      // logIn({ email, password });
-    }
   };
 
-  // useEffect(() => {
-  //   if (result.success) {
-  //     console.log("Registered the user successfully, now navigating him");
+  // *? Earlier we had the below code, but there was no easy way
+  // *? (without using useState or useRef) to get access to
+  // *? values like email and password. So I followed https://formik.org/docs/api/useFormikContext
+  // *? formik docs and wrote AuthFormValues as suggested to use useFormikContext to
+  // *? get access to values
 
-  //     logInWithEmailPassword({ email: "ab@g.com", password: "123456" });
-  //   } else if (result.error) {
-  //     console.log("Error occurred:", result.error.message);
-  //   }
-  // }, [result]);
+  /* 
+    Log in the user after successful registration
 
-  // Log in the user after successful registration
-  // useEffect(() => {
-  //   console.log("Reached effect");
-  //   console.log("The result is", result);
+     useEffect(() => {
+       if (result.success && result.operation === AuthOperationName.Register) {
+         logIn({ email: "plm@g.com", password: "123456" });
+       }
+     }, [result, logIn]); 
+  */
 
-  //   if (
-  //     result.success &&
-  //     result.operation === AuthOperationName.Register &&
-  //     creds.email &&
-  //     creds.password
-  //   ) {
-  //     console.log("REGISTRATION SUCCESS");
+  const handleAuthSwitch = () => {
+    setShowLoginPage((pre) => !pre);
+  };
 
-  //     logInWithEmailPassword({ email: creds.email, password: creds.password });
-  //   }
-  // }, [result, logInWithEmailPassword]);
+  // *? As mentioned above, writing this in component style so that
+  // *? I can use this in jsx below.
+  // *? This pattern is recommended by Formik inorder to use useFormikContext
+  // *? Reference - https://formik.org/docs/api/useFormikContext
 
-  // useEffect(() => {
-  //   setCreds({
-  //     email: formikAuthenticate.values.email,
-  //     password: formikAuthenticate.values.password,
-  //   });
-  // }, [formikAuthenticate.values.email, formikAuthenticate.values.password]);
+  const AuthFormValues = () => {
+    const { values } = useFormikContext<AuthFormProps>();
 
-  const handleAuth = (e: GestureResponderEvent, handleSubmit: () => void) => {
-    e.preventDefault();
-    handleSubmit();
+    // Log in the user after successful registration
+    useEffect(() => {
+      if (result.success && result.operation === AuthOperationName.Register) {
+        logIn({ email: values.email, password: values.password });
+      }
+    }, [result, logIn, values]);
+
+    return null;
   };
 
   return (
     <>
-      {/* Page Header */}
       <View style={styleUtils.headerTextContainer}>
         <Text style={styleUtils.headerText}>
           {showLoginPage ? "Login to your account" : "Create an account"}
         </Text>
       </View>
 
-      {/* Form */}
-
       <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={AuthValidationSchema}
-        // onSubmit={(values) => console.log(values)}
-        onSubmit={(values) => {
+        onSubmit={(values: AuthFormProps) => {
           // Your form submission logic here
           if (showLoginPage) {
             logInWithEmailPassword({
@@ -137,7 +106,7 @@ const RegisterLoginForm = () => {
               password: values.password,
             });
           } else {
-            registerAndLinkIdentities({
+            performRegistration({
               email: values.email,
               password: values.password,
             });
@@ -153,56 +122,64 @@ const RegisterLoginForm = () => {
           handleSubmit,
         }) => {
           return (
-            <View style={userFormStyles.flexContainer}>
-              {/* Email */}
-              <View style={userFormStyles.flexItem}>
-                <MaterialIcons
-                  name="email"
-                  size={21}
-                  color={colors.darkGray1}
-                />
-                <TextInput
-                  onChangeText={handleChange("email")}
-                  onBlur={handleBlur("email")}
-                  value={values.email}
-                  style={userFormStyles.textInput}
-                  placeholder="Email"
-                  autoCapitalize="none"
-                />
-              </View>
-              {/* Display validation errors if touched */}
-              <Text style={userFormStyles.error}>
-                {touched.email && errors.email}
-              </Text>
+            <>
+              <View style={userFormStyles.flexContainer}>
+                {/* Email */}
+                <View style={userFormStyles.flexItem}>
+                  <MaterialIcons
+                    name="email"
+                    size={21}
+                    color={colors.darkGray1}
+                  />
+                  <TextInput
+                    onChangeText={handleChange("email")}
+                    onBlur={handleBlur("email")}
+                    value={values.email}
+                    style={userFormStyles.textInput}
+                    placeholder="Email"
+                    autoCapitalize="none"
+                  />
+                </View>
+                {/* Display validation errors if touched */}
+                <Text style={userFormStyles.error}>
+                  {touched.email && errors.email}
+                </Text>
 
-              {/* Password */}
-              <View style={userFormStyles.flexItem}>
-                <MaterialIcons name="lock" size={21} color={colors.darkGray1} />
-                <TextInput
-                  onChangeText={handleChange("password")}
-                  onBlur={handleBlur("password")}
-                  value={values.password}
-                  style={userFormStyles.textInput}
-                  placeholder="Password"
-                  autoCapitalize="none"
-                  secureTextEntry
-                />
+                {/* Password */}
+                <View style={userFormStyles.flexItem}>
+                  <MaterialIcons
+                    name="lock"
+                    size={21}
+                    color={colors.darkGray1}
+                  />
+                  <TextInput
+                    onChangeText={handleChange("password")}
+                    onBlur={handleBlur("password")}
+                    value={values.password}
+                    style={userFormStyles.textInput}
+                    placeholder="Password"
+                    autoCapitalize="none"
+                    secureTextEntry
+                  />
+                </View>
+                {/* Display validation errors if touched */}
+                <Text style={userFormStyles.error}>
+                  {touched.password && errors.password}
+                </Text>
+                <View style={styleUtils.buttonContainer}>
+                  <Pressable
+                    // onPress={(e) => handleAuth(e, handleSubmit)}
+                    onPress={() => handleSubmit()}
+                    style={styles.authBtn}
+                  >
+                    <Text style={styles.authBtnText}>
+                      {showLoginPage ? "SIGN IN" : "SIGN UP"}
+                    </Text>
+                  </Pressable>
+                </View>
               </View>
-              {/* Display validation errors if touched */}
-              <Text style={userFormStyles.error}>
-                {touched.password && errors.password}
-              </Text>
-              <View style={styleUtils.buttonContainer}>
-                <Pressable
-                  onPress={(e) => handleAuth(e, handleSubmit)}
-                  style={styles.authBtn}
-                >
-                  <Text style={styles.authBtnText}>
-                    {showLoginPage ? "SIGN IN" : "SIGN UP"}
-                  </Text>
-                </Pressable>
-              </View>
-            </View>
+              <AuthFormValues />
+            </>
           );
         }}
       </Formik>
@@ -219,95 +196,23 @@ const RegisterLoginForm = () => {
           </Text>
         </Pressable>
       </View>
-
-      {/* <View style={userFormStyles.flexContainer}>
-        <View style={userFormStyles.flexItem}>
-          <MaterialIcons name="email" size={21} color={colors.darkGray1} />
-          <TextInput
-            onChangeText={formikAuthenticate.handleChange('email')}
-            onBlur={formikAuthenticate.handleBlur('email')}
-            value={formikAuthenticate.values.email}
-            style={userFormStyles.textInput}
-            placeholder="Email"
-            autoCapitalize="none"
-          />
-        </View>
-        <Text style={userFormStyles.error}>
-          {formikAuthenticate.touched.email && formikAuthenticate.errors.email}
-        </Text>
-
-        <View style={userFormStyles.flexItem}>
-          <MaterialIcons name="lock" size={21} color={colors.darkGray1} />
-          <TextInput
-            onChangeText={formikAuthenticate.handleChange('password')}
-            onBlur={formikAuthenticate.handleBlur('password')}
-            value={formikAuthenticate.values.password}
-            style={userFormStyles.textInput}
-            placeholder="Password"
-            autoCapitalize="none"
-            secureTextEntry
-          />
-        </View>
-        <Text style={userFormStyles.error}>
-          {formikAuthenticate.touched.password &&
-            formikAuthenticate.errors.password}
-        </Text>
-        <View style={styleUtils.buttonContainer}>
-          <Pressable
-            onPress={
-              showLoginPage
-                ? () =>
-                    logInWithEmailPassword({
-                      email: formikAuthenticate.values.email!,
-                      password: formikAuthenticate.values.password!,
-                    })
-                : () =>
-                    registerAndLinkIdentities({
-                      email: formikAuthenticate.values.email!,
-                      password: formikAuthenticate.values.password!,
-                    })
-            }
-            style={styles.authBtn}
-          >
-            <Text style={styles.authBtnText}>
-              {showLoginPage ? 'SIGN IN' : 'SIGN UP'}
-            </Text>
-          </Pressable>
-        </View>
-
-        <View style={userFormStyles.flexContainer}>
-          <Text>
-            {showLoginPage
-              ? `You don't have an account?`
-              : 'Already have an account?'}
-          </Text>
-          <Pressable onPress={handleAuthSwitch} style={styles.link}>
-            <Text style={styles.linkText}>
-              {showLoginPage ? 'SIGN UP' : 'SIGN IN'}
-            </Text>
-          </Pressable>
-        </View> 
-
-      </View> */}
     </>
   );
 };
-
-export default Authenticate
 
 const styles = StyleSheet.create({
   authBtn: {
     backgroundColor: colors.lightGreen2,
     padding: dimensions.paddingSmall3,
-    display: 'flex',
+    display: "flex",
     flexGrow: 1,
     borderRadius: dimensions.borderRadius,
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
     marginTop: dimensions.marginMedium,
   },
   authBtnText: {
-    color: 'white',
+    color: "white",
   },
   link: {
     marginVertical: dimensions.marginMedium,
@@ -315,4 +220,4 @@ const styles = StyleSheet.create({
   linkText: {
     color: colors.lightGreen2,
   },
-})
+});

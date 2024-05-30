@@ -1,48 +1,18 @@
-import { FormikConfig, useFormik } from 'formik'
-import React, { createContext, useContext, useRef, useState } from "react";
-import { customerValidationSchema } from "./FormValidators";
-import { CustomerType, InputViewType } from "./types";
+import React, { createContext, useContext, useRef } from "react";
+import { CustomerType } from "./types";
 import { useQuery, useRealm, useUser } from "@realm/react";
 import Realm from "realm";
 import { Order } from "../models/OrderSchema";
 
-type FormValues = {
-  name: string;
-  phone: string;
-  email: string;
-  address: string;
-  password: string;
-};
-
 type RealmContextT = {
-  formikAuthenticate: ReturnType<typeof useFormik<Partial<FormValues>>>;
   addNewCustomerHandler: (customerData: CustomerType) => void;
 };
 
 const RealmCtxProvider = createContext<RealmContextT | undefined>(undefined);
 
 function RealmContext({ children }: { children: React.ReactNode }) {
-  const [inputView, setInputView] = useState<InputViewType>({
-    isInput: false,
-    inputType: null,
-  });
-
   const realm = useRealm();
   const user = useUser();
-
-  // Formik to add customer form
-  const formikConfigAddCustomer: FormikConfig<Partial<FormValues>> = {
-    initialValues: {
-      name: "",
-      phone: "",
-      email: "",
-      address: "",
-    },
-    validationSchema: customerValidationSchema,
-    onSubmit: () => {
-      console.log("GEEER");
-    },
-  };
 
   const orders = useQuery(Order);
   console.log("The orders retreived are", orders);
@@ -96,25 +66,7 @@ function RealmContext({ children }: { children: React.ReactNode }) {
     // });
   };
 
-  // Formik for Authenticate form
-  const formikConfigAuthenticate: FormikConfig<Partial<FormValues>> = {
-    initialValues: {
-      email: "",
-      password: "",
-    },
-    validationSchema: customerValidationSchema,
-    onSubmit: () => {
-      // Handle form submission here (e.g., call addNewCustomerHandler)
-      // addNewCustomerHandler;
-    },
-  };
-
-  const formikAuthenticate = useFormik(formikConfigAuthenticate);
-
   const contextValues = {
-    inputView,
-    // formikAddCustomer,
-    formikAuthenticate,
     addNewCustomerHandler,
   };
 
@@ -126,12 +78,12 @@ function RealmContext({ children }: { children: React.ReactNode }) {
 }
 
 export const useRealmContext = () => {
-  const context = useContext(RealmCtxProvider)
+  const context = useContext(RealmCtxProvider);
 
   if (context === undefined) {
-    throw new Error('useRealmContext must be used within an RealmProvider')
+    throw new Error("useRealmContext must be used within an RealmProvider");
   }
-  return context
-}
+  return context;
+};
 
-export default RealmContext
+export default RealmContext;

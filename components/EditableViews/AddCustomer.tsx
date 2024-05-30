@@ -38,13 +38,9 @@ const AddCustomer = () => {
   return (
     <Modal visible={isAddCustomerModalOpen} animationType="slide">
       <SafeAreaView style={styleUtils.flexContainer}>
-        {/* ADD CUSTOMER FORM---> */}
-        {/* Page Header */}
         <View style={styleUtils.headerTextContainer}>
           <Text style={styleUtils.headerText}>Add New Customer</Text>
         </View>
-
-        {/* Form */}
 
         <Formik
           initialValues={customerInitialValues}
@@ -88,8 +84,6 @@ const AddCustomer = () => {
                     <Entypo name="phone" size={24} color={colors.darkGray1} />
 
                     <TextInput
-                      // onChangeText={(text) => handleCustomerFormInput(text, 'phone')} // if we dont use formik
-
                       onChangeText={handleChange("phone")}
                       onBlur={handleBlur("phone")}
                       value={values.phone}

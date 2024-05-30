@@ -1,26 +1,6 @@
-import React, { useContext, createContext, useState, useRef } from "react";
-import { InputViewType } from './types'
-import { Animated } from "react-native";
-import { FormikConfig, useFormik } from "formik";
-import { customerValidationSchema } from "./FormValidators";
-
-type FormValues = {
-  name: string;
-  phone: string;
-  email: string;
-  address: string;
-  password: string;
-};
+import React, { useContext, createContext, useState } from "react";
 
 type AppContextT = {
-  inputView: InputViewType;
-  setInputView: React.Dispatch<React.SetStateAction<InputViewType>>;
-  fadeAnim: Animated.Value;
-  formikAuthenticate: ReturnType<typeof useFormik<Partial<FormValues>>>;
-  handleAuthSwitch: () => void;
-  showLoginPage: boolean;
-  creds: Partial<FormValues>;
-  setCreds: React.Dispatch<React.SetStateAction<Partial<FormValues>>>;
   isAddCustomerModalOpen: boolean;
   showCustomerModal: (show: boolean) => void;
   isAddTransactionModalOpen: boolean;
@@ -42,49 +22,7 @@ function AppContext({ children }: { children: React.ReactNode }) {
     setIsTransactionModalOpen(show);
   };
 
-  const [inputView, setInputView] = useState<InputViewType>({
-    isInput: false,
-    inputType: null,
-  });
-
-  const [showLoginPage, setShowLoginPage] = useState(true);
-  const [creds, setCreds] = useState<Partial<FormValues>>({
-    email: "",
-    password: "",
-  });
-
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-
-  // authSwitch switches from login to register or vice-versa
-
-  const handleAuthSwitch = () => {
-    setShowLoginPage((pre) => !pre);
-  };
-
-  // Formik for Authenticate form
-  const formikConfigAuthenticate: FormikConfig<Partial<FormValues>> = {
-    initialValues: {
-      email: "",
-      password: "",
-    },
-    validationSchema: customerValidationSchema,
-    onSubmit: () => {
-      // Handle form submission here (e.g., call addNewCustomerHandler)
-      // addNewCustomerHandler()
-    },
-  };
-
-  const formikAuthenticate = useFormik(formikConfigAuthenticate);
-
   const contextValues = {
-    inputView,
-    setInputView,
-    fadeAnim,
-    showLoginPage,
-    handleAuthSwitch,
-    formikAuthenticate,
-    creds,
-    setCreds,
     isAddCustomerModalOpen,
     showCustomerModal,
     isAddTransactionModalOpen,
@@ -99,13 +37,13 @@ function AppContext({ children }: { children: React.ReactNode }) {
 }
 
 export const useGlobalContext = () => {
-  const context = useContext(AppProvider)
+  const context = useContext(AppProvider);
 
   if (context === undefined) {
-    throw new Error('useGlobalContext must be used within an AppProvider')
+    throw new Error("useGlobalContext must be used within an AppProvider");
   }
 
-  return context
-}
+  return context;
+};
 
-export default AppContext
+export default AppContext;
