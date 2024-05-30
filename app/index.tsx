@@ -10,9 +10,10 @@ import { useGlobalContext } from "../utils/AppContext";
 import { colors, dimensions, styleUtils } from "../utils/styles";
 import { StyleSheet } from "react-native";
 import { useAuth, useQuery } from "@realm/react";
+import Loading from "../components/Loading";
 
 const Customers = () => {
-  const { showCustomerModal } = useGlobalContext();
+  const { showCustomerModal, isLoading } = useGlobalContext();
   // TODO: This component is only for Customers, so please move this logout functionality to one level upper
   const { logOut } = useAuth();
   const customers = useQuery(CustomerSchema);

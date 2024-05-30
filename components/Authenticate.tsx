@@ -18,6 +18,9 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { AuthOperationName, useAuth, useEmailPasswordAuth } from "@realm/react";
 import { Formik, useFormikContext } from "formik";
 import { AuthValidationSchema } from "../utils/FormValidators";
+import { useGlobalContext } from "../utils/AppContext";
+import { isLoading } from "expo-font";
+import Loading from "./Loading";
 
 interface AuthFormProps {
   email: string;
@@ -38,6 +41,7 @@ const RegisterLoginForm = () => {
   const [showLoginPage, setShowLoginPage] = useState(true);
   const { logInWithEmailPassword } = useAuth();
   const { register, result, logIn } = useEmailPasswordAuth();
+  const { isLoading, setIsLoading } = useGlobalContext();
 
   const performRegistration = ({
     email,
@@ -46,6 +50,7 @@ const RegisterLoginForm = () => {
     email: string;
     password: string;
   }) => {
+    setIsLoading(true);
     register({ email, password });
   };
 
@@ -80,6 +85,7 @@ const RegisterLoginForm = () => {
     // Log in the user after successful registration
     useEffect(() => {
       if (result.success && result.operation === AuthOperationName.Register) {
+        setIsLoading(false);
         logIn({ email: values.email, password: values.password });
       }
     }, [result, logIn, values]);

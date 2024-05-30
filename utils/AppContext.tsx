@@ -5,6 +5,8 @@ type AppContextT = {
   showCustomerModal: (show: boolean) => void;
   isAddTransactionModalOpen: boolean;
   showTransactionModal: (show: boolean) => void;
+  isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const AppProvider = createContext<AppContextT | undefined>(undefined);
@@ -12,6 +14,8 @@ function AppContext({ children }: { children: React.ReactNode }) {
   const [isAddCustomerModalOpen, setIsAddCustomerModalOpen] = useState(false);
   const [isAddTransactionModalOpen, setIsTransactionModalOpen] =
     useState(false);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   // MODALS
   const showCustomerModal = (show: boolean) => {
@@ -27,6 +31,8 @@ function AppContext({ children }: { children: React.ReactNode }) {
     showCustomerModal,
     isAddTransactionModalOpen,
     showTransactionModal,
+    isLoading,
+    setIsLoading,
   };
 
   return (

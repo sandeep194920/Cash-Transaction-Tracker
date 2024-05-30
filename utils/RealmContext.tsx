@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useRef } from "react";
+import React, { createContext, useContext, useRef, useState } from "react";
 import { CustomerType } from "./types";
 import { useQuery, useRealm, useUser } from "@realm/react";
 import Realm from "realm";
