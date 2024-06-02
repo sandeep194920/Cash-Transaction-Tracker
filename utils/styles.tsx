@@ -1,15 +1,16 @@
 import { StyleSheet } from 'react-native'
 
 export const colors = {
-  white: '#fff',
-  darkGray1: '#666567',
-  lightGray1: '#dddddd',
-  lightGreen1: '#8aaf05',
-  lightGreen2: '#1caa5c',
-  lightBlue1: '#1caaaa',
-  red: '#bc412b',
-  black: '#121111',
-}
+  white: "#fff",
+  darkGray1: "#666567",
+  lightGray0: "#f6f6f6",
+  lightGray1: "#dddddd",
+  lightGreen1: "#8aaf05",
+  lightGreen2: "#1caa5c",
+  lightBlue1: "#1caaaa",
+  red: "#bc412b",
+  black: "#121111",
+};
 
 export const dimensions = {
   paddingSmall1: 2,
@@ -35,7 +36,7 @@ export const dimensions = {
   smallGap: 4,
   largeGap: 20,
   borderRadius: 100,
-}
+};
 
 export const styleUtils = StyleSheet.create({
   /* EACH ITEM STYLES ---> */
@@ -53,7 +54,6 @@ export const styleUtils = StyleSheet.create({
   // Each item in the list
   columnContainer: {
     display: "flex",
-    flexDirection: "column",
     justifyContent: "space-between",
     alignItems: "flex-start",
     gap: dimensions.marginLarge1,
@@ -147,6 +147,15 @@ export const styleUtils = StyleSheet.create({
   buttonText: {
     color: "white",
     fontSize: dimensions.extraLargeFont2,
+  },
+
+  smallShadow: {
+    shadowColor: colors.darkGray1,
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    // Android shadow property
+    elevation: 5,
   },
 });
 
