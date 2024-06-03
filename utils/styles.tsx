@@ -10,7 +10,7 @@ export const colors = {
   lightBlue1: "#1caaaa",
   red: "#bc412b",
   black: "#121111",
-};
+} as const;
 
 export const dimensions = {
   paddingSmall1: 2,
@@ -38,7 +38,32 @@ export const dimensions = {
   borderRadius: 100,
 };
 
+const reusableStyles = StyleSheet.create({
+  smallShadow: {
+    shadowColor: colors.darkGray1,
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    // Android shadow property
+    elevation: 5,
+  },
+});
+
+
 export const styleUtils = StyleSheet.create({
+  smallShadow: {
+    ...reusableStyles.smallShadow,
+  },
+
+  cardContainer: {
+    width: "auto",
+    alignSelf: "center",
+    marginTop: 5,
+    backgroundColor: colors.lightGray0,
+    padding: 20,
+    ...reusableStyles.smallShadow,
+  },
+
   /* EACH ITEM STYLES ---> */
   // Each item in the list
   itemContainer: {
@@ -147,15 +172,6 @@ export const styleUtils = StyleSheet.create({
   buttonText: {
     color: "white",
     fontSize: dimensions.extraLargeFont2,
-  },
-
-  smallShadow: {
-    shadowColor: colors.darkGray1,
-    shadowOffset: { width: 1, height: 1 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    // Android shadow property
-    elevation: 5,
   },
 });
 

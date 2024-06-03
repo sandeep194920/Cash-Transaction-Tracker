@@ -1,12 +1,12 @@
 import { View, StyleSheet, Pressable } from 'react-native'
 import React from 'react'
 import { colors, styleUtils } from '../../utils/styles'
-import { ButtonType } from '../../utils/types'
+import { RoundButtonType } from "../../utils/types";
 import { Entypo, Ionicons } from '@expo/vector-icons'
 import { useGlobalContext } from '../../utils/AppContext'
 
-const AddEditButton = ({ type, pressHandler }: ButtonType) => {
-  const buttonTypes = {
+const AddEditButton = ({ type, pressHandler }: RoundButtonType) => {
+  const RoundButtonTypes = {
     ADD: (
       <Pressable style={{ ...styleUtils.addButton }} onPress={pressHandler}>
         <Ionicons name="add" size={24} color="white" />
@@ -20,7 +20,9 @@ const AddEditButton = ({ type, pressHandler }: ButtonType) => {
       </Pressable>
     ),
   };
-  return <View style={styleUtils.buttonContainer}>{buttonTypes[type]}</View>;
+  return (
+    <View style={styleUtils.buttonContainer}>{RoundButtonTypes[type]}</View>
+  );
 };
 
 export default AddEditButton

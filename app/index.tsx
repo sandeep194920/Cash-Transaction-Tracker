@@ -5,7 +5,7 @@ import React from "react";
 import Customer from "../components/Customer";
 import { Customer as CustomerSchema } from "../models/CustomerSchema";
 import AddEditButton from "../components/Buttons/AddEditButton";
-import AddCustomer from "../components/EditableViews/AddCustomer";
+import AddNewCustomer from "../screens/modalScreens/AddNewCustomer";
 import { useGlobalContext } from "../utils/AppContext";
 import { colors, dimensions, styleUtils } from "../utils/styles";
 import { StyleSheet } from "react-native";
@@ -41,7 +41,7 @@ const Customers = () => {
         />
       </>
       {/* MODAL */}
-      <AddCustomer />
+      <AddNewCustomer />
     </SafeAreaView>
   );
 };

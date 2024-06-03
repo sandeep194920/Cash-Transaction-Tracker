@@ -3,7 +3,7 @@ import AppContext from '../utils/AppContext'
 import { AppProvider, RealmProvider, UserProvider } from '@realm/react'
 import { Customer } from '../models/CustomerSchema'
 import { Order, Item } from '../models/OrderSchema'
-import Authenticate from '../components/Authenticate'
+import Authenticate from "../screens/Authenticate";
 import RealmContext from '../utils/RealmContext'
 import { AppConstants } from '../constants'
 import { useEffect } from "react";

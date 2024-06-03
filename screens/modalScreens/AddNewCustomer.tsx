@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React from "react";
 import { useGlobalContext } from "../../utils/AppContext";
-import WithCancelButton from "../Buttons/WithCancelButton";
+import WithCancelButton from "../../components/Buttons/WithCancelButton";
 import { colors, styleUtils, userFormStyles } from "../../utils/styles";
 import {
   MaterialIcons,
@@ -22,7 +22,7 @@ import { customerValidationSchema } from "../../utils/FormValidators";
 import { CustomerType } from "../../utils/types";
 
 const customerInitialValues = { name: "", phone: "", email: "", address: "" };
-const AddCustomer = () => {
+const AddNewCustomer = () => {
   const { isAddCustomerModalOpen, showCustomerModal } = useGlobalContext();
   const { addNewCustomerHandler } = useRealmContext();
 
@@ -151,11 +151,6 @@ const AddCustomer = () => {
   );
 };
 
-export default AddCustomer;
+export default AddNewCustomer;
 
 const styles = StyleSheet.create({});
-
-
-
-
-

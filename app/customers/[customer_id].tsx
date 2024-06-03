@@ -11,7 +11,7 @@ import { Customer as CustomerSchema } from "../../models/CustomerSchema";
 import { Order } from "../../models/OrderSchema";
 import AddEditButton from "../../components/Buttons/AddEditButton";
 import { useGlobalContext } from "../../utils/AppContext";
-import AddTransaction from "../../components/EditableViews/AddTransaction";
+import AddNewTransaction from "../../screens/modalScreens/AddNewTransaction";
 
 const CustomerTransactions = () => {
   const { customer_id, customer_name } = useLocalSearchParams();
@@ -53,7 +53,7 @@ const CustomerTransactions = () => {
         pressHandler={showTransactionModal.bind(this, true)}
       />
       {/* MODAL */}
-      <AddTransaction />
+      <AddNewTransaction />
     </SafeAreaView>
   );
 };

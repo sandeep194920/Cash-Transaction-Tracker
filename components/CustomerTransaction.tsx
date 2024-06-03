@@ -3,9 +3,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { router } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
-import { colors, styleUtils } from '../utils/styles'
-import { useQuery, useUser } from "@realm/react";
-// import { OrdersType } from "../utils/types";
+import { colors, styleUtils } from "../utils/styles";
 import { Order } from "../models/OrderSchema";
 import { Customer as CustomerSchema } from "../models/CustomerSchema";
 

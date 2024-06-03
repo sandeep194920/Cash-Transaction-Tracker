@@ -19,8 +19,6 @@ import { AuthOperationName, useAuth, useEmailPasswordAuth } from "@realm/react";
 import { Formik, useFormikContext } from "formik";
 import { AuthValidationSchema } from "../utils/FormValidators";
 import { useGlobalContext } from "../utils/AppContext";
-import { isLoading } from "expo-font";
-import Loading from "./Loading";
 
 interface AuthFormProps {
   email: string;
