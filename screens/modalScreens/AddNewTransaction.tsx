@@ -28,6 +28,7 @@ import Button from "../../components/Buttons/Button";
 import MultipleButtons from "../../components/Buttons/MultipleButtons";
 import { ButtonType } from "../../utils/types";
 import AddedItems from "../../components/AddedItems";
+import AddTransactionInput from "../../components/AddTransactionInput";
 
 const AddNewTransaction = () => {
   // const { formikAddCustomer } = useRealmContext();
@@ -36,9 +37,8 @@ const AddNewTransaction = () => {
 
   const [itemNumber, setItemNumber] = useState(0);
 
+  const [showAddItemInput, setShowAddItemInput] = useState(false);
   const handleCloseModal = () => {
-    console.log("The modal closed");
-
     showTransactionModal(false);
   };
 
@@ -58,64 +58,44 @@ const AddNewTransaction = () => {
   return (
     <Modal visible={isAddTransactionModalOpen} animationType="slide">
       <SafeAreaView style={styleUtils.flexContainer}>
-        {/* Move this to it's own container */}
-        <View>
+        <View style={styleUtils.flexContainer}>
           {/* Page Header */}
           <View style={styleUtils.headerTextContainer}>
-            <Text style={styleUtils.headerText}>Date</Text>
-          </View>
-          <View style={{ ...styleUtils.cardContainer, width: "90%" }}>
-            <Text style={styles.itemHeaderText}>
-              Add Item : {itemNumber + 1}
+            <Text style={styleUtils.headerText}>
+              {new Date().toDateString()}
             </Text>
-            <View>
-              <View style={styles.itemRowContainer}>
-                <Text style={styles.itemHeading}>Item name</Text>
-                <TextInput style={styles.itemInput} />
-              </View>
-
-              <View style={styles.itemRowContainer}>
-                <Text style={styles.itemHeading}>Price per item</Text>
-                <TextInput style={styles.itemInput} />
-              </View>
-
-              <View style={styles.itemRowContainer}>
-                <Text style={styles.itemHeading}>Quantity</Text>
-                <TextInput style={styles.itemInput} />
-              </View>
-
-              <View style={styles.itemRowContainer}>
-                <View>
-                  <Text style={styles.itemHeading}>
-                    Total price of this item
-                  </Text>
-                  <Text style={styleUtils.subText}>
-                    (Price per item X Quantity )
-                  </Text>
-                </View>
-                <View
-                  style={{
-                    ...styleUtils.tag,
-                    backgroundColor: colors.darkGray1,
-                  }}
-                >
-                  <Text
-                    style={{
-                      ...styleUtils.tagText,
-                      fontSize: dimensions.smallFont1,
-                      fontWeight: "600",
-                    }}
-                  >
-                    {200}
-                  </Text>
-                </View>
-              </View>
-              <MultipleButtons buttons={transactionButtons} />
-            </View>
           </View>
+          {showAddItemInput ? (
+            <AddTransactionInput
+              handleClose={handleCloseModal}
+              itemNumber={itemNumber}
+            />
+          ) : (
+            <MultipleButtons
+              buttons={[
+                {
+                  title: "Add next item",
+                  bgColor: "lightGreen2",
+                  onPress: () => setShowAddItemInput((prev) => !prev),
+                },
+              ]}
+            />
+          )}
+          <AddedItems addItemsShown={showAddItemInput} />
         </View>
-        {/* Added Items */}
-        <AddedItems />
+        {!showAddItemInput && (
+          <MultipleButtons
+            buttons={[
+              {
+                title: "Cancel",
+                bgColor: "transparent",
+                color: "red",
+                onPress: handleCloseModal,
+              },
+              { title: "Confirm Items", bgColor: "lightGreen1" },
+            ]}
+          />
+        )}
       </SafeAreaView>
     </Modal>
   );
@@ -132,10 +112,8 @@ const styles = StyleSheet.create({
   },
 
   itemRowContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginVertical: 10,
+    ...styleUtils.itemRowContainer,
+    padding: dimensions.paddingSmall3,
   },
 
   itemHeading: {
@@ -149,7 +127,6 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     minWidth: 160,
   },
-
   buttonContainer: {
     justifyContent: "center",
     alignItems: "center",

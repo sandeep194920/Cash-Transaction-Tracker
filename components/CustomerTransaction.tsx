@@ -1,11 +1,12 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import React from 'react'
-import { router } from 'expo-router'
-import { Ionicons } from '@expo/vector-icons'
+import React from "react";
+import { router } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
 import { colors, styleUtils } from "../utils/styles";
 import { Order } from "../models/OrderSchema";
 import { Customer as CustomerSchema } from "../models/CustomerSchema";
+import TextHighlight from "./TextHighlight";
 
 interface CustomerTransactionProps {
   transaction: Order;
@@ -34,7 +35,7 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
 
   const getLinkedCustomer = (order: Order) => {
     console.log("The order is", order);
-    
+
     const customers = order.linkingObjects<CustomerSchema>(
       "Customer",
       "orders"
@@ -45,7 +46,7 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
 
   const result = getLinkedCustomer(transaction);
   console.log("The result is", result);
-console.log("The order id type is", typeof order_id);
+  console.log("The order id type is", typeof order_id);
 
   return (
     <Pressable
@@ -57,46 +58,50 @@ console.log("The order id type is", typeof order_id);
         })
       }
     >
-      <View style={styleUtils.itemContainer}>
-        <View style={styleUtils.columnContainer}>
+      <View style={styleUtils.itemColumnContainer}>
+        <View style={styles.itemRowContainer}>
           <View>
             <Text style={styleUtils.smallText}>
               {order_date.toDateString()}
             </Text>
           </View>
+          <TextHighlight
+            type="success"
+            size="small"
+            innerText="Paid"
+            outerText={`$${order_price}`}
+          />
+        </View>
+
+        <View style={styles.itemRowContainer}>
           <View style={{ ...styleUtils.flexRow, justifyContent: "center" }}>
             <Ionicons name="pricetag" size={20} color={colors.lightGreen1} />
             <Text style={{ marginLeft: 10, fontWeight: "bold" }}>$10</Text>
           </View>
-        </View>
-        <View style={styleUtils.columnContainer}>
-          <View style={styleUtils.flexRow}>
-            <View
-              style={{ ...styleUtils.tag, backgroundColor: colors.lightGreen1 }}
-            >
-              <Text style={styleUtils.tagText}>Paid</Text>
-            </View>
-            <Text style={styleUtils.mediumText}>${order_price}</Text>
-          </View>
-          <View style={styleUtils.flexRow}>
-            <View
-              style={{
-                ...styleUtils.tag,
-                backgroundColor: 10 >= 0 ? colors.lightBlue1 : colors.red,
-              }}
-            >
-              <Text style={styleUtils.tagText}>{`${
-                10 >= 0 ? "Overpayment" : "Outstanding"
-              }`}</Text>
-            </View>
-            <Text style={styleUtils.mediumText}>${10}</Text>
-          </View>
+          <TextHighlight
+            type="info"
+            size="small"
+            innerText="Overpayment"
+            outerText={`$${order_price}`}
+          />
         </View>
       </View>
     </Pressable>
   );
 };
 
-export default CustomerTransaction
+export default CustomerTransaction;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  itemContainer: {
+    paddingHorizontal: "5%",
+    paddingVertical: 5,
+    backgroundColor: colors.lightGray1,
+  },
+  itemRowContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginVertical: 10,
+  },
+});

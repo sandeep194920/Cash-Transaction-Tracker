@@ -1,4 +1,4 @@
-import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useMemo, useState } from "react";
 import { useLocalSearchParams } from "expo-router";
 import { colors, dimensions, styleUtils } from "../../../utils/styles";
@@ -12,6 +12,7 @@ import {
 import { Customer as CustomerSchema } from "../../../models/CustomerSchema";
 
 import { BSON } from "realm";
+import TextHighlight from "../../../components/TextHighlight";
 
 const CustomerOrder = () => {
   const { order_id } = useLocalSearchParams<{ order_id: string }>();
@@ -83,62 +84,28 @@ const CustomerOrder = () => {
         {/* Customer Price Details */}
 
         {/* total */}
-        <View style={styles.priceContainer}>
+        <View style={styles.itemRowContainer}>
           <Text style={styleUtils.mediumText}>Total </Text>
-          <View style={styleUtils.flexRow}>
-            <View
-              style={{
-                ...styleUtils.tag,
-                backgroundColor: colors.lightBlue1,
-              }}
-            >
-              <Text
-                style={{
-                  ...styleUtils.tagText,
-                  fontSize: dimensions.mediumFont,
-                }}
-              >{` $ ${order_price} `}</Text>
-            </View>
-          </View>
+          <TextHighlight innerText="$ 20" type="info" size="medium" />
         </View>
         {/* paid by customer */}
-        <View style={styles.priceContainer}>
+        <View style={styles.itemRowContainer}>
           <Text style={styleUtils.mediumText}>{customer?.name} paid</Text>
-          <View style={styleUtils.flexRow}>
-            <View
-              style={{
-                ...styleUtils.tag,
-                backgroundColor: colors.lightGreen1,
-              }}
-            >
-              <Text
-                style={{
-                  ...styleUtils.tagText,
-                  fontSize: dimensions.mediumFont,
-                }}
-              >{` $ ${paid_by_customer} `}</Text>
-            </View>
-          </View>
+          <TextHighlight
+            type="success"
+            innerText={` $ ${paid_by_customer} `}
+            size="medium"
+          />
         </View>
         {/* carryover */}
-        <View style={styles.priceContainer}>
+        <View style={styles.itemRowContainer}>
           <Text style={styleUtils.mediumText}>{type}</Text>
-          <View style={styleUtils.flexRow}>
-            <View
-              style={{
-                ...styleUtils.tag,
-                backgroundColor:
-                  type === "Overpayment" ? colors.lightGreen2 : colors.red,
-              }}
-            >
-              <Text
-                style={{
-                  ...styleUtils.tagText,
-                  fontSize: dimensions.mediumFont,
-                }}
-              >{` $ ${carry_over} `}</Text>
-            </View>
-          </View>
+
+          <TextHighlight
+            type={type === "Overpayment" ? `success` : "warning"}
+            size="medium"
+            innerText={` $ ${carry_over} `}
+          />
         </View>
       </View>
       <Button type="EDIT" />
@@ -158,7 +125,7 @@ type ItemProps = {
 const ItemDetails: React.FC<ItemProps> = ({ item }) => {
   const { name, price_per_item, quantity } = item;
   return (
-    <View style={styles.itemContainerExtended}>
+    <View style={styles.itemRowContainer}>
       <Text style={styleUtils.largeText}>
         {name[0].toUpperCase()}
         {name.slice(1)}
@@ -181,16 +148,12 @@ const ItemDetails: React.FC<ItemProps> = ({ item }) => {
 
 const styles = StyleSheet.create({
   itemsContainer: {
+    ...styleUtils.itemRowContainer,
     backgroundColor: colors.lightGray1,
-    marginBottom: dimensions.marginLarge1,
+    marginBottom: dimensions.marginMedium,
   },
-  itemContainerExtended: {
-    ...styleUtils.itemContainer,
-    marginBottom: dimensions.noMargin,
+  itemRowContainer: {
+    ...styleUtils.itemRowContainer,
+    padding: dimensions.paddingSmall3,
   },
-  priceContainer: {
-    ...styleUtils.itemContainer,
-    backgroundColor: 'transparent',
-    marginBottom: dimensions.noMargin,
-  },
-})
+});

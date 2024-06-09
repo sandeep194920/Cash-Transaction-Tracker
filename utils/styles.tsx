@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from "react-native";
 
 export const colors = {
   white: "#fff",
@@ -49,7 +49,6 @@ const reusableStyles = StyleSheet.create({
   },
 });
 
-
 export const styleUtils = StyleSheet.create({
   smallShadow: {
     ...reusableStyles.smallShadow,
@@ -66,10 +65,14 @@ export const styleUtils = StyleSheet.create({
 
   /* EACH ITEM STYLES ---> */
   // Each item in the list
-  itemContainer: {
-    display: "flex",
+  itemRowContainer: {
     flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
+    // flexWrap: "wrap",
+  },
+
+  itemColumnContainer: {
     justifyContent: "space-between",
     padding: dimensions.paddingMedium,
     backgroundColor: colors.lightGray1,
@@ -92,11 +95,12 @@ export const styleUtils = StyleSheet.create({
     borderRadius: dimensions.borderRadiusRound,
     paddingHorizontal: dimensions.paddingSmall2,
     paddingVertical: dimensions.paddingSmall1,
-    marginRight: dimensions.marginLarge1,
+    // marginRight: dimensions.marginLarge1,
   },
   tagText: {
     color: "white",
     fontSize: dimensions.tagFont,
+    fontWeight: "500",
   },
 
   // Used for names and other important info
@@ -178,11 +182,11 @@ export const styleUtils = StyleSheet.create({
 export const userFormStyles = StyleSheet.create({
   flexContainer: {
     padding: dimensions.paddingExtraLarge,
-    alignItems: 'center',
+    alignItems: "center",
   },
   flexItem: {
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row",
     gap: dimensions.largeGap,
     marginVertical: dimensions.marginLarge1,
   },
@@ -196,4 +200,4 @@ export const userFormStyles = StyleSheet.create({
     color: colors.red,
     marginLeft: dimensions.marginExtraLarge1,
   },
-})
+});

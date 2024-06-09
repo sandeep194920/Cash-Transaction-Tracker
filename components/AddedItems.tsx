@@ -1,187 +1,85 @@
-import { StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { styleUtils } from "../utils/styles";
+import { colors, dimensions, styleUtils } from "../utils/styles";
+import TextHighlight from "./TextHighlight";
+import { Feather } from "@expo/vector-icons";
+import { Dimensions } from "react-native";
 
-const AddedItems = () => {
+const items = [
+  { id: "1", header: "Roti, Curry & Rice", price: 20, qty: 10, total: 200 },
+  { id: "2", header: "Roti & Curry", price: 10, qty: 20, total: 200 },
+  { id: "3", header: "Rice & Curry", price: 5, qty: 10, total: 50 },
+  { id: "4", header: "Roti", price: 20, qty: 10, total: 200 },
+  { id: "5", header: "Roti", price: 20, qty: 10, total: 200 },
+  { id: "6", header: "Roti", price: 20, qty: 10, total: 200 },
+  { id: "7", header: "Roti", price: 20, qty: 10, total: 200 },
+  { id: "8", header: "Roti", price: 20, qty: 10, total: 200 },
+  { id: "9", header: "Roti", price: 20, qty: 10, total: 200 },
+];
+
+interface AddItemsProp {
+  addItemsShown: boolean;
+}
+
+const AddedItems = ({ addItemsShown }: AddItemsProp) => {
+  const windowHeight = Dimensions.get("window").height;
   return (
-    <View>
-      <View
-        style={{
-          ...styleUtils.headerTextContainer,
-          justifyContent: "flex-start",
-          paddingHorizontal: 20,
-        }}
-      >
+    <View
+      style={{
+        height: addItemsShown ? windowHeight / 2 - 50 : windowHeight - 250,
+      }}
+    >
+      <View style={styles.headerTextContainer}>
         <Text style={styleUtils.headerText}>Items Added</Text>
       </View>
-
       {/* Individual Item card */}
-      <View
-        style={{
-          //   backgroundColor: "orange",
-          flexDirection: "row",
-          justifyContent: "flex-start",
-          gap: 10,
-          paddingHorizontal: 10,
-          flexWrap: "wrap",
+      <FlatList
+        contentContainerStyle={styles.itemsContainer}
+        numColumns={2}
+        columnWrapperStyle={{ justifyContent: "space-between" }}
+        data={items}
+        renderItem={({ item }) => {
+          const { header, price, qty, total } = item;
+          return (
+            <View style={styles.itemContainer}>
+              <View
+                style={{
+                  ...styles.itemRowContainer,
+                  alignItems: "center",
+                  marginBottom: dimensions.marginLarge1,
+                }}
+              >
+                <Text style={styleUtils.mediumText}>{header}</Text>
+              </View>
+
+              <View style={styles.itemRowContainer}>
+                <Text>Price</Text>
+                <Text>${price}</Text>
+              </View>
+
+              <View style={styles.itemRowContainer}>
+                <Text>Qty</Text>
+                <Text>{qty}</Text>
+              </View>
+
+              <View style={styles.itemRowContainer}>
+                <Text>Total</Text>
+                <TextHighlight innerText={`$ ${total}`} type="info" />
+              </View>
+
+              <View
+                style={{
+                  ...styles.itemRowContainer,
+                  marginTop: dimensions.marginLarge1,
+                }}
+              >
+                <Feather name="trash-2" size={20} color={colors.red} />
+                <Feather name="edit" size={20} color={colors.black} />
+              </View>
+            </View>
+          );
         }}
-      >
-        <View
-          style={{
-            ...styleUtils.cardContainer,
-            padding: 10,
-            flexDirection: "row",
-            // alignSelf: "flex-start",
-          }}
-        >
-          <View style={{ rowGap: 12, width: 150 }}>
-            <View
-              style={{
-                alignItems: "center",
-              }}
-            >
-              <Text style={styleUtils.mediumText}>Roti, Curry and Rice</Text>
-            </View>
-
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Text>Price</Text>
-              <Text>20</Text>
-            </View>
-
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Text>Qty</Text>
-              <Text>20</Text>
-            </View>
-
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Text>Total</Text>
-              <Text>200</Text>
-            </View>
-          </View>
-        </View>
-
-        <View
-          style={{
-            ...styleUtils.cardContainer,
-            padding: 10,
-            flexDirection: "row",
-            // alignSelf: "flex-start",
-          }}
-        >
-          <View style={{ rowGap: 12, width: 150 }}>
-            <View
-              style={{
-                alignItems: "center",
-              }}
-            >
-              <Text style={styleUtils.mediumText}>Roti</Text>
-            </View>
-
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Text>Price</Text>
-              <Text>20</Text>
-            </View>
-
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Text>Qty</Text>
-              <Text>20</Text>
-            </View>
-
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Text>Total</Text>
-              <Text>200</Text>
-            </View>
-          </View>
-        </View>
-
-        <View
-          style={{
-            ...styleUtils.cardContainer,
-            padding: 10,
-            flexDirection: "row",
-            // alignSelf: "flex-start",
-          }}
-        >
-          <View style={{ rowGap: 12, width: 150 }}>
-            <View
-              style={{
-                alignItems: "center",
-              }}
-            >
-              <Text style={styleUtils.mediumText}>Roti</Text>
-            </View>
-
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Text>Price</Text>
-              <Text>20</Text>
-            </View>
-
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Text>Qty</Text>
-              <Text>20</Text>
-            </View>
-
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Text>Total</Text>
-              <Text>200</Text>
-            </View>
-          </View>
-        </View>
-      </View>
+      />
     </View>
   );
 };
@@ -189,9 +87,24 @@ const AddedItems = () => {
 export default AddedItems;
 
 const styles = StyleSheet.create({
-  addedItemContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
+  itemsContainer: {
+    // ...styleUtils.itemRowContainer,
+    gap: dimensions.largeGap,
+    marginHorizontal: dimensions.marginLarge1,
+  },
+  itemContainer: {
+    ...styleUtils.cardContainer,
+    padding: 10,
+    minWidth: 150,
+  },
+  itemRowContainer: {
+    ...styleUtils.itemRowContainer,
+    marginBottom: dimensions.marginMedium,
+  },
+  headerTextContainer: {
+    ...styleUtils.headerTextContainer,
+    justifyContent: "flex-start",
+    paddingHorizontal: 20,
+    marginVertical: dimensions.marginMedium,
   },
 });

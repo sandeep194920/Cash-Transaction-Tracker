@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { router } from "expo-router";
-import { colors, styleUtils } from "../utils/styles";
+import { colors, dimensions, styleUtils } from "../utils/styles";
 import { Customer as CustomerSchema } from "../models/CustomerSchema";
 
 interface CustomerProps {
@@ -20,7 +20,7 @@ const Customer: React.FC<CustomerProps> = ({ customer }) => {
           })
         }
       >
-        <View style={styleUtils.itemContainer}>
+        <View style={styles.itemRowContainer}>
           <View>
             <Text style={styleUtils.largeText}>{name}</Text>
             <Text style={styleUtils.subText}>({customer_id.toString()})</Text>
@@ -49,4 +49,11 @@ const Customer: React.FC<CustomerProps> = ({ customer }) => {
 
 export default Customer;
 
-// const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  itemRowContainer: {
+    ...styleUtils.itemRowContainer,
+    padding: dimensions.paddingMedium,
+    marginBottom: dimensions.marginMedium,
+    backgroundColor: colors.lightGray1,
+  },
+});
