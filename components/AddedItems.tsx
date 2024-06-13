@@ -110,8 +110,8 @@ const styles = StyleSheet.create({
   },
   headerTextContainer: {
     ...styleUtils.headerTextContainer,
-    justifyContent: "flex-start",
     paddingHorizontal: 20,
+    paddingVertical: 10,
     marginVertical: dimensions.marginMedium,
   },
 });

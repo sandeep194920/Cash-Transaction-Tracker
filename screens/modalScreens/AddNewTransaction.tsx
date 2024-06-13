@@ -1,7 +1,7 @@
 import { Modal, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import { useGlobalContext } from "../../utils/AppContext";
-import { colors, dimensions, styleUtils } from "../../utils/styles";
+import { styleUtils } from "../../utils/styles";
 
 import MultipleButtons from "../../components/Buttons/MultipleButtons";
 import { ItemAdded } from "../../utils/types";
@@ -9,7 +9,6 @@ import AddedItems from "../../components/AddedItems";
 import AddTransactionInput from "../../components/AddTransactionInput";
 
 const AddNewTransaction = () => {
-  // const { formikAddCustomer } = useRealmContext();
   const { isAddTransactionModalOpen, showTransactionModal } =
     useGlobalContext();
 
@@ -31,7 +30,12 @@ const AddNewTransaction = () => {
 
   return (
     <Modal visible={isAddTransactionModalOpen} animationType="slide">
-      <SafeAreaView style={styleUtils.flexContainer}>
+      <SafeAreaView
+        style={{
+          ...styleUtils.flexContainer,
+          overflow: "hidden",
+        }}
+      >
         <View style={styleUtils.flexContainer}>
           {/* Page Header */}
           <View style={styleUtils.headerTextContainer}>
@@ -61,54 +65,26 @@ const AddNewTransaction = () => {
             addItemsShown={showAddItemInput}
           />
         </View>
-        {!showAddItemInput ||
-          (itemsAdded.length !== 0 && (
-            <MultipleButtons
-              buttons={[
-                {
-                  title: "Cancel",
-                  bgColor: "transparent",
-                  color: "red",
-                  onPress: handleCloseModal,
-                },
-                { title: "Confirm Items", bgColor: "lightGreen1" },
-              ]}
-            />
-          ))}
       </SafeAreaView>
+      {itemsAdded.length > 0 && (
+        <View style={{ flex: 0.1 }}>
+          <MultipleButtons
+            buttons={[
+              {
+                title: "Cancel",
+                bgColor: "transparent",
+                color: "red",
+                onPress: handleCloseModal,
+              },
+              { title: "Confirm Items", bgColor: "lightGreen1" },
+            ]}
+          />
+        </View>
+      )}
     </Modal>
   );
 };
 
 export default AddNewTransaction;
 
-const styles = StyleSheet.create({
-  itemHeaderText: {
-    fontSize: dimensions.largeFont,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 10,
-  },
-
-  itemRowContainer: {
-    ...styleUtils.itemRowContainer,
-    padding: dimensions.paddingSmall3,
-  },
-
-  itemHeading: {
-    fontWeight: "600",
-    fontSize: dimensions.mediumFont,
-  },
-  itemInput: {
-    borderColor: colors.lightGreen1,
-    borderBottomWidth: 1,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    minWidth: 160,
-  },
-  buttonContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 20,
-  },
-});
+const styles = StyleSheet.create({});

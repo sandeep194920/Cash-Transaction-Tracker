@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { Modal, StyleSheet, Text, TextInput, View } from "react-native";
 import React from "react";
 import MultipleButtons from "./Buttons/MultipleButtons";
 import {
@@ -85,7 +85,7 @@ const AddTransactionInput = ({
                   <TextInput
                     onBlur={handleBlur("price")}
                     onChangeText={handleChange("price")}
-                    value={`${values.price}`} // number is converted to str
+                    value={`${values.price === 0 ? " " : values.price}`}
                     style={styles.itemInput}
                     keyboardType="numeric"
                     placeholder="Price of this item"
@@ -108,7 +108,7 @@ const AddTransactionInput = ({
                   <TextInput
                     onBlur={handleBlur("qty")}
                     onChangeText={handleChange("qty")}
-                    value={`${values.qty}`} // number is converted to str
+                    value={`${values.qty === 0 ? " " : values.qty}`}
                     style={styles.itemInput}
                     keyboardType="numeric"
                     placeholder="How many of these"
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
   },
   itemRowContainer: {
     ...styleUtils.itemRowContainer,
-    padding: dimensions.paddingSmall3,
+    padding: dimensions.paddingSmall1,
   },
   itemHeading: {
     fontWeight: "600",
@@ -194,4 +194,3 @@ const styles = StyleSheet.create({
     minWidth: 160,
   },
 });
-
