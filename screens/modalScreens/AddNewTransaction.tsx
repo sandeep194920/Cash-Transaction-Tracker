@@ -1,32 +1,10 @@
-import {
-  Modal,
-  Pressable,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  ScrollView,
-} from "react-native";
+import { Modal, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import { useGlobalContext } from "../../utils/AppContext";
-import WithCancelButton from "../../components/Buttons/WithCancelButton";
-import {
-  colors,
-  dimensions,
-  styleUtils,
-  userFormStyles,
-} from "../../utils/styles";
-import {
-  MaterialIcons,
-  Ionicons,
-  Entypo,
-  FontAwesome,
-} from "@expo/vector-icons";
-import { useRealmContext } from "../../utils/RealmContext";
-import Button from "../../components/Buttons/Button";
+import { colors, dimensions, styleUtils } from "../../utils/styles";
+
 import MultipleButtons from "../../components/Buttons/MultipleButtons";
-import { ButtonType } from "../../utils/types";
+import { ItemAdded } from "../../utils/types";
 import AddedItems from "../../components/AddedItems";
 import AddTransactionInput from "../../components/AddTransactionInput";
 
@@ -36,24 +14,20 @@ const AddNewTransaction = () => {
     useGlobalContext();
 
   const [itemNumber, setItemNumber] = useState(0);
+  const [itemsAdded, setItemsAdded] = useState<ItemAdded[]>([]);
 
   const [showAddItemInput, setShowAddItemInput] = useState(false);
   const handleCloseModal = () => {
     showTransactionModal(false);
+    setItemsAdded([]);
+    setItemNumber(0);
   };
 
-  const transactionButtons: ButtonType[] = [
-    {
-      title: "Go back",
-      color: "red",
-      bgColor: "transparent",
-      onPress: handleCloseModal,
-    },
-    {
-      title: "Add Item",
-      bgColor: "lightGreen1",
-    },
-  ];
+  const handleItemAdded = (newItem: ItemAdded) => {
+    setItemsAdded((prevItem) => [...prevItem, newItem]);
+    setItemNumber((prev) => prev + 1);
+    setShowAddItemInput(false);
+  };
 
   return (
     <Modal visible={isAddTransactionModalOpen} animationType="slide">
@@ -65,10 +39,11 @@ const AddNewTransaction = () => {
               {new Date().toDateString()}
             </Text>
           </View>
-          {showAddItemInput ? (
+          {showAddItemInput || itemsAdded.length === 0 ? (
             <AddTransactionInput
               handleClose={handleCloseModal}
               itemNumber={itemNumber}
+              onItemAdded={handleItemAdded}
             />
           ) : (
             <MultipleButtons
@@ -81,21 +56,25 @@ const AddNewTransaction = () => {
               ]}
             />
           )}
-          <AddedItems addItemsShown={showAddItemInput} />
-        </View>
-        {!showAddItemInput && (
-          <MultipleButtons
-            buttons={[
-              {
-                title: "Cancel",
-                bgColor: "transparent",
-                color: "red",
-                onPress: handleCloseModal,
-              },
-              { title: "Confirm Items", bgColor: "lightGreen1" },
-            ]}
+          <AddedItems
+            itemsAdded={itemsAdded}
+            addItemsShown={showAddItemInput}
           />
-        )}
+        </View>
+        {!showAddItemInput ||
+          (itemsAdded.length !== 0 && (
+            <MultipleButtons
+              buttons={[
+                {
+                  title: "Cancel",
+                  bgColor: "transparent",
+                  color: "red",
+                  onPress: handleCloseModal,
+                },
+                { title: "Confirm Items", bgColor: "lightGreen1" },
+              ]}
+            />
+          ))}
       </SafeAreaView>
     </Modal>
   );

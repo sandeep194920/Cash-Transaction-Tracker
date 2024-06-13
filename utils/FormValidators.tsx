@@ -23,3 +23,18 @@ export const AuthValidationSchema = yup.object().shape({
     .required("Password is required")
     .min(6, "Password must be at least 6 characters long"),
 });
+
+
+export const ItemInputSchema = yup.object().shape({
+  itemName: yup.string().required("Please enter the item name"),
+  price: yup
+    .number()
+    .typeError("Price must be a number")
+    .required("What's the price of this item")
+    .min(1, "Price must be greater than 0"),
+  qty: yup
+    .number()
+    .typeError("Quantity must be a number")
+    .required("How many of these")
+    .min(1, "Quantity must be greater than 0"),
+});

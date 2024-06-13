@@ -1,12 +1,3 @@
-// export type CustomerType = {
-//   _id: string
-//   name: string
-//   address: string
-//   signed_up_on: string
-//   balance: number
-//   user_id: string
-// }
-
 import { colors } from "./styles";
 
 export type CustomerType = {
@@ -53,28 +44,31 @@ type ButtonWithNoBorder = BaseButtonType & {
 
 export type ButtonType = ButtonWithBgColor | ButtonWithNoBorder;
 
+export type Item = {
+  itemName: string;
+  price: number;
+  qty: number;
+};
 
-
-type Item = {
-  name: string
-  pricePerItem: number
-  quantity: number
-}
+export type ItemAdded = Item & {
+  id: string;
+  total: number;
+};
 
 type OrderItem = {
-  order_id: string
-  order_price: number
-  order_date: string
-  items: Item[]
-  paid_by_customer: number
-  carry_over: number
-}
+  order_id: string;
+  order_price: number;
+  order_date: string;
+  items: Item[];
+  paid_by_customer: number;
+  carry_over: number;
+};
 
 export type OrdersType = {
-  [customerId: string]: OrderItem[]
-}
+  [customerId: string]: OrderItem[];
+};
 
 export type InputViewType = {
-  isInput: boolean
-  inputType: null | 'ADD' | 'EDIT'
-}
+  isInput: boolean;
+  inputType: null | "ADD" | "EDIT";
+};

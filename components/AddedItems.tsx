@@ -4,6 +4,7 @@ import { colors, dimensions, styleUtils } from "../utils/styles";
 import TextHighlight from "./TextHighlight";
 import { Feather } from "@expo/vector-icons";
 import { Dimensions } from "react-native";
+import { ItemAdded } from "../utils/types";
 
 const items = [
   { id: "1", header: "Roti, Curry & Rice", price: 20, qty: 10, total: 200 },
@@ -19,10 +20,16 @@ const items = [
 
 interface AddItemsProp {
   addItemsShown: boolean;
+  itemsAdded: ItemAdded[];
 }
 
-const AddedItems = ({ addItemsShown }: AddItemsProp) => {
+const AddedItems = ({ addItemsShown, itemsAdded }: AddItemsProp) => {
   const windowHeight = Dimensions.get("window").height;
+
+  if (itemsAdded.length === 0) {
+    return;
+  }
+
   return (
     <View
       style={{
@@ -37,9 +44,9 @@ const AddedItems = ({ addItemsShown }: AddItemsProp) => {
         contentContainerStyle={styles.itemsContainer}
         numColumns={2}
         columnWrapperStyle={{ justifyContent: "space-between" }}
-        data={items}
+        data={itemsAdded}
         renderItem={({ item }) => {
-          const { header, price, qty, total } = item;
+          const { itemName, price, qty, total } = item;
           return (
             <View style={styles.itemContainer}>
               <View
@@ -49,7 +56,7 @@ const AddedItems = ({ addItemsShown }: AddItemsProp) => {
                   marginBottom: dimensions.marginLarge1,
                 }}
               >
-                <Text style={styleUtils.mediumText}>{header}</Text>
+                <Text style={styleUtils.mediumText}>{itemName}</Text>
               </View>
 
               <View style={styles.itemRowContainer}>
