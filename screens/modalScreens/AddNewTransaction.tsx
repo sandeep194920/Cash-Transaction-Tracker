@@ -45,7 +45,11 @@ const AddNewTransaction = () => {
           </View>
           {showAddItemInput || itemsAdded.length === 0 ? (
             <AddTransactionInput
-              handleClose={handleCloseModal}
+              handleClose={
+                itemsAdded.length === 0
+                  ? handleCloseModal
+                  : () => setShowAddItemInput(false)
+              }
               itemNumber={itemNumber}
               onItemAdded={handleItemAdded}
             />
@@ -60,13 +64,15 @@ const AddNewTransaction = () => {
               ]}
             />
           )}
-          <AddedItems
-            itemsAdded={itemsAdded}
-            addItemsShown={showAddItemInput}
-          />
+          {!showAddItemInput && (
+            <AddedItems
+              itemsAdded={itemsAdded}
+              addItemsShown={showAddItemInput}
+            />
+          )}
         </View>
       </SafeAreaView>
-      {itemsAdded.length > 0 && (
+      {itemsAdded.length > 0 && !showAddItemInput && (
         <View style={{ flex: 0.1 }}>
           <MultipleButtons
             buttons={[

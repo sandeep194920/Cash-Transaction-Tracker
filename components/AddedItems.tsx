@@ -43,7 +43,7 @@ const AddedItems = ({ addItemsShown, itemsAdded }: AddItemsProp) => {
       <FlatList
         contentContainerStyle={styles.itemsContainer}
         numColumns={2}
-        columnWrapperStyle={{ justifyContent: "space-between" }}
+        columnWrapperStyle={{ justifyContent: "space-around" }}
         data={itemsAdded}
         renderItem={({ item }) => {
           const { itemName, price, qty, total } = item;
@@ -52,11 +52,12 @@ const AddedItems = ({ addItemsShown, itemsAdded }: AddItemsProp) => {
               <View
                 style={{
                   ...styles.itemRowContainer,
+                  justifyContent: "center",
                   alignItems: "center",
                   marginBottom: dimensions.marginLarge1,
                 }}
               >
-                <Text style={styleUtils.mediumText}>{itemName}</Text>
+                <Text style={styles.itemName}>{itemName}</Text>
               </View>
 
               <View style={styles.itemRowContainer}>
@@ -95,8 +96,6 @@ export default AddedItems;
 
 const styles = StyleSheet.create({
   itemsContainer: {
-    // ...styleUtils.itemRowContainer,
-    gap: dimensions.largeGap,
     marginHorizontal: dimensions.marginLarge1,
   },
   itemContainer: {
@@ -113,5 +112,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     marginVertical: dimensions.marginMedium,
+  },
+  itemName: {
+    ...styleUtils.mediumText,
   },
 });
