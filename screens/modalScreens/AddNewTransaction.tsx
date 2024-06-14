@@ -1,12 +1,14 @@
 import { Modal, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import { useGlobalContext } from "../../utils/AppContext";
-import { styleUtils } from "../../utils/styles";
+import { colors, styleUtils } from "../../utils/styles";
 
 import MultipleButtons from "../../components/Buttons/MultipleButtons";
 import { ItemAdded } from "../../utils/types";
 import AddedItems from "../../components/AddedItems";
 import AddTransactionInput from "../../components/AddTransactionInput";
+import { Feather } from "@expo/vector-icons";
+import { DatePicker } from "../../components/DateTimePicker";
 
 const AddNewTransaction = () => {
   const { isAddTransactionModalOpen, showTransactionModal } =
@@ -42,6 +44,8 @@ const AddNewTransaction = () => {
             <Text style={styleUtils.headerText}>
               {new Date().toDateString()}
             </Text>
+            {/* <Feather name="edit" size={20} color={colors.lightBlue1} /> */}
+            <DatePicker />
           </View>
           {showAddItemInput || itemsAdded.length === 0 ? (
             <AddTransactionInput

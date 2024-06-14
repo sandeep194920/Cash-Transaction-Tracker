@@ -137,6 +137,7 @@ export const styleUtils = StyleSheet.create({
     color: "#171414",
     fontSize: dimensions.extraLargeFont,
     fontWeight: "bold",
+    marginRight: 5,
   },
 
   smallText: {
