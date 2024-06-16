@@ -9,7 +9,7 @@ import { colors, styleUtils } from "../utils/styles";
 
 const DatePicker = () => {
   const [date, setDate] = useState(new Date());
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
 
   const onChange = (event: DateTimePickerEvent, selectedDate: any) => {
     const currentDate = selectedDate;
@@ -23,16 +23,18 @@ const DatePicker = () => {
 
   return (
     <SafeAreaView>
-      {!show && (
-        <>
-          <Text style={styleUtils.headerText}>Add Transaction</Text>
-          <View
-            style={{
-              ...styleUtils.itemRowContainer,
-              marginTop: 12,
-              justifyContent: "space-evenly",
-            }}
-          >
+      <Text style={styleUtils.headerText}>Add Transaction</Text>
+      <View
+        style={{
+          ...styleUtils.itemRowContainer,
+          marginTop: 12,
+          justifyContent: "space-evenly",
+        }}
+      >
+        {show ? (
+          <DateTimePicker value={date} onChange={onChange} />
+        ) : (
+          <>
             <Text>{date.toDateString()}</Text>
             <Feather
               onPress={showMode}
@@ -40,10 +42,10 @@ const DatePicker = () => {
               size={20}
               color={colors.lightBlue1}
             />
-          </View>
-        </>
-      )}
-      {show && <DateTimePicker value={date} onChange={onChange} />}
+          </>
+        )}
+      </View>
+      {/* {show && <DateTimePicker value={date} onChange={onChange} />} */}
     </SafeAreaView>
   );
 };

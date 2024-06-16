@@ -69,7 +69,6 @@ export const styleUtils = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    // flexWrap: "wrap",
   },
 
   itemColumnContainer: {

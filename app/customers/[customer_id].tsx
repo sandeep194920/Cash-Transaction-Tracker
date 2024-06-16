@@ -47,7 +47,6 @@ const CustomerTransactions = () => {
           );
         }}
       />
-      {/* <Button type="ADD" /> */}
       <AddEditButton
         type="ADD"
         pressHandler={showTransactionModal.bind(this, true)}
