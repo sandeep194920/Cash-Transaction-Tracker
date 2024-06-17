@@ -12,19 +12,59 @@ const AddNewTransaction = () => {
   const { isAddTransactionModalOpen, showTransactionModal } =
     useGlobalContext();
 
-  const [itemNumber, setItemNumber] = useState(0);
   const [itemsAdded, setItemsAdded] = useState<ItemAdded[]>([]);
-
+  // ? If Item is in add mode, then currentItemInEdit mode will be null.
+  // ? Else if Item is in edit mode, then currentItemInEdit mode will be an object that also contains id.
+  const [currentItemInEdit, setCurrentItemInEdit] = useState<ItemAdded | null>(
+    null
+  );
   const [showAddItemInput, setShowAddItemInput] = useState(false);
+  console.log("RERENDERING - now  currentItemInEdit is", currentItemInEdit);
+
   const handleCloseModal = () => {
-    showTransactionModal(false);
-    setItemsAdded([]);
-    setItemNumber(0);
+    console.log("Closing modal");
+    if (itemsAdded.length === 0) {
+      showTransactionModal(false);
+      setItemsAdded([]);
+    } else {
+      setShowAddItemInput(false);
+    }
+    setCurrentItemInEdit(null);
+  };
+
+  const handleAddItem = () => {
+    setCurrentItemInEdit(null);
+    setShowAddItemInput((prev) => !prev);
   };
 
   const handleItemAdded = (newItem: ItemAdded) => {
+    setCurrentItemInEdit(null);
     setItemsAdded((prevItem) => [...prevItem, newItem]);
-    setItemNumber((prev) => prev + 1);
+    setShowAddItemInput(false);
+  };
+
+  const handleItemRemove = (deleteItemId: string) => {
+    const newItems = itemsAdded.filter((item) => item.id !== deleteItemId);
+    setItemsAdded(newItems);
+  };
+
+  const handleItemEdit = (editItemId: string) => {
+    const editableItem = itemsAdded.find((item) => item.id === editItemId);
+    setCurrentItemInEdit(editableItem!);
+    setShowAddItemInput(true);
+  };
+
+  const handleItemUpdate = (updatedItem: ItemAdded) => {
+    setCurrentItemInEdit(null);
+    const updatedItems = itemsAdded.map((item) => {
+      if (item.id === updatedItem.id) {
+        return updatedItem;
+      }
+      return item;
+    });
+    console.log("REACHED HERE");
+
+    setItemsAdded(updatedItems);
     setShowAddItemInput(false);
   };
 
@@ -43,13 +83,16 @@ const AddNewTransaction = () => {
           </View>
           {showAddItemInput || itemsAdded.length === 0 ? (
             <AddTransactionInput
-              handleClose={
-                itemsAdded.length === 0
-                  ? handleCloseModal
-                  : () => setShowAddItemInput(false)
-              }
-              itemNumber={itemNumber}
+              itemCurrentlyEditted={currentItemInEdit}
+              // handleClose={
+              //   itemsAdded.length === 0
+              //     ? handleCloseModal
+              //     : () => setShowAddItemInput(false)
+              // }
+              handleClose={handleCloseModal}
+              itemNumber={itemsAdded.length}
               onItemAdded={handleItemAdded}
+              onItemUpdate={handleItemUpdate}
             />
           ) : (
             <MultipleButtons
@@ -57,7 +100,7 @@ const AddNewTransaction = () => {
                 {
                   title: "Add next item",
                   bgColor: "lightGreen2",
-                  onPress: () => setShowAddItemInput((prev) => !prev),
+                  onPress: handleAddItem,
                 },
               ]}
             />
@@ -66,6 +109,8 @@ const AddNewTransaction = () => {
             <AddedItems
               itemsAdded={itemsAdded}
               addItemsShown={showAddItemInput}
+              onDeleteItem={handleItemRemove}
+              onEditItem={handleItemEdit}
             />
           )}
         </View>

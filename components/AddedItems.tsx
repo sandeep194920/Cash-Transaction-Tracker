@@ -21,9 +21,16 @@ const items = [
 interface AddItemsProp {
   addItemsShown: boolean;
   itemsAdded: ItemAdded[];
+  onDeleteItem: (id: string) => void;
+  onEditItem: (id: string) => void;
 }
 
-const AddedItems = ({ addItemsShown, itemsAdded }: AddItemsProp) => {
+const AddedItems = ({
+  addItemsShown,
+  itemsAdded,
+  onDeleteItem,
+  onEditItem,
+}: AddItemsProp) => {
   const windowHeight = Dimensions.get("window").height;
 
   if (itemsAdded.length === 0) {
@@ -43,10 +50,14 @@ const AddedItems = ({ addItemsShown, itemsAdded }: AddItemsProp) => {
       <FlatList
         contentContainerStyle={styles.itemsContainer}
         numColumns={2}
-        columnWrapperStyle={{ justifyContent: "space-around" }}
+        columnWrapperStyle={{
+          justifyContent: "flex-start",
+          margin: 8,
+          gap: 30,
+        }}
         data={itemsAdded}
         renderItem={({ item }) => {
-          const { itemName, price, qty, total } = item;
+          const { id, itemName, price, qty, total } = item;
           return (
             <View style={styles.itemContainer}>
               <View
@@ -81,8 +92,18 @@ const AddedItems = ({ addItemsShown, itemsAdded }: AddItemsProp) => {
                   marginTop: dimensions.marginLarge1,
                 }}
               >
-                <Feather name="trash-2" size={20} color={colors.red} />
-                <Feather name="edit" size={20} color={colors.black} />
+                <Feather
+                  name="trash-2"
+                  size={20}
+                  color={colors.red}
+                  onPress={() => onDeleteItem(id)}
+                />
+                <Feather
+                  name="edit"
+                  size={20}
+                  color={colors.black}
+                  onPress={() => onEditItem(id)}
+                />
               </View>
             </View>
           );

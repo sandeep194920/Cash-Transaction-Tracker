@@ -1,5 +1,5 @@
-import { Modal, StyleSheet, Text, TextInput, View } from "react-native";
-import React from "react";
+import { StyleSheet, Text, TextInput, View } from "react-native";
+import React, { useEffect, useState } from "react";
 import MultipleButtons from "./Buttons/MultipleButtons";
 import {
   colors,
@@ -12,23 +12,41 @@ import { Formik } from "formik";
 import { ItemInputSchema } from "../utils/FormValidators";
 import uuid from "react-native-uuid";
 import TextHighlight from "./TextHighlight";
+
+// * NOTE ABOUT THIS COMPONENT
+
+/*
+We are handling two things here.
+1. To handle adding new item 
+2. To handle updating items - When user clicks on edit icon in item card inside <AddedItems/> component,
+   then we need to show this input with those filled values and then update them
+
+For this reason we have the logic handleItemAddition() for adding an item, and handleItemUpdate() for updating an item
+
+*/
+
 interface AddTransactionInputProps {
   handleClose: () => void;
   itemNumber: number;
   setItemNumber?: React.Dispatch<React.SetStateAction<number>>;
   onItemAdded: (newItem: ItemAdded) => void;
+  itemCurrentlyEditted: ItemAdded | null;
+  onItemUpdate: (item: ItemAdded) => void;
 }
 
-const initialInputValues: Item = {
+const initFormValues: Item = {
   itemName: "",
   price: 0,
   qty: 0,
 };
+let initialInputValues = initFormValues;
 
 const AddTransactionInput = ({
   handleClose,
   itemNumber,
   onItemAdded,
+  itemCurrentlyEditted,
+  onItemUpdate,
 }: AddTransactionInputProps) => {
   const handleItemAddition = (item: Item) => {
     const newItem = {
@@ -39,11 +57,38 @@ const AddTransactionInput = ({
     onItemAdded(newItem);
   };
 
+  const handleItemUpdate = (item: Item) => {
+    if (!itemCurrentlyEditted) return;
+
+    const updatedItem = {
+      ...item,
+      id: itemCurrentlyEditted.id,
+      total: +(item.price * item.qty).toFixed(2),
+    };
+    onItemUpdate(updatedItem);
+    initialInputValues = initFormValues;
+  };
+
+  const handleCancel = () => {
+    handleClose();
+    initialInputValues = initFormValues;
+  };
+
+  if (itemCurrentlyEditted?.itemName) {
+    const { itemName, price, qty } = itemCurrentlyEditted;
+    initialInputValues = {
+      itemName,
+      price,
+      qty,
+    };
+  }
+
   return (
     <Formik
+      enableReinitialize
       initialValues={initialInputValues}
       validationSchema={ItemInputSchema}
-      onSubmit={handleItemAddition}
+      onSubmit={!!itemCurrentlyEditted ? handleItemUpdate : handleItemAddition}
     >
       {({
         handleChange,
@@ -52,12 +97,15 @@ const AddTransactionInput = ({
         touched,
         errors,
         handleSubmit,
+        // resetForm, // TODO: this didnt help me in clearing the values. Will come back to this if I have time
       }) => {
         return (
           <View>
             <View style={{ ...styleUtils.cardContainer, width: "90%" }}>
               <Text style={styles.itemHeaderText}>
-                Add Item : {itemNumber + 1}
+                {itemCurrentlyEditted
+                  ? `Edit Item`
+                  : `Add Item : ${itemNumber + 1}`}
               </Text>
               <View>
                 <View style={styles.itemRowContainer}>
@@ -146,12 +194,20 @@ const AddTransactionInput = ({
                       title: "Cancel",
                       color: "red",
                       bgColor: "transparent",
-                      onPress: handleClose,
+                      onPress: handleCancel,
                     },
                     {
-                      title: "Add Item",
-                      bgColor: "lightGreen1",
-                      onPress: handleSubmit,
+                      ...(!!itemCurrentlyEditted
+                        ? {
+                            title: "Update Item",
+                            bgColor: "lightBlue1",
+                            onPress: handleSubmit,
+                          }
+                        : {
+                            title: "Add Item",
+                            bgColor: "lightGreen1",
+                            onPress: handleSubmit,
+                          }),
                     },
                   ]}
                 />
@@ -161,6 +217,37 @@ const AddTransactionInput = ({
         );
       }}
     </Formik>
+    // <>
+    //   <TextInput value={values.itemName}>{values.itemName}</TextInput>
+    //   <MultipleButtons
+    //     buttons={[
+    //       {
+    //         title: "Cancel",
+    //         color: "red",
+    //         bgColor: "transparent",
+    //         onPress: handleClose,
+    //       },
+    //       {
+    //         ...(!!itemCurrentlyEditted
+    //           ? {
+    //               title: "Update Item",
+    //               bgColor: "lightBlue1",
+    //               onPress: () => handleItemUpdate(itemCurrentlyEditted),
+    //             }
+    //           : {
+    //               title: "Add Item",
+    //               bgColor: "lightGreen1",
+    //               onPress: () =>
+    //                 handleItemAddition({
+    //                   itemName: "NEW ITEM",
+    //                   price: 0,
+    //                   qty: 0,
+    //                 }),
+    //             }),
+    //       },
+    //     ]}
+    //   />
+    // </>
   );
 };
 

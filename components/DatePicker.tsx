@@ -11,10 +11,9 @@ const DatePicker = () => {
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
 
-  const onChange = (event: DateTimePickerEvent, selectedDate: any) => {
-    const currentDate = selectedDate;
+  const onChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
     setShow(false);
-    setDate(currentDate);
+    selectedDate && setDate(selectedDate);
   };
 
   const showMode = () => {
@@ -45,7 +44,6 @@ const DatePicker = () => {
           </>
         )}
       </View>
-      {/* {show && <DateTimePicker value={date} onChange={onChange} />} */}
     </SafeAreaView>
   );
 };
