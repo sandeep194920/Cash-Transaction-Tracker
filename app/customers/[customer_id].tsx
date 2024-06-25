@@ -27,6 +27,9 @@ const CustomerTransactions = () => {
     );
   });
 
+  console.log("The customer transactions are", customerTransactions);
+  
+
   const { showTransactionModal } = useGlobalContext();
 
   return (

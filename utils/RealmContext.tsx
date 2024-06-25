@@ -6,6 +6,7 @@ import { Order } from "../models/OrderSchema";
 
 type RealmContextT = {
   addNewCustomerHandler: (customerData: CustomerType) => void;
+  addNewTransactionHandler:(transaction:any) => void;
 };
 
 const RealmCtxProvider = createContext<RealmContextT | undefined>(undefined);
@@ -66,8 +67,13 @@ function RealmContext({ children }: { children: React.ReactNode }) {
     // });
   };
 
+  const addNewTransactionHandler = (transaction:any) => {
+    console.log('Adding the transaction to db',transaction);
+  }
+
   const contextValues = {
     addNewCustomerHandler,
+    addNewTransactionHandler
   };
 
   return (

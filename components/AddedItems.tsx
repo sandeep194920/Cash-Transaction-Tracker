@@ -23,6 +23,7 @@ interface AddItemsProp {
   itemsAdded: ItemAdded[];
   onDeleteItem: (id: string) => void;
   onEditItem: (id: string) => void;
+  totalAmount: number;
 }
 
 const AddedItems = ({
@@ -30,6 +31,7 @@ const AddedItems = ({
   itemsAdded,
   onDeleteItem,
   onEditItem,
+  totalAmount,
 }: AddItemsProp) => {
   const windowHeight = Dimensions.get("window").height;
 
@@ -37,26 +39,53 @@ const AddedItems = ({
     return;
   }
 
+  // if items are odd number then that would break the layout of Flatlist columnWrapperStyle.
+  // Hence always ensuring that the items are even
+  const adjustedItems: ItemAdded[] =
+    itemsAdded.length % 2 !== 0
+      ? [
+          ...itemsAdded,
+          {
+            id: "placeholder",
+            itemName: "placeholder",
+            price: -1,
+            qty: -1,
+            total: -1,
+          },
+        ]
+      : itemsAdded;
+
   return (
     <View
       style={{
-        height: addItemsShown ? windowHeight / 2 - 50 : windowHeight - 250,
+        backgroundColor: "lightblue",
+        height: addItemsShown ? windowHeight / 2 - 170 : windowHeight - 250,
       }}
     >
-      <View style={styles.headerTextContainer}>
-        <Text style={styleUtils.headerText}>Items Added</Text>
-      </View>
+      {/* <View style={styles.headerTextContainer}>
+        <Text style={styleUtils.mediumText}>Transaction total -</Text>
+        <TextHighlight
+          innerText={`$ ${totalAmount}`}
+          type="info"
+          size="medium"
+        />
+      </View> */}
+
       {/* Individual Item card */}
+
       <FlatList
         contentContainerStyle={styles.itemsContainer}
         numColumns={2}
         columnWrapperStyle={{
-          justifyContent: "flex-start",
-          margin: 8,
-          gap: 30,
+          justifyContent: "space-around",
+          // marginVertical: 8,
         }}
-        data={itemsAdded}
+        data={adjustedItems}
         renderItem={({ item }) => {
+          if (item.id === "placeholder") {
+            return <View style={styles.placeholderContainer} />;
+          }
+
           const { id, itemName, price, qty, total } = item;
           return (
             <View style={styles.itemContainer}>
@@ -65,42 +94,41 @@ const AddedItems = ({
                   ...styles.itemRowContainer,
                   justifyContent: "center",
                   alignItems: "center",
-                  marginBottom: dimensions.marginLarge1,
+                  marginBottom: dimensions.smallMargin,
                 }}
               >
                 <Text style={styles.itemName}>{itemName}</Text>
               </View>
 
               <View style={styles.itemRowContainer}>
-                <Text>Price</Text>
-                <Text>${price}</Text>
+                <Text style={styleUtils.smallText}>Price</Text>
+                <Text style={styleUtils.smallText}>${price}</Text>
               </View>
 
               <View style={styles.itemRowContainer}>
-                <Text>Qty</Text>
-                <Text>{qty}</Text>
+                <Text style={styleUtils.smallText}>Qty</Text>
+                <Text style={styleUtils.smallText}>{qty}</Text>
               </View>
 
               <View style={styles.itemRowContainer}>
-                <Text>Total</Text>
+                <Text style={styleUtils.smallText}>Total</Text>
                 <TextHighlight innerText={`$ ${total}`} type="info" />
               </View>
 
               <View
                 style={{
                   ...styles.itemRowContainer,
-                  marginTop: dimensions.marginLarge1,
                 }}
               >
                 <Feather
                   name="trash-2"
-                  size={20}
+                  size={15}
                   color={colors.red}
                   onPress={() => onDeleteItem(id)}
                 />
                 <Feather
                   name="edit"
-                  size={20}
+                  size={15}
                   color={colors.black}
                   onPress={() => onEditItem(id)}
                 />
@@ -121,20 +149,17 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     ...styleUtils.cardContainer,
-    padding: 10,
-    minWidth: 150,
+    padding: 8,
+    minWidth: 160,
   },
   itemRowContainer: {
     ...styleUtils.itemRowContainer,
     marginBottom: dimensions.marginMedium,
   },
-  headerTextContainer: {
-    ...styleUtils.headerTextContainer,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    marginVertical: dimensions.marginMedium,
-  },
   itemName: {
     ...styleUtils.mediumText,
+  },
+  placeholderContainer: {
+    minWidth: 150,
   },
 });

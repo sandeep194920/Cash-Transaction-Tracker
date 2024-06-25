@@ -19,19 +19,12 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
   customer_name,
   customer_id,
 }) => {
-  const { order_price, order_date, _id: order_id } = transaction;
-
-  // const getLinkedManufacturer = (car: LinkedCar): string => {
-  //   const manufacturer = car.linkingObjects<ToManyManufacturer>(
-  //     'ToManyManufacturer',
-  //     'cars',
-  //   )[0];
-  //   // Returns 'Nissan', as only one manufacturer is linked
-  //   // to this car object.
-  //   return manufacturer.name;
-  // };
-
-  console.log("The name is", customer_name, "id is", customer_id);
+  const {
+    order_price,
+    order_date,
+    _id: order_id,
+    paid_by_customer,
+  } = transaction;
 
   const getLinkedCustomer = (order: Order) => {
     console.log("The order is", order);
@@ -69,14 +62,16 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
             type="success"
             size="small"
             innerText="Paid"
-            outerText={`$${order_price}`}
+            outerText={`$${paid_by_customer}`}
           />
         </View>
 
         <View style={styles.itemRowContainer}>
           <View style={{ ...styleUtils.flexRow, justifyContent: "center" }}>
             <Ionicons name="pricetag" size={20} color={colors.lightGreen1} />
-            <Text style={{ marginLeft: 10, fontWeight: "bold" }}>$10</Text>
+            <Text style={{ marginLeft: 10, fontWeight: "bold" }}>
+              ${order_price}
+            </Text>
           </View>
           <TextHighlight
             type="info"

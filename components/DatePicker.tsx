@@ -5,10 +5,14 @@ import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import { Feather } from "@expo/vector-icons";
-import { colors, styleUtils } from "../utils/styles";
+import { colors, dimensions, styleUtils } from "../utils/styles";
 
-const DatePicker = () => {
-  const [date, setDate] = useState(new Date());
+interface DateProps {
+  date: Date;
+  setDate: React.Dispatch<React.SetStateAction<Date>>;
+}
+
+const DatePicker = ({ date, setDate }: DateProps) => {
   const [show, setShow] = useState(false);
 
   const onChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
@@ -22,7 +26,6 @@ const DatePicker = () => {
 
   return (
     <SafeAreaView>
-      <Text style={styleUtils.headerText}>Add Transaction</Text>
       <View
         style={{
           ...styleUtils.itemRowContainer,
@@ -33,15 +36,23 @@ const DatePicker = () => {
         {show ? (
           <DateTimePicker value={date} onChange={onChange} />
         ) : (
-          <>
-            <Text>{date.toDateString()}</Text>
+          <View style={styleUtils.itemRowContainer}>
+            <Text
+              style={{
+                ...styleUtils.headerText,
+                fontSize: dimensions.largeFont,
+              }}
+            >
+              {date.toDateString()}
+            </Text>
+
             <Feather
               onPress={showMode}
               name="edit"
               size={20}
               color={colors.lightBlue1}
             />
-          </>
+          </View>
         )}
       </View>
     </SafeAreaView>

@@ -217,37 +217,6 @@ const AddTransactionInput = ({
         );
       }}
     </Formik>
-    // <>
-    //   <TextInput value={values.itemName}>{values.itemName}</TextInput>
-    //   <MultipleButtons
-    //     buttons={[
-    //       {
-    //         title: "Cancel",
-    //         color: "red",
-    //         bgColor: "transparent",
-    //         onPress: handleClose,
-    //       },
-    //       {
-    //         ...(!!itemCurrentlyEditted
-    //           ? {
-    //               title: "Update Item",
-    //               bgColor: "lightBlue1",
-    //               onPress: () => handleItemUpdate(itemCurrentlyEditted),
-    //             }
-    //           : {
-    //               title: "Add Item",
-    //               bgColor: "lightGreen1",
-    //               onPress: () =>
-    //                 handleItemAddition({
-    //                   itemName: "NEW ITEM",
-    //                   price: 0,
-    //                   qty: 0,
-    //                 }),
-    //             }),
-    //       },
-    //     ]}
-    //   />
-    // </>
   );
 };
 

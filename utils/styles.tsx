@@ -21,13 +21,14 @@ export const dimensions = {
   smallWidth1: 0.4,
   largeWidth1: 200,
   noMargin: 0,
+  smallMargin: 6,
   marginMedium: 10,
   marginLarge1: 16,
   marginLarge2: 20,
   marginExtraLarge1: 45,
   smallFont1: 13,
-  smallFont2: 13,
-  mediumFont: 14.5,
+  smallFont2: 14,
+  mediumFont: 15,
   largeFont: 17.2,
   extraLargeFont: 20,
   extraLargeFont2: 24,
@@ -112,6 +113,7 @@ export const styleUtils = StyleSheet.create({
   // for something like Price
   mediumText: {
     fontWeight: "500",
+    fontSize: dimensions.mediumFont,
   },
 
   // used for displaying customer id and such sub texts
@@ -129,7 +131,6 @@ export const styleUtils = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     gap: dimensions.smallGap,
-    marginVertical: dimensions.marginLarge1,
   },
 
   headerText: {
