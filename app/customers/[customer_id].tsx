@@ -11,7 +11,7 @@ import { Customer as CustomerSchema } from "../../models/CustomerSchema";
 import { Order } from "../../models/OrderSchema";
 import AddEditButton from "../../components/Buttons/AddEditButton";
 import { useGlobalContext } from "../../utils/AppContext";
-import AddNewTransaction from "../../screens/modalScreens/AddNewTransaction";
+import AddNewTransaction from "../../screens/modalScreens/Transaction/AddNewTransaction";
 
 const CustomerTransactions = () => {
   const { customer_id, customer_name } = useLocalSearchParams();

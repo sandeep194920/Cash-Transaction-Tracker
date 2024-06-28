@@ -58,28 +58,17 @@ const AddedItems = ({
   return (
     <View
       style={{
-        backgroundColor: "lightblue",
-        height: addItemsShown ? windowHeight / 2 - 170 : windowHeight - 250,
+        maxHeight: addItemsShown ? null : windowHeight - 300,
+        paddingVertical: 5,
       }}
     >
-      {/* <View style={styles.headerTextContainer}>
-        <Text style={styleUtils.mediumText}>Transaction total -</Text>
-        <TextHighlight
-          innerText={`$ ${totalAmount}`}
-          type="info"
-          size="medium"
-        />
-      </View> */}
-
-      {/* Individual Item card */}
-
       <FlatList
         contentContainerStyle={styles.itemsContainer}
         numColumns={2}
         columnWrapperStyle={{
           justifyContent: "space-around",
-          // marginVertical: 8,
         }}
+        style={{ flexGrow: 0 }}
         data={adjustedItems}
         renderItem={({ item }) => {
           if (item.id === "placeholder") {
@@ -146,6 +135,7 @@ export default AddedItems;
 const styles = StyleSheet.create({
   itemsContainer: {
     marginHorizontal: dimensions.marginLarge1,
+    // backgroundColor: "lightblue",
   },
   itemContainer: {
     ...styleUtils.cardContainer,

@@ -19,6 +19,7 @@ export const dimensions = {
   paddingMedium: 18,
   paddingExtraLarge: 50,
   smallWidth1: 0.4,
+  mediumWidth1: 70,
   largeWidth1: 200,
   noMargin: 0,
   smallMargin: 6,
@@ -131,6 +132,7 @@ export const styleUtils = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     gap: dimensions.smallGap,
+    marginVertical: dimensions.marginLarge1,
   },
 
   headerText: {
