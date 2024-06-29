@@ -3,6 +3,7 @@ import React from "react";
 import { router } from "expo-router";
 import { colors, dimensions, styleUtils } from "../utils/styles";
 import { Customer as CustomerSchema } from "../models/CustomerSchema";
+import TextHighlight from "./TextHighlight";
 
 interface CustomerProps {
   customer: CustomerSchema;
@@ -25,22 +26,11 @@ const Customer: React.FC<CustomerProps> = ({ customer }) => {
             <Text style={styleUtils.largeText}>{name}</Text>
             <Text style={styleUtils.subText}>({customer_id.toString()})</Text>
           </View>
-
-          <View style={styleUtils.columnContainer}>
-            <View style={styleUtils.flexRow}>
-              <View
-                style={{
-                  ...styleUtils.tag,
-                  backgroundColor: 100 >= 0 ? colors.lightGreen1 : colors.red,
-                }}
-              >
-                <Text style={styleUtils.tagText}>
-                  {balance >= 0 ? "Overpayment " : "Outstanding"}
-                </Text>
-              </View>
-              <Text style={{ fontWeight: "500" }}>$100</Text>
-            </View>
-          </View>
+          <TextHighlight
+            innerText="Outstanding"
+            type="success"
+            outerText="$100"
+          />
         </View>
       </Pressable>
     </View>

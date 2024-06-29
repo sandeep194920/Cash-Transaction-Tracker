@@ -25,6 +25,8 @@ export const AuthValidationSchema = yup.object().shape({
 });
 
 
+
+
 export const ItemInputSchema = yup.object().shape({
   itemName: yup.string().required("Please enter the item name"),
   price: yup
@@ -37,4 +39,12 @@ export const ItemInputSchema = yup.object().shape({
     .typeError("Quantity must be a number")
     .required("How many of these")
     .min(1, "Quantity must be greater than 0"),
+});
+
+export const PriceSchema = yup.object().shape({
+  amountPaid: yup
+    .number()
+    .typeError("Amount paid must be a number")
+    .required("Amount paid by customer for this transaction?")
+    .min(0, "Amount paid must be 0 or more"),
 });
