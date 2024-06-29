@@ -73,12 +73,6 @@ export const styleUtils = StyleSheet.create({
     alignItems: "center",
   },
 
-  itemColumnContainer: {
-    justifyContent: "space-between",
-    padding: dimensions.paddingMedium,
-    backgroundColor: colors.lightGray1,
-    marginBottom: dimensions.marginMedium,
-  },
 
   // Each item in the list
   columnContainer: {

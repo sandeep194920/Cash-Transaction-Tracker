@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { colors, styleUtils } from "../utils/styles";
+import { colors, dimensions, styleUtils } from "../utils/styles";
 import { Order } from "../models/OrderSchema";
 import { Customer as CustomerSchema } from "../models/CustomerSchema";
 import TextHighlight from "./TextHighlight";
@@ -47,11 +47,10 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
         router.push({
           pathname: `/customers/orders/[order_id]`,
           params: { order_id: order_id.toString() },
-          // params: { customer_id, customer_name },
         })
       }
     >
-      <View style={styleUtils.itemColumnContainer}>
+      <View style={styles.itemColumnContainer}>
         <View style={styles.itemRowContainer}>
           <View>
             <Text style={styleUtils.smallText}>
@@ -88,15 +87,15 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
 export default CustomerTransaction;
 
 const styles = StyleSheet.create({
-  itemContainer: {
-    paddingHorizontal: "5%",
-    paddingVertical: 5,
-    backgroundColor: colors.lightGray1,
-  },
   itemRowContainer: {
-    flexDirection: "row",
+    ...styleUtils.itemRowContainer,
+    marginVertical: 8,
+  },
+  itemColumnContainer: {
     justifyContent: "space-between",
-    alignItems: "center",
-    marginVertical: 10,
+    paddingVertical: dimensions.paddingSmall3,
+    paddingHorizontal: dimensions.paddingMedium,
+    backgroundColor: colors.lightGray1,
+    marginBottom: dimensions.marginMedium,
   },
 });

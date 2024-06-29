@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import React from "react";
 import { useGlobalContext } from "../../utils/AppContext";
-import WithCancelButton from "../../components/Buttons/WithCancelButton";
 import { colors, styleUtils, userFormStyles } from "../../utils/styles";
 import {
   MaterialIcons,
@@ -20,6 +19,7 @@ import { useRealmContext } from "../../utils/RealmContext";
 import { Formik } from "formik";
 import { customerValidationSchema } from "../../utils/FormValidators";
 import { CustomerType } from "../../utils/types";
+import MultipleButtons from "../../components/Buttons/MultipleButtons";
 
 const customerInitialValues = { name: "", phone: "", email: "", address: "" };
 const AddNewCustomer = () => {
@@ -137,10 +137,20 @@ const AddNewCustomer = () => {
                     {touched.address && errors.address}
                   </Text>
                 </View>
-
-                <WithCancelButton
-                  onPressHandler={handleSubmit}
-                  onCancelHandler={cancelHandler}
+                <MultipleButtons
+                  buttons={[
+                    {
+                      title: "Cancel",
+                      color: "red",
+                      bgColor: "transparent",
+                      onPress: cancelHandler,
+                    },
+                    {
+                      title: "Add New Customer",
+                      bgColor: "lightGreen1",
+                      onPress: handleSubmit,
+                    },
+                  ]}
                 />
               </>
             );

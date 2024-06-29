@@ -1,16 +1,18 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { router } from "expo-router";
 import { colors, dimensions, styleUtils } from "../utils/styles";
 import { Customer as CustomerSchema } from "../models/CustomerSchema";
 import TextHighlight from "./TextHighlight";
-
+import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 interface CustomerProps {
   customer: CustomerSchema;
 }
 
 const Customer: React.FC<CustomerProps> = ({ customer }) => {
   const { name, _id: customer_id, balance } = customer;
+  const [showCustomerId, setShowCustomerId] = useState(false);
+
   return (
     <View>
       <Pressable
@@ -21,16 +23,43 @@ const Customer: React.FC<CustomerProps> = ({ customer }) => {
           })
         }
       >
-        <View style={styles.itemRowContainer}>
-          <View>
-            <Text style={styleUtils.largeText}>{name}</Text>
-            <Text style={styleUtils.subText}>({customer_id.toString()})</Text>
+        <View style={styles.itemColumnContainer}>
+          <View style={styleUtils.itemRowContainer}>
+            <View
+              style={{
+                ...styleUtils.itemRowContainer,
+              }}
+            >
+              <Text style={styleUtils.largeText}>{name}</Text>
+              <MaterialIcons
+                style={{
+                  top: -5,
+                }}
+                name={showCustomerId ? "arrow-drop-down" : "arrow-drop-up"}
+                size={22}
+                color={showCustomerId ? colors.lightBlue1 : colors.darkGray1}
+                onPress={() => setShowCustomerId((prev) => !prev)}
+              />
+            </View>
+            <TextHighlight
+              type="success"
+              size="small"
+              innerText="Outstanding"
+              outerText="$100"
+            />
           </View>
-          <TextHighlight
-            innerText="Outstanding"
-            type="success"
-            outerText="$100"
-          />
+
+          {showCustomerId && (
+            <View
+              style={{
+                ...styleUtils.itemRowContainer,
+              }}
+            >
+              <Text style={styleUtils.subText}>
+                (Customer ID - {customer_id.toString()})
+              </Text>
+            </View>
+          )}
         </View>
       </Pressable>
     </View>
@@ -40,10 +69,11 @@ const Customer: React.FC<CustomerProps> = ({ customer }) => {
 export default Customer;
 
 const styles = StyleSheet.create({
-  itemRowContainer: {
-    ...styleUtils.itemRowContainer,
+  itemColumnContainer: {
+    justifyContent: "space-between",
     padding: dimensions.paddingMedium,
-    marginBottom: dimensions.marginMedium,
     backgroundColor: colors.lightGray1,
+    marginBottom: dimensions.marginMedium,
+    gap: 5,
   },
 });
