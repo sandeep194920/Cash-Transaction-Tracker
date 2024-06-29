@@ -104,35 +104,34 @@ const AddNewTransaction = () => {
   };
 
   const handleItemsConfirm = () => {
-    console.log("The items are");
-    console.log("The date is", date);
-    console.log("The items are", itemsAdded);
     setIsConfirmTransactionShown(true);
-
-    // const transformedItems = itemsAdded.map(item => {
-    //   return {
-    //     name:item.itemName,
-    //     quantity:item.qty,
-    //     price_per_item:item.price
-    //   }
-    // })
-
-    // realm.write(() => {
-    //   realm.create("Order", {
-    //     _id: new Realm.BSON.ObjectId(),
-    //     user_id: user.id,
-    //     order_price: transactionTotalAmount,
-    //     paid_by_customer: 101,
-    //     customer_id: '664b2eefefe2d173655afce1',
-    //     carry_over: -101,
-    //     order_date: new Date(),
-    //     items: transformedItems,
-    //   });
-    // });
   };
 
   const hideConfirmTransaction = () => {
     setIsConfirmTransactionShown(false);
+  };
+
+  // Method to create the transaction/Order
+  const handleConfirmTransaction = () => {
+    const transformedItems = itemsAdded.map(({ itemName, qty, price }) => ({
+      name: itemName,
+      quantity: +qty,
+      price_per_item: +price,
+    }));
+    realm.write(() => {
+      realm.create("Order", {
+        _id: new Realm.BSON.ObjectId(),
+        user_id: user.id,
+        order_price: transactionTotalAmount,
+        paid_by_customer: 101,
+        customer_id: "664b2eefefe2d173655afce1",
+        carry_over: -101,
+        order_date: new Date(),
+        items: transformedItems,
+      });
+    });
+    hideConfirmTransaction();
+    handleTransactionCloseModal();
   };
 
   return (
@@ -184,26 +183,7 @@ const AddNewTransaction = () => {
           <View>
             {itemsAdded.length > 0 && !showAddItemInput && (
               <View>
-                <View
-                  style={{
-                    marginHorizontal: dimensions.marginLarge1,
-                    // gap: 15,
-                    paddingVertical: 15,
-                  }}
-                >
-                  {/* <View style={styleUtils.itemRowContainer}>
-                  <Text style={{ fontSize: dimensions.smallFont2 }}>
-                    Paid by customer
-                  </Text>
-                  <TextHighlight innerText="$100" type="success" />
-                </View>
-                <View style={styleUtils.itemRowContainer}>
-                  <Text style={{ fontSize: dimensions.smallFont2 }}>
-                    Carryover
-                  </Text>
-                  <TextHighlight innerText="$100" type="info" />
-                </View> */}
-
+                <View style={styles.totalAmountSeperator}>
                   <View style={styles.separator}></View>
                   <View style={styleUtils.itemRowContainer}>
                     <Text style={styles.amountText}>Total Amount</Text>
@@ -238,6 +218,7 @@ const AddNewTransaction = () => {
           isConfirmTransactionShown={isConfirmTransactionShown}
           onHideConfirmation={hideConfirmTransaction}
           newCarryOver={`${newCarryOverAmount}`}
+          onConfirmTransaction={handleConfirmTransaction}
         />
       </Modal>
     </>
@@ -255,5 +236,9 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.lightGray0,
     borderWidth: 1,
     marginVertical: 10,
+  },
+  totalAmountSeperator: {
+    marginHorizontal: dimensions.marginLarge1,
+    paddingVertical: 15,
   },
 });

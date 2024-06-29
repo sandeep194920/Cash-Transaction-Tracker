@@ -50,7 +50,7 @@ const DatePicker = ({ date, setDate }: DateProps) => {
               onPress={showMode}
               name="edit"
               size={20}
-              color={colors.lightBlue1}
+              color={colors.darkGray1}
             />
           </View>
         )}

@@ -24,12 +24,14 @@ interface ConfirmTransactionProps {
   isConfirmTransactionShown: boolean;
   onHideConfirmation: () => void;
   newCarryOver: string;
+  onConfirmTransaction: () => void;
 }
 
 const ConfirmTransaction = ({
   isConfirmTransactionShown,
   onHideConfirmation,
   newCarryOver,
+  onConfirmTransaction,
 }: ConfirmTransactionProps) => {
   return (
     <Modal visible={isConfirmTransactionShown} animationType="fade">
@@ -39,9 +41,7 @@ const ConfirmTransaction = ({
           amountPaid: 0,
         }}
         validationSchema={PriceSchema}
-        onSubmit={() => {
-          console.log("Submitting the transaction");
-        }}
+        onSubmit={onConfirmTransaction}
       >
         {({
           handleChange,
@@ -50,7 +50,6 @@ const ConfirmTransaction = ({
           touched,
           errors,
           handleSubmit,
-          // resetForm, // TODO: this didnt help me in clearing the values. Will come back to this if I have time
         }) => {
           return (
             <SafeAreaView
@@ -134,7 +133,7 @@ const ConfirmTransaction = ({
                   <View style={styles.descriptionTextContainer}>
                     <AntDesign
                       name="infocirlce"
-                      size={20}
+                      size={15}
                       color={colors.darkGray1}
                     />
                     <Text style={styles.description}>
