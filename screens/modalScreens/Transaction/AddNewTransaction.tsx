@@ -46,7 +46,9 @@ const AddNewTransaction = () => {
   );
   const [showAddItemInput, setShowAddItemInput] = useState(false);
   const [date, setDate] = useState(new Date());
-  const [newCarryOverAmount, setNewCarryOverAmount] = useState(0);
+  // TODO: May be remove the carryover amount state here and handle that properly. I guess it should come from other place
+  // You can still use this state to set the state but init state should come from backend
+  const [newCarryOverAmount, setNewCarryOverAmount] = useState(100);
 
   const transactionTotalAmount = useMemo(() => {
     return itemsAdded.reduce((acc, current) => {
@@ -112,26 +114,27 @@ const AddNewTransaction = () => {
   };
 
   // Method to create the transaction/Order
-  const handleConfirmTransaction = () => {
-    const transformedItems = itemsAdded.map(({ itemName, qty, price }) => ({
-      name: itemName,
-      quantity: +qty,
-      price_per_item: +price,
-    }));
-    realm.write(() => {
-      realm.create("Order", {
-        _id: new Realm.BSON.ObjectId(),
-        user_id: user.id,
-        order_price: transactionTotalAmount,
-        paid_by_customer: 101,
-        customer_id: "664b2eefefe2d173655afce1",
-        carry_over: -101,
-        order_date: new Date(),
-        items: transformedItems,
-      });
-    });
-    hideConfirmTransaction();
-    handleTransactionCloseModal();
+  const handleConfirmTransaction = ({ amountPaid }: { amountPaid: number }) => {
+    console.log("The amount paid by customer is", amountPaid);
+    // const transformedItems = itemsAdded.map(({ itemName, qty, price }) => ({
+    //   name: itemName,
+    //   quantity: +qty,
+    //   price_per_item: +price,
+    // }));
+    // realm.write(() => {
+    //   realm.create("Order", {
+    //     _id: new Realm.BSON.ObjectId(),
+    //     user_id: user.id,
+    //     order_price: transactionTotalAmount,
+    //     paid_by_customer: 101,
+    //     customer_id: "664b2eefefe2d173655afce1",
+    //     carry_over: -101,
+    //     order_date: new Date(),
+    //     items: transformedItems,
+    //   });
+    // });
+    // hideConfirmTransaction();
+    // handleTransactionCloseModal();
   };
 
   return (
@@ -187,7 +190,11 @@ const AddNewTransaction = () => {
                   <View style={styles.separator}></View>
                   <View style={styleUtils.itemRowContainer}>
                     <Text style={styles.amountText}>Total Amount</Text>
-                    <TextHighlight innerText="$100" type="info" size="medium" />
+                    <TextHighlight
+                      innerText={`$ ${transactionTotalAmount}`}
+                      type="info"
+                      size="medium"
+                    />
                   </View>
                 </View>
                 <View>
@@ -217,7 +224,8 @@ const AddNewTransaction = () => {
         <ConfirmTransaction
           isConfirmTransactionShown={isConfirmTransactionShown}
           onHideConfirmation={hideConfirmTransaction}
-          newCarryOver={`${newCarryOverAmount}`}
+          transactionTotalAmount={transactionTotalAmount}
+          newCarryOver={newCarryOverAmount}
           onConfirmTransaction={handleConfirmTransaction}
         />
       </Modal>

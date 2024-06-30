@@ -23,8 +23,9 @@ import { PriceSchema } from "../../../utils/FormValidators";
 interface ConfirmTransactionProps {
   isConfirmTransactionShown: boolean;
   onHideConfirmation: () => void;
-  newCarryOver: string;
-  onConfirmTransaction: () => void;
+  newCarryOver: number;
+  onConfirmTransaction: ({ amountPaid }: { amountPaid: number }) => void;
+  transactionTotalAmount: number;
 }
 
 const ConfirmTransaction = ({
@@ -32,6 +33,7 @@ const ConfirmTransaction = ({
   onHideConfirmation,
   newCarryOver,
   onConfirmTransaction,
+  transactionTotalAmount,
 }: ConfirmTransactionProps) => {
   return (
     <Modal visible={isConfirmTransactionShown} animationType="fade">
@@ -41,7 +43,10 @@ const ConfirmTransaction = ({
           amountPaid: 0,
         }}
         validationSchema={PriceSchema}
-        onSubmit={onConfirmTransaction}
+        // onSubmit={onConfirmTransaction} // * - We can pass the values like amountPaid to parent component
+        onSubmit={(values) => {
+          onConfirmTransaction(values);
+        }}
       >
         {({
           handleChange,
@@ -81,7 +86,7 @@ const ConfirmTransaction = ({
                   <View style={styleUtils.itemRowContainer}>
                     <Text>Today's Total Amount</Text>
                     <TextHighlight
-                      innerText="$ 100"
+                      innerText={`$ ${transactionTotalAmount}`}
                       type="info"
                       size="medium"
                     />
@@ -93,6 +98,23 @@ const ConfirmTransaction = ({
                       innerText="$ 100"
                       type="warning"
                       size="medium"
+                    />
+                  </View>
+
+                  <View style={styles.carryOverContainer}>
+                    <View style={styles.descriptionTextContainer}>
+                      <AntDesign
+                        name="infocirlce"
+                        size={15}
+                        color={colors.darkGray1}
+                      />
+                      <Text style={styles.description}>
+                        Customer's balance amount
+                      </Text>
+                    </View>
+                    <TextHighlight
+                      innerText={`$ ${newCarryOver - transactionTotalAmount}`}
+                      type="warning"
                     />
                   </View>
 
@@ -113,15 +135,10 @@ const ConfirmTransaction = ({
                       style={styles.amountPaidInput}
                       keyboardType="numeric"
                       value={`${values.amountPaid}`}
-                      placeholder="Amount paid"
+                      placeholder="0"
                     />
                     <View>
-                      <Text
-                        style={{
-                          ...userFormStyles.error,
-                          alignSelf: "center",
-                        }}
-                      >
+                      <Text style={userFormStyles.error}>
                         {touched.amountPaid && errors.amountPaid}
                       </Text>
                     </View>
@@ -129,19 +146,6 @@ const ConfirmTransaction = ({
                 </View>
               </View>
               <View>
-                <View style={styles.carryOverContainer}>
-                  <View style={styles.descriptionTextContainer}>
-                    <AntDesign
-                      name="infocirlce"
-                      size={15}
-                      color={colors.darkGray1}
-                    />
-                    <Text style={styles.description}>
-                      The new carryover amount is
-                    </Text>
-                  </View>
-                  <TextHighlight innerText="$ 200" type="warning" />
-                </View>
                 <MultipleButtons
                   buttons={[
                     {
@@ -196,97 +200,5 @@ const styles = StyleSheet.create({
   },
   description: {
     ...styleUtils.smallText,
-    // fontStyle: "italic",
   },
 });
-
-{
-  /* <SafeAreaView
-          style={{
-            ...styleUtils.flexContainer,
-          }}
-        >
-          <View
-            style={{
-              ...styleUtils.flexContainer,
-            }}
-          >
-            <View style={{ ...styleUtils.headerTextContainer }}>
-              <Text
-                style={{
-                  ...styleUtils.headerText,
-                }}
-              >
-                Confirm Transaction
-              </Text>
-            </View>
-
-            <View style={styles.itemsContainer}>
-              <View style={styleUtils.itemRowContainer}>
-                <Text>Transaction date</Text>
-                <Text>{new Date().toDateString()}</Text>
-              </View>
-
-              <View style={styleUtils.itemRowContainer}>
-                <Text>Today's Total Amount</Text>
-                <TextHighlight innerText="$ 100" type="info" size="medium" />
-              </View>
-
-              <View style={styleUtils.itemRowContainer}>
-                <Text>Carry over amount so far</Text>
-                <TextHighlight innerText="$ 100" type="warning" size="medium" />
-              </View>
-
-              <View
-                style={{
-                  gap: 20,
-                  marginTop: 20,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Text style={styleUtils.mediumText}>
-                  How much did the customer pay today?
-                </Text>
-                <TextInput
-                  style={styles.amountPaidInput}
-                  onChangeText={setAmountPaid}
-                  keyboardType="numeric"
-                  value={`${amountPaid}`}
-                  placeholder="Phone"
-                />
-              </View>
-            </View>
-          </View>
-          <View>
-            <View style={styles.carryOverContainer}>
-              <View style={styles.descriptionTextContainer}>
-                <AntDesign
-                  name="infocirlce"
-                  size={20}
-                  color={colors.darkGray1}
-                />
-                <Text style={styles.description}>
-                  The new carryover amount is
-                </Text>
-              </View>
-              <TextHighlight innerText="$ 200" type="warning" />
-            </View>
-            <MultipleButtons
-              buttons={[
-                {
-                  title: "Go back",
-                  color: "red",
-                  bgColor: "transparent",
-                  onPress: onHideConfirmation,
-                },
-                {
-                  title: "Confirm Transaction",
-                  color: "white",
-                  bgColor: "lightGreen1",
-                },
-              ]}
-            />
-          </View>
-        </SafeAreaView> */
-}
