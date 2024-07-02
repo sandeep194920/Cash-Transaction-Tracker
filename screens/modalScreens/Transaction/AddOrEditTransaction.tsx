@@ -63,6 +63,8 @@ const AddOrEditTransaction = ({ type = "ADD", ...props }: TransactionProps) => {
   // You can still use this state to set the state but init state should come from backend
   const [newCarryOverAmount, setNewCarryOverAmount] = useState(100);
 
+  const { order, handleCloseEditMode } = props as TransactionEdit;
+
   const transactionTotalAmount = useMemo(() => {
     return itemsAdded.reduce((acc, current) => {
       return acc + parseFloat(current.total.toFixed(2));
@@ -81,6 +83,7 @@ const AddOrEditTransaction = ({ type = "ADD", ...props }: TransactionProps) => {
     showTransactionModal(false);
     // setItemsAdded([]);
     setCurrentItemInEdit(null);
+    handleCloseEditMode();
   };
 
   const handleAddItem = () => {
@@ -153,12 +156,9 @@ const AddOrEditTransaction = ({ type = "ADD", ...props }: TransactionProps) => {
 
   // IF type === "EDIT"
   // ORDERID = 66818023eaf42b5f25ab7423
-  const { order, handleCloseEditMode } = props as TransactionEdit;
+
   useEffect(() => {
     if (type !== "EDIT") return;
-    if (!isTransactionModalOpen) {
-      handleCloseEditMode();
-    }
     console.log("Order items", order.items);
     const newItems = order.items.map((item: ItemInBeFormat) => item);
     console.log("The new items", newItems);
