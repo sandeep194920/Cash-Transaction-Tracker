@@ -9,19 +9,11 @@ export type CustomerType = {
 
 export type RoundButtonType = {
   type: "ADD" | "EDIT";
-  pressHandler: () => void;
+  onPress: () => void;
 };
 
 // * NOTE: I wanted a way where, if the bgColor is specified, noBorder shouldn't be allowed
 // * and vice versa. So achieveing that below
-
-// export type ButtonType = {
-//   title: string;
-//   color?: keyof typeof colors;
-//   bgColor?: keyof typeof colors | "transparent";
-//   borderRadius?: "semi-rounded" | "rounded";
-//   noBorder?: boolean;
-// };
 
 type BaseButtonType = {
   title: string;
@@ -44,28 +36,21 @@ type ButtonWithNoBorder = BaseButtonType & {
 
 export type ButtonType = ButtonWithBgColor | ButtonWithNoBorder;
 
-export type Item = {
+export type ItemInFeFormat = {
   itemName: string;
   price: number;
   qty: number;
 };
 
-export type ItemAdded = Item & {
+export type ItemAddedInFeFormat = ItemInFeFormat & {
   id: string;
   total: number;
 };
 
-type OrderItem = {
-  order_id: string;
-  order_price: number;
-  order_date: string;
-  items: Item[];
-  paid_by_customer: number;
-  carry_over: number;
-};
-
-export type OrdersType = {
-  [customerId: string]: OrderItem[];
+export type ItemInBeFormat = {
+  name: string;
+  price_per_item: number;
+  quantity: number;
 };
 
 export type InputViewType = {

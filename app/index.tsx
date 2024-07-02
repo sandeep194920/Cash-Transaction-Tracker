@@ -37,7 +37,7 @@ const Customers = () => {
         <AddEditButton
           type="ADD"
           // pressHandler={() => showCustomerModal( true)}
-          pressHandler={showCustomerModal.bind(this, true)} // this is same as above commented code
+          onPress={showCustomerModal.bind(this, true)} // this is same as above commented code
         />
       </>
       {/* MODAL */}

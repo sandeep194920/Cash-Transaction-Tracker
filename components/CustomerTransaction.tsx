@@ -27,8 +27,6 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
   } = transaction;
 
   const getLinkedCustomer = (order: Order) => {
-    console.log("The order is", order);
-
     const customers = order.linkingObjects<CustomerSchema>(
       "Customer",
       "orders"

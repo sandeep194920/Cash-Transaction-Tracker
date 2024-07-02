@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import MultipleButtons from "./Buttons/MultipleButtons";
 import {
   colors,
@@ -7,11 +7,12 @@ import {
   styleUtils,
   userFormStyles,
 } from "../utils/styles";
-import { ItemAdded, Item } from "../utils/types";
+import { ItemAddedInFeFormat, ItemInFeFormat } from "../utils/types";
 import { Formik } from "formik";
 import { ItemInputSchema } from "../utils/FormValidators";
 import uuid from "react-native-uuid";
 import TextHighlight from "./TextHighlight";
+import { updateItemWithDetailsFE } from "../utils/transformItems";
 
 // * NOTE ABOUT THIS COMPONENT
 
@@ -29,12 +30,12 @@ interface AddTransactionInputProps {
   handleClose: () => void;
   itemNumber: number;
   setItemNumber?: React.Dispatch<React.SetStateAction<number>>;
-  onItemAdded: (newItem: ItemAdded) => void;
-  itemCurrentlyEditted: ItemAdded | null;
-  onItemUpdate: (item: ItemAdded) => void;
+  onItemAdded: (newItem: ItemAddedInFeFormat) => void;
+  itemCurrentlyEditted: ItemAddedInFeFormat | null;
+  onItemUpdate: (item: ItemAddedInFeFormat) => void;
 }
 
-const initFormValues: Item = {
+const initFormValues: ItemInFeFormat = {
   itemName: "",
   price: 0,
   qty: 0,
@@ -48,16 +49,19 @@ const AddTransactionInput = ({
   itemCurrentlyEditted,
   onItemUpdate,
 }: AddTransactionInputProps) => {
-  const handleItemAddition = (item: Item) => {
-    const newItem = {
-      ...item,
-      id: uuid.v4().toString(),
-      total: +(item.price * item.qty).toFixed(2),
-    };
-    onItemAdded(newItem);
+  const handleItemAddition = (item: ItemInFeFormat) => {
+    // const newItem = {
+    //   ...item,
+    //   id: uuid.v4().toString(),
+    //   total: +(item.price * item.qty).toFixed(2),
+    // };
+
+    // Above code transformed to below format
+
+    onItemAdded(updateItemWithDetailsFE(item));
   };
 
-  const handleItemUpdate = (item: Item) => {
+  const handleItemUpdate = (item: ItemInFeFormat) => {
     if (!itemCurrentlyEditted) return;
 
     const updatedItem = {

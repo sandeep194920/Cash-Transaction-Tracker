@@ -1,17 +1,19 @@
 import { Modal, SafeAreaView, StyleSheet, View, Text } from "react-native";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useGlobalContext } from "../../../utils/AppContext";
 import { colors, dimensions, styleUtils } from "../../../utils/styles";
 import MultipleButtons from "../../../components/Buttons/MultipleButtons";
-import { ItemAdded } from "../../../utils/types";
+import { ItemAddedInFeFormat, ItemInBeFormat } from "../../../utils/types";
 import AddedItems from "../../../components/AddedItems";
 import AddTransactionInput from "../../../components/AddTransactionInput";
 import DatePicker from "../../../components/DatePicker";
 import { useRealm, useUser } from "@realm/react";
 import TextHighlight from "../../../components/TextHighlight";
 import ConfirmTransaction from "./ConfirmTransaction";
+import { itemsToBeFormat } from "../../../utils/transformItems";
 
-const addedItems: ItemAdded[] = [
+// TODO: Remove this test code block of addedItems later
+const addedItems: ItemAddedInFeFormat[] = [
   {
     id: "112342",
     itemName: "Roti",
@@ -28,9 +30,20 @@ const addedItems: ItemAdded[] = [
   },
 ];
 
-const AddNewTransaction = () => {
-  const { isAddTransactionModalOpen, showTransactionModal } =
-    useGlobalContext();
+type TransactionEdit = {
+  type: "EDIT";
+  order: any;
+  handleCloseEditMode: () => void;
+};
+
+type TransactionAdd = {
+  type: "ADD";
+};
+
+type TransactionProps = TransactionAdd | TransactionEdit;
+
+const AddOrEditTransaction = ({ type = "ADD", ...props }: TransactionProps) => {
+  const { isTransactionModalOpen, showTransactionModal } = useGlobalContext();
 
   const [isConfirmTransactionShown, setIsConfirmTransactionShown] =
     useState(false);
@@ -38,12 +51,12 @@ const AddNewTransaction = () => {
   const realm = useRealm();
   const user = useUser();
 
-  const [itemsAdded, setItemsAdded] = useState<ItemAdded[]>([]);
+  const [itemsAdded, setItemsAdded] =
+    useState<ItemAddedInFeFormat[]>(addedItems);
   // ? If Item is in add mode, then currentItemInEdit mode will be null.
   // ? Else if Item is in edit mode, then currentItemInEdit mode will be an object that also contains id.
-  const [currentItemInEdit, setCurrentItemInEdit] = useState<ItemAdded | null>(
-    null
-  );
+  const [currentItemInEdit, setCurrentItemInEdit] =
+    useState<ItemAddedInFeFormat | null>(null);
   const [showAddItemInput, setShowAddItemInput] = useState(false);
   const [date, setDate] = useState(new Date());
   // TODO: May be remove the carryover amount state here and handle that properly. I guess it should come from other place
@@ -75,7 +88,7 @@ const AddNewTransaction = () => {
     setShowAddItemInput((prev) => !prev);
   };
 
-  const handleItemAdded = (newItem: ItemAdded) => {
+  const handleItemAdded = (newItem: ItemAddedInFeFormat) => {
     setCurrentItemInEdit(null);
     setItemsAdded((prevItem) => [...prevItem, newItem]);
     setShowAddItemInput(false);
@@ -92,7 +105,7 @@ const AddNewTransaction = () => {
     setShowAddItemInput(true);
   };
 
-  const handleItemUpdate = (updatedItem: ItemAdded) => {
+  const handleItemUpdate = (updatedItem: ItemAddedInFeFormat) => {
     setCurrentItemInEdit(null);
     const updatedItems = itemsAdded.map((item) => {
       if (item.id === updatedItem.id) {
@@ -115,11 +128,12 @@ const AddNewTransaction = () => {
 
   // Method to create the transaction/Order
   const handleConfirmTransaction = ({ amountPaid }: { amountPaid: number }) => {
-    const transformedItems = itemsAdded.map(({ itemName, qty, price }) => ({
-      name: itemName,
-      quantity: +qty,
-      price_per_item: +price,
-    }));
+    // const transformedItems = itemsAdded.map(({ itemName, qty, price }) => ({
+    //   name: itemName,
+    //   quantity: +qty,
+    //   price_per_item: +price,
+    // }));
+    const transformedItems = itemsToBeFormat(itemsAdded);
     realm.write(() => {
       realm.create("Order", {
         _id: new Realm.BSON.ObjectId(),
@@ -137,9 +151,22 @@ const AddNewTransaction = () => {
     handleTransactionCloseModal();
   };
 
+  // IF type === "EDIT"
+  // ORDERID = 66818023eaf42b5f25ab7423
+  const { order, handleCloseEditMode } = props as TransactionEdit;
+  useEffect(() => {
+    if (type !== "EDIT") return;
+    if (!isTransactionModalOpen) {
+      handleCloseEditMode();
+    }
+    console.log("Order items", order.items);
+    const newItems = order.items.map((item: ItemInBeFormat) => item);
+    console.log("The new items", newItems);
+  }, [isTransactionModalOpen]);
+
   return (
     <>
-      <Modal visible={isAddTransactionModalOpen} animationType="slide">
+      <Modal visible={isTransactionModalOpen} animationType="slide">
         <SafeAreaView
           style={{
             ...styleUtils.flexContainer,
@@ -233,7 +260,7 @@ const AddNewTransaction = () => {
   );
 };
 
-export default AddNewTransaction;
+export default AddOrEditTransaction;
 
 const styles = StyleSheet.create({
   amountText: {

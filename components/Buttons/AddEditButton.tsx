@@ -5,16 +5,17 @@ import { RoundButtonType } from "../../utils/types";
 import { Entypo, Ionicons } from '@expo/vector-icons'
 import { useGlobalContext } from '../../utils/AppContext'
 
-const AddEditButton = ({ type, pressHandler }: RoundButtonType) => {
+const AddEditButton = ({ type, onPress }: RoundButtonType) => {
   const RoundButtonTypes = {
     ADD: (
-      <Pressable style={{ ...styleUtils.addButton }} onPress={pressHandler}>
+      <Pressable style={{ ...styleUtils.addButton }} onPress={onPress}>
         <Ionicons name="add" size={24} color="white" />
       </Pressable>
     ),
     EDIT: (
       <Pressable
         style={{ ...styleUtils.addButton, backgroundColor: colors.lightBlue1 }}
+        onPress={onPress}
       >
         <Entypo name="edit" size={24} color="white" />
       </Pressable>

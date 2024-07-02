@@ -16,7 +16,7 @@ import { Customer as CustomerSchema } from "../../models/CustomerSchema";
 import { Order } from "../../models/OrderSchema";
 import AddEditButton from "../../components/Buttons/AddEditButton";
 import { useGlobalContext } from "../../utils/AppContext";
-import AddNewTransaction from "../../screens/modalScreens/Transaction/AddNewTransaction";
+import AddOrEditTransaction from "../../screens/modalScreens/Transaction/AddOrEditTransaction";
 import useAnimateEntry from "../../hooks/useAnimateEntry";
 
 const CustomerTransactions = () => {
@@ -66,10 +66,10 @@ const CustomerTransactions = () => {
       />
       <AddEditButton
         type="ADD"
-        pressHandler={showTransactionModal.bind(this, true)}
+        onPress={showTransactionModal.bind(this, true)}
       />
       {/* MODAL */}
-      <AddNewTransaction />
+      <AddOrEditTransaction type="ADD" />
     </SafeAreaView>
   );
 };

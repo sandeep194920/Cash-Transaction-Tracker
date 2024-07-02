@@ -3,7 +3,7 @@ import React, { useContext, createContext, useState } from "react";
 type AppContextT = {
   isAddCustomerModalOpen: boolean;
   showCustomerModal: (show: boolean) => void;
-  isAddTransactionModalOpen: boolean;
+  isTransactionModalOpen: boolean;
   showTransactionModal: (show: boolean) => void;
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -12,8 +12,7 @@ type AppContextT = {
 const AppProvider = createContext<AppContextT | undefined>(undefined);
 function AppContext({ children }: { children: React.ReactNode }) {
   const [isAddCustomerModalOpen, setIsAddCustomerModalOpen] = useState(false);
-  const [isAddTransactionModalOpen, setIsTransactionModalOpen] =
-    useState(false);
+  const [isTransactionModalOpen, setIsTransactionModalOpen] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -29,7 +28,7 @@ function AppContext({ children }: { children: React.ReactNode }) {
   const contextValues = {
     isAddCustomerModalOpen,
     showCustomerModal,
-    isAddTransactionModalOpen,
+    isTransactionModalOpen,
     showTransactionModal,
     isLoading,
     setIsLoading,

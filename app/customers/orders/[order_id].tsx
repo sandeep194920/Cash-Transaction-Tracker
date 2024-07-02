@@ -13,13 +13,19 @@ import { Customer as CustomerSchema } from "../../../models/CustomerSchema";
 
 import { BSON } from "realm";
 import TextHighlight from "../../../components/TextHighlight";
+import AddOrEditTransaction from "../../../screens/modalScreens/Transaction/AddOrEditTransaction";
+import { useGlobalContext } from "../../../utils/AppContext";
 
 const CustomerOrder = () => {
   const { order_id } = useLocalSearchParams<{ order_id: string }>();
   const [customerDetails, setCustomerDetails] =
     useState<CustomerSchema | null>();
+  const { showTransactionModal } = useGlobalContext();
 
   const order = useObject(OrderSchema, new BSON.ObjectID(order_id));
+
+  const [isEditMode, setIsEditMode] = useState(false);
+
   // const order = useQuery(Order, (orders) => {
   //   return orders.filtered("_id == $0", order_id.toString());
   // });
@@ -49,6 +55,7 @@ const CustomerOrder = () => {
   }, [order]);
 
   const customer = useMemo(() => customerDetails, [customerDetails]);
+  console.log("THE CUSTOMER IS", customer);
 
   const { order_date, order_price, items, paid_by_customer, carry_over } =
     order ?? {
@@ -70,6 +77,18 @@ const CustomerOrder = () => {
     }, 0);
   }, [items]);
 
+  // * EDIT TRANSACTION
+  const editTransactionHandler = () => {
+    console.log("The edit button is clicked");
+
+    setIsEditMode((prev) => !prev);
+    showTransactionModal(true);
+  };
+
+  const handleCloseEditMode = () => {
+    setIsEditMode(false);
+  };
+
   return (
     <SafeAreaView style={styleUtils.flexContainer}>
       <View style={styleUtils.flexContainer}>
@@ -78,7 +97,8 @@ const CustomerOrder = () => {
           <Text style={styleUtils.headerText}>
             {order_date?.toDateString()}
           </Text>
-          <Text style={styleUtils.smallText}>(Monday)</Text>
+          {/* TODO: Make the date in Jun 30, 2024 (Sunday) format */}
+          {/* <Text style={styleUtils.smallText}>(Monday)</Text> */}
         </View>
         {/* Items */}
         <View style={styles.itemsContainer}>
@@ -123,7 +143,14 @@ const CustomerOrder = () => {
           />
         </View>
       </View>
-      <Button type="EDIT" pressHandler={() => {}} />
+      <Button type="EDIT" onPress={editTransactionHandler} />
+      {isEditMode && (
+        <AddOrEditTransaction
+          type="EDIT"
+          order={order}
+          handleCloseEditMode={handleCloseEditMode}
+        />
+      )}
     </SafeAreaView>
   );
 };

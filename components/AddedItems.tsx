@@ -4,7 +4,7 @@ import { colors, dimensions, styleUtils } from "../utils/styles";
 import TextHighlight from "./TextHighlight";
 import { Feather } from "@expo/vector-icons";
 import { Dimensions } from "react-native";
-import { ItemAdded } from "../utils/types";
+import { ItemAddedInFeFormat } from "../utils/types";
 
 const items = [
   { id: "1", header: "Roti, Curry & Rice", price: 20, qty: 10, total: 200 },
@@ -20,7 +20,7 @@ const items = [
 
 interface AddItemsProp {
   addItemsShown: boolean;
-  itemsAdded: ItemAdded[];
+  itemsAdded: ItemAddedInFeFormat[];
   onDeleteItem: (id: string) => void;
   onEditItem: (id: string) => void;
   totalAmount: number;
@@ -41,7 +41,7 @@ const AddedItems = ({
 
   // if items are odd number then that would break the layout of Flatlist columnWrapperStyle.
   // Hence always ensuring that the items are even
-  const adjustedItems: ItemAdded[] =
+  const adjustedItems: ItemAddedInFeFormat[] =
     itemsAdded.length % 2 !== 0
       ? [
           ...itemsAdded,
