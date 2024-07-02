@@ -107,70 +107,73 @@ const AddTransactionInput = ({
                   ? `Edit Item`
                   : `Add Item : ${itemNumber + 1}`}
               </Text>
-              <View>
+              <View style={styles.itemsContainer}>
                 <View style={styles.itemRowContainer}>
                   <Text style={styles.itemHeading}>Item name</Text>
-                  <TextInput
-                    onBlur={handleBlur("itemName")}
-                    onChangeText={handleChange("itemName")}
-                    value={values.itemName}
-                    style={styles.itemInput}
-                  />
-                </View>
-                <View>
-                  <Text
-                    style={{
-                      ...userFormStyles.error,
-                      alignSelf: "center",
-                    }}
-                  >
-                    {touched.itemName && errors.itemName}
-                  </Text>
+                  <View style={styles.itemInputContainer}>
+                    <TextInput
+                      onBlur={handleBlur("itemName")}
+                      onChangeText={handleChange("itemName")}
+                      value={values.itemName}
+                      style={styles.itemInput}
+                      autoCorrect={false}
+                    />
+                    {touched.itemName && errors.itemName && (
+                      <Text
+                        style={{
+                          ...userFormStyles.error,
+                        }}
+                      >
+                        {touched.itemName && errors.itemName}
+                      </Text>
+                    )}
+                  </View>
                 </View>
 
                 <View style={styles.itemRowContainer}>
                   <Text style={styles.itemHeading}>Price per item</Text>
-                  <TextInput
-                    onBlur={handleBlur("price")}
-                    onChangeText={handleChange("price")}
-                    value={`${values.price === 0 ? " " : values.price}`}
-                    style={styles.itemInput}
-                    keyboardType="numeric"
-                    placeholder="Price of this item"
-                  />
-                </View>
-
-                <View>
-                  <Text
-                    style={{
-                      ...userFormStyles.error,
-                      alignSelf: "center",
-                    }}
-                  >
-                    {touched.price && errors.price}
-                  </Text>
+                  <View style={styles.itemInputContainer}>
+                    <TextInput
+                      onBlur={handleBlur("price")}
+                      onChangeText={handleChange("price")}
+                      value={`${values.price === 0 ? " " : values.price}`}
+                      style={styles.itemInput}
+                      keyboardType="numeric"
+                      placeholder="Price of this item"
+                    />
+                    {touched.price && errors.price && (
+                      <Text
+                        style={{
+                          ...userFormStyles.error,
+                        }}
+                      >
+                        {touched.price && errors.price}
+                      </Text>
+                    )}
+                  </View>
                 </View>
 
                 <View style={styles.itemRowContainer}>
                   <Text style={styles.itemHeading}>Quantity</Text>
-                  <TextInput
-                    onBlur={handleBlur("qty")}
-                    onChangeText={handleChange("qty")}
-                    value={`${values.qty === 0 ? " " : values.qty}`}
-                    style={styles.itemInput}
-                    keyboardType="numeric"
-                    placeholder="How many of these"
-                  />
-                </View>
-                <View>
-                  <Text
-                    style={{
-                      ...userFormStyles.error,
-                      alignSelf: "center",
-                    }}
-                  >
-                    {touched.qty && errors.qty}
-                  </Text>
+                  <View style={styles.itemInputContainer}>
+                    <TextInput
+                      onBlur={handleBlur("qty")}
+                      onChangeText={handleChange("qty")}
+                      value={`${values.qty === 0 ? " " : values.qty}`}
+                      style={styles.itemInput}
+                      keyboardType="numeric"
+                      placeholder="How many of these"
+                    />
+                    {touched.qty && errors.qty && (
+                      <Text
+                        style={{
+                          ...userFormStyles.error,
+                        }}
+                      >
+                        {touched.qty && errors.qty}
+                      </Text>
+                    )}
+                  </View>
                 </View>
 
                 <View style={styles.itemRowContainer}>
@@ -227,14 +230,16 @@ const styles = StyleSheet.create({
     fontSize: dimensions.largeFont,
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 10,
+    marginBottom: 25,
+  },
+  itemsContainer: {
+    gap: 20,
   },
   itemRowContainer: {
     ...styleUtils.itemRowContainer,
-    padding: dimensions.paddingSmall1,
+    margin: dimensions.paddingSmall1,
   },
   itemHeading: {
-    fontWeight: "600",
     fontSize: dimensions.mediumFont,
   },
   buttonContainer: {
@@ -242,8 +247,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
   },
+  itemInputContainer: {
+    gap: 10,
+  },
   itemInput: {
-    borderColor: colors.lightGreen1,
+    borderColor: colors.darkGray1,
     borderBottomWidth: 1,
     paddingHorizontal: 8,
     paddingVertical: 4,

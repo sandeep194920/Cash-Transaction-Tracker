@@ -56,17 +56,24 @@ const CustomerOrder = () => {
       paid_by_customer: 0,
       carry_over: 0,
     };
-  let type = "CarryOver";
+  let type = "Carryover till date";
 
   if (order_price - paid_by_customer <= 0) {
-    type = "Overpayment";
+    type = "Overpayment till date";
   }
+
+  const totalAmount = useMemo(() => {
+    return items?.reduce((acc, current) => {
+      return (
+        acc + parseFloat(current.price_per_item.toFixed(2)) * current.quantity
+      );
+    }, 0);
+  }, [items]);
 
   return (
     <SafeAreaView style={styleUtils.flexContainer}>
       <View style={styleUtils.flexContainer}>
         {/* Header to show date and price */}
-        {/* <Text>HELLO</Text> */}
         <View style={styleUtils.headerTextContainer}>
           <Text style={styleUtils.headerText}>
             {order_date?.toDateString()}
@@ -85,30 +92,38 @@ const CustomerOrder = () => {
 
         {/* total */}
         <View style={styles.itemRowContainer}>
-          <Text style={styleUtils.mediumText}>Total </Text>
-          <TextHighlight innerText="$ 20" type="info" size="medium" />
+          <Text style={styleUtils.mediumText}>Total</Text>
+          <TextHighlight
+            innerText={`$ ${totalAmount}`}
+            type="info"
+            size="medium"
+          />
         </View>
         {/* paid by customer */}
         <View style={styles.itemRowContainer}>
-          <Text style={styleUtils.mediumText}>{customer?.name} paid</Text>
+          <Text style={styles.textStyle}>
+            John Paid{" "}
+            <Text style={styleUtils.subText}>
+              (on {order_date?.toDateString()})
+            </Text>
+          </Text>
           <TextHighlight
+            innerText={`$ ${paid_by_customer}`}
             type="success"
-            innerText={` $ ${paid_by_customer} `}
             size="medium"
           />
         </View>
         {/* carryover */}
         <View style={styles.itemRowContainer}>
-          <Text style={styleUtils.mediumText}>{type}</Text>
-
+          <Text style={styleUtils.mediumText}>Carryover so far</Text>
           <TextHighlight
-            type={type === "Overpayment" ? `success` : "warning"}
+            type="warning"
+            innerText={`$ ${paid_by_customer}`}
             size="medium"
-            innerText={` $ ${carry_over} `}
           />
         </View>
       </View>
-      <Button type="EDIT" />
+      <Button type="EDIT" pressHandler={() => {}} />
     </SafeAreaView>
   );
 };
@@ -126,20 +141,29 @@ const ItemDetails: React.FC<ItemProps> = ({ item }) => {
   const { name, price_per_item, quantity } = item;
   return (
     <View style={styles.itemRowContainer}>
-      <Text style={styleUtils.largeText}>
-        {name[0].toUpperCase()}
-        {name.slice(1)}
-        <Text style={styleUtils.subText}> (× {quantity})</Text>
-      </Text>
+      <View
+        style={{
+          ...styleUtils.itemRowContainer,
+          gap: 10,
+        }}
+      >
+        <Text style={{ ...styles.textStyle, ...styleUtils.largeText }}>
+          {name[0].toUpperCase()}
+          {name.slice(1)}
+        </Text>
+        <Text style={{ ...styleUtils.subText, marginTop: 0 }}>
+          (× {quantity})
+        </Text>
+      </View>
       <View style={styleUtils.flexRow}>
         <View
           style={{
             ...styleUtils.tag,
           }}
         >
-          <Text style={{ ...styleUtils.tagText, color: colors.black }}>{` $ ${
-            price_per_item * quantity
-          } `}</Text>
+          <Text
+            style={{ ...styleUtils.mediumText, color: colors.black }}
+          >{` $ ${price_per_item * quantity} `}</Text>
         </View>
       </View>
     </View>
@@ -155,5 +179,9 @@ const styles = StyleSheet.create({
   itemRowContainer: {
     ...styleUtils.itemRowContainer,
     padding: dimensions.paddingSmall3,
+  },
+  textStyle: {
+    ...styleUtils.mediumText,
+    maxWidth: "70%",
   },
 });

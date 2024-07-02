@@ -36,7 +36,12 @@ const DatePicker = ({ date, setDate }: DateProps) => {
         {show ? (
           <DateTimePicker value={date} onChange={onChange} />
         ) : (
-          <View style={styleUtils.itemRowContainer}>
+          <View
+            style={{
+              ...styleUtils.itemRowContainer,
+              gap: 5,
+            }}
+          >
             <Text
               style={{
                 ...styleUtils.headerText,

@@ -1,10 +1,15 @@
 // SCREEN 2
-import { View, FlatList, Text, StyleSheet, SafeAreaView } from "react-native";
+import {
+  View,
+  FlatList,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  Animated,
+} from "react-native";
 import React, { useEffect } from "react";
-import data from "../../data";
 import CustomerTransaction from "../../components/CustomerTransaction";
 import { styleUtils } from "../../utils/styles";
-import WithAddButton from "../../components/Buttons/AddEditButton";
 import { useQuery, useRealm, useUser } from "@realm/react";
 import { useLocalSearchParams } from "expo-router";
 import { Customer as CustomerSchema } from "../../models/CustomerSchema";
@@ -12,6 +17,7 @@ import { Order } from "../../models/OrderSchema";
 import AddEditButton from "../../components/Buttons/AddEditButton";
 import { useGlobalContext } from "../../utils/AppContext";
 import AddNewTransaction from "../../screens/modalScreens/Transaction/AddNewTransaction";
+import useAnimateEntry from "../../hooks/useAnimateEntry";
 
 const CustomerTransactions = () => {
   const { customer_id, customer_name } = useLocalSearchParams();
@@ -27,10 +33,14 @@ const CustomerTransactions = () => {
     );
   });
 
-  console.log("The customer transactions are", customerTransactions);
-  
-
   const { showTransactionModal } = useGlobalContext();
+
+  // the modal opens sometimes when we click on any customer, so we will let this be false initially
+  useEffect(() => {
+    showTransactionModal(false);
+  }, []);
+
+  const { animateRef, flashAnim } = useAnimateEntry(customerTransactions);
 
   return (
     <SafeAreaView style={styleUtils.flexContainer}>
@@ -39,14 +49,18 @@ const CustomerTransactions = () => {
         <Text style={styleUtils.smallText}>({customer_id})</Text>
       </View>
       <FlatList
+        ref={animateRef}
         data={customerTransactions}
-        renderItem={({ item }) => {
+        renderItem={({ item, index }) => {
+          const isLastItem = index === customerTransactions.length - 1;
           return (
-            <CustomerTransaction
-              transaction={item}
-              customer_id={customer_id.toString()}
-              customer_name={customer_name.toString()}
-            />
+            <Animated.View style={isLastItem ? { opacity: flashAnim } : null}>
+              <CustomerTransaction
+                transaction={item}
+                customer_id={customer_id.toString()}
+                customer_name={customer_name.toString()}
+              />
+            </Animated.View>
           );
         }}
       />

@@ -195,6 +195,7 @@ export const userFormStyles = StyleSheet.create({
   },
   error: {
     color: colors.red,
-    marginLeft: dimensions.marginExtraLarge1,
+    // marginLeft: dimensions.marginExtraLarge1,
+    // alignSelf: "center",
   },
 });

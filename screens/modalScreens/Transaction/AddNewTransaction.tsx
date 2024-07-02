@@ -38,7 +38,7 @@ const AddNewTransaction = () => {
   const realm = useRealm();
   const user = useUser();
 
-  const [itemsAdded, setItemsAdded] = useState<ItemAdded[]>(addedItems);
+  const [itemsAdded, setItemsAdded] = useState<ItemAdded[]>([]);
   // ? If Item is in add mode, then currentItemInEdit mode will be null.
   // ? Else if Item is in edit mode, then currentItemInEdit mode will be an object that also contains id.
   const [currentItemInEdit, setCurrentItemInEdit] = useState<ItemAdded | null>(
@@ -115,26 +115,26 @@ const AddNewTransaction = () => {
 
   // Method to create the transaction/Order
   const handleConfirmTransaction = ({ amountPaid }: { amountPaid: number }) => {
-    console.log("The amount paid by customer is", amountPaid);
-    // const transformedItems = itemsAdded.map(({ itemName, qty, price }) => ({
-    //   name: itemName,
-    //   quantity: +qty,
-    //   price_per_item: +price,
-    // }));
-    // realm.write(() => {
-    //   realm.create("Order", {
-    //     _id: new Realm.BSON.ObjectId(),
-    //     user_id: user.id,
-    //     order_price: transactionTotalAmount,
-    //     paid_by_customer: 101,
-    //     customer_id: "664b2eefefe2d173655afce1",
-    //     carry_over: -101,
-    //     order_date: new Date(),
-    //     items: transformedItems,
-    //   });
-    // });
-    // hideConfirmTransaction();
-    // handleTransactionCloseModal();
+    const transformedItems = itemsAdded.map(({ itemName, qty, price }) => ({
+      name: itemName,
+      quantity: +qty,
+      price_per_item: +price,
+    }));
+    realm.write(() => {
+      realm.create("Order", {
+        _id: new Realm.BSON.ObjectId(),
+        user_id: user.id,
+        order_price: transactionTotalAmount,
+        paid_by_customer: +amountPaid,
+        customer_id: "664b2eefefe2d173655afce1",
+        carry_over: -111,
+        order_date: new Date(),
+        items: transformedItems,
+      });
+    });
+    setItemsAdded([]);
+    hideConfirmTransaction();
+    handleTransactionCloseModal();
   };
 
   return (
