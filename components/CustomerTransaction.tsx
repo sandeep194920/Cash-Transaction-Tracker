@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import React from "react";
+import React, { Dispatch } from "react";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { colors, dimensions, styleUtils } from "../utils/styles";
@@ -13,12 +13,14 @@ interface CustomerTransactionProps {
   transaction: Order;
   customer_id: string;
   customer_name: string;
+  // setRecentlyModifiedOrder: Dispatch<React.SetStateAction<null | string>>;
 }
 
 const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
   transaction,
   customer_name,
   customer_id,
+  // setRecentlyModifiedOrder,
 }) => {
   const {
     order_price,
@@ -40,15 +42,16 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
   console.log("The result is", result);
   console.log("The order id type is", typeof order_id);
 
+  const onPressHandler = () => {
+    router.push({
+      pathname: `/customers/orders/[order_id]`,
+      params: { order_id: order_id.toString() },
+    });
+    // setRecentlyModifiedOrder(order_id.toString());
+  };
+
   return (
-    <Pressable
-      onPress={() =>
-        router.push({
-          pathname: `/customers/orders/[order_id]`,
-          params: { order_id: order_id.toString() },
-        })
-      }
-    >
+    <Pressable onPress={onPressHandler}>
       <View style={styles.itemColumnContainer}>
         <View style={styles.itemRowContainer}>
           <View style={styleUtils.itemRowContainer}>

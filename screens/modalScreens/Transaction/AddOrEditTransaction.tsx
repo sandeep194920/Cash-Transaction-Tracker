@@ -1,5 +1,5 @@
 import { Modal, SafeAreaView, StyleSheet, View, Text } from "react-native";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { Dispatch, useEffect, useMemo, useState } from "react";
 import { useGlobalContext } from "../../../utils/AppContext";
 import { colors, dimensions, styleUtils } from "../../../utils/styles";
 import MultipleButtons from "../../../components/Buttons/MultipleButtons";
@@ -86,7 +86,7 @@ const AddOrEditTransaction = ({ type = "ADD", ...props }: TransactionProps) => {
     showTransactionModal(false);
     // setItemsAdded([]);
     setCurrentItemInEdit(null);
-    handleCloseEditMode();
+    handleCloseEditMode && handleCloseEditMode();
   };
 
   const handleAddItem = () => {
