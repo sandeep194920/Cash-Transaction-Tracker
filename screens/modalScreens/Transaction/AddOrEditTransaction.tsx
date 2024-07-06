@@ -10,7 +10,10 @@ import DatePicker from "../../../components/DatePicker";
 import { useRealm, useUser } from "@realm/react";
 import TextHighlight from "../../../components/TextHighlight";
 import ConfirmTransaction from "./ConfirmTransaction";
-import { itemsToBeFormat } from "../../../utils/transformItems";
+import {
+  itemsToBeFormat,
+  itemsToFeFormat,
+} from "../../../utils/transformItems";
 
 // TODO: Remove this test code block of addedItems later
 const addedItems: ItemAddedInFeFormat[] = [
@@ -58,7 +61,7 @@ const AddOrEditTransaction = ({ type = "ADD", ...props }: TransactionProps) => {
   const [currentItemInEdit, setCurrentItemInEdit] =
     useState<ItemAddedInFeFormat | null>(null);
   const [showAddItemInput, setShowAddItemInput] = useState(false);
-  const [date, setDate] = useState(new Date());
+  const [orderDate, setOrderDate] = useState(new Date());
   // TODO: May be remove the carryover amount state here and handle that properly. I guess it should come from other place
   // You can still use this state to set the state but init state should come from backend
   const [newCarryOverAmount, setNewCarryOverAmount] = useState(100);
@@ -130,12 +133,11 @@ const AddOrEditTransaction = ({ type = "ADD", ...props }: TransactionProps) => {
   };
 
   // Method to create the transaction/Order
-  const handleConfirmTransaction = ({ amountPaid }: { amountPaid: number }) => {
-    // const transformedItems = itemsAdded.map(({ itemName, qty, price }) => ({
-    //   name: itemName,
-    //   quantity: +qty,
-    //   price_per_item: +price,
-    // }));
+  const handleConfirmNewTransaction = ({
+    amountPaid,
+  }: {
+    amountPaid: number;
+  }) => {
     const transformedItems = itemsToBeFormat(itemsAdded);
     realm.write(() => {
       realm.create("Order", {
@@ -145,7 +147,7 @@ const AddOrEditTransaction = ({ type = "ADD", ...props }: TransactionProps) => {
         paid_by_customer: +amountPaid,
         customer_id: "664b2eefefe2d173655afce1",
         carry_over: -111,
-        order_date: new Date(),
+        order_date: orderDate,
         items: transformedItems,
       });
     });
@@ -154,14 +156,30 @@ const AddOrEditTransaction = ({ type = "ADD", ...props }: TransactionProps) => {
     handleTransactionCloseModal();
   };
 
-  // IF type === "EDIT"
-  // ORDERID = 66818023eaf42b5f25ab7423
+  // Method to update the transaction/Order
+  const handleConfirmExistingTransaction = ({
+    amountPaid,
+  }: {
+    amountPaid: number;
+  }) => {
+    const transformedItems = itemsToBeFormat(itemsAdded);
+    realm.write(() => {
+      order.items = transformedItems;
+      order.paid_by_customer = +amountPaid;
+      order.order_price = transactionTotalAmount;
+      order.order_date = orderDate;
+      // TODO:
+      // carry_over=
+    });
+    setItemsAdded([]);
+    hideConfirmTransaction();
+    handleTransactionCloseModal();
+  };
 
   useEffect(() => {
     if (type !== "EDIT") return;
-    console.log("Order items", order.items);
     const newItems = order.items.map((item: ItemInBeFormat) => item);
-    console.log("The new items", newItems);
+    setItemsAdded(itemsToFeFormat(newItems));
   }, [isTransactionModalOpen]);
 
   return (
@@ -179,7 +197,7 @@ const AddOrEditTransaction = ({ type = "ADD", ...props }: TransactionProps) => {
           >
             {/* Page Header */}
             <View style={{ ...styleUtils.headerTextContainer }}>
-              <DatePicker date={date} setDate={setDate} />
+              <DatePicker date={orderDate} setDate={setOrderDate} />
             </View>
             {showAddItemInput || itemsAdded.length === 0 ? (
               <AddTransactionInput
@@ -253,7 +271,12 @@ const AddOrEditTransaction = ({ type = "ADD", ...props }: TransactionProps) => {
           onHideConfirmation={hideConfirmTransaction}
           transactionTotalAmount={transactionTotalAmount}
           newCarryOver={newCarryOverAmount}
-          onConfirmTransaction={handleConfirmTransaction}
+          orderDate={orderDate}
+          onConfirmTransaction={
+            type === "ADD"
+              ? handleConfirmNewTransaction
+              : handleConfirmExistingTransaction
+          }
         />
       </Modal>
     </>

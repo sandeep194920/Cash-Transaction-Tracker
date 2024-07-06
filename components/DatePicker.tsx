@@ -6,6 +6,7 @@ import DateTimePicker, {
 } from "@react-native-community/datetimepicker";
 import { Feather } from "@expo/vector-icons";
 import { colors, dimensions, styleUtils } from "../utils/styles";
+import { formatDate } from "../utils/formatDate";
 
 interface DateProps {
   date: Date;
@@ -24,6 +25,8 @@ const DatePicker = ({ date, setDate }: DateProps) => {
     setShow(true);
   };
 
+  const { date: formattedDate, day } = formatDate(date);
+
   return (
     <SafeAreaView>
       <View
@@ -36,20 +39,16 @@ const DatePicker = ({ date, setDate }: DateProps) => {
         {show ? (
           <DateTimePicker value={date} onChange={onChange} />
         ) : (
-          <View
-            style={{
-              ...styleUtils.itemRowContainer,
-              gap: 5,
-            }}
-          >
+          <View style={styleUtils.itemRowContainer}>
             <Text
               style={{
                 ...styleUtils.headerText,
                 fontSize: dimensions.largeFont,
               }}
             >
-              {date.toDateString()}
+              {formattedDate}
             </Text>
+            <Text style={styleUtils.smallText}>({day}) </Text>
 
             <Feather
               onPress={showMode}

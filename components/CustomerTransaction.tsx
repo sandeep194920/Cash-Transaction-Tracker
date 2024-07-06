@@ -7,6 +7,7 @@ import { colors, dimensions, styleUtils } from "../utils/styles";
 import { Order } from "../models/OrderSchema";
 import { Customer as CustomerSchema } from "../models/CustomerSchema";
 import TextHighlight from "./TextHighlight";
+import { formatDate } from "../utils/formatDate";
 
 interface CustomerTransactionProps {
   transaction: Order;
@@ -50,9 +51,13 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
     >
       <View style={styles.itemColumnContainer}>
         <View style={styles.itemRowContainer}>
-          <View>
+          <View style={styleUtils.itemRowContainer}>
             <Text style={styleUtils.smallText}>
-              {order_date.toDateString()}
+              {formatDate(order_date, "short").day}
+              {", "}
+            </Text>
+            <Text style={styleUtils.smallText}>
+              {formatDate(order_date).date}
             </Text>
           </View>
           <TextHighlight

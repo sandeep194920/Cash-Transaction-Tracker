@@ -15,6 +15,7 @@ import { BSON } from "realm";
 import TextHighlight from "../../../components/TextHighlight";
 import AddOrEditTransaction from "../../../screens/modalScreens/Transaction/AddOrEditTransaction";
 import { useGlobalContext } from "../../../utils/AppContext";
+import { formatDate } from "../../../utils/formatDate";
 
 const CustomerOrder = () => {
   const { order_id } = useLocalSearchParams<{ order_id: string }>();
@@ -91,65 +92,74 @@ const CustomerOrder = () => {
 
   return (
     <SafeAreaView style={styleUtils.flexContainer}>
-      <View style={styleUtils.flexContainer}>
-        {/* Header to show date and price */}
-        <View style={styleUtils.headerTextContainer}>
-          <Text style={styleUtils.headerText}>
-            {order_date?.toDateString()}
-          </Text>
-          {/* TODO: Make the date in Jun 30, 2024 (Sunday) format */}
-          {/* <Text style={styleUtils.smallText}>(Monday)</Text> */}
-        </View>
-        {/* Items */}
-        <View style={styles.itemsContainer}>
-          <FlatList
-            data={items}
-            renderItem={({ item }) => <ItemDetails item={item} />}
-          />
-        </View>
+      {order_date && (
+        <>
+          <View style={styleUtils.flexContainer}>
+            {/* Header to show date and price */}
+            <View style={styleUtils.headerTextContainer}>
+              <View style={styleUtils.itemRowContainer}>
+                <Text style={styleUtils.headerText}>
+                  {formatDate(order_date).date}
+                </Text>
+                <Text style={styleUtils.smallText}>
+                  ({formatDate(order_date).day})
+                </Text>
+              </View>
+              {/* TODO: Make the date in Jun 30, 2024 (Sunday) format */}
+              {/* <Text style={styleUtils.smallText}>(Monday)</Text> */}
+            </View>
+            {/* Items */}
+            <View style={styles.itemsContainer}>
+              <FlatList
+                data={items}
+                renderItem={({ item }) => <ItemDetails item={item} />}
+              />
+            </View>
 
-        {/* Customer Price Details */}
+            {/* Customer Price Details */}
 
-        {/* total */}
-        <View style={styles.itemRowContainer}>
-          <Text style={styleUtils.mediumText}>Total</Text>
-          <TextHighlight
-            innerText={`$ ${totalAmount}`}
-            type="info"
-            size="medium"
-          />
-        </View>
-        {/* paid by customer */}
-        <View style={styles.itemRowContainer}>
-          <Text style={styles.textStyle}>
-            John Paid{" "}
-            <Text style={styleUtils.subText}>
-              (on {order_date?.toDateString()})
-            </Text>
-          </Text>
-          <TextHighlight
-            innerText={`$ ${paid_by_customer}`}
-            type="success"
-            size="medium"
-          />
-        </View>
-        {/* carryover */}
-        <View style={styles.itemRowContainer}>
-          <Text style={styleUtils.mediumText}>Carryover so far</Text>
-          <TextHighlight
-            type="warning"
-            innerText={`$ ${paid_by_customer}`}
-            size="medium"
-          />
-        </View>
-      </View>
-      <Button type="EDIT" onPress={editTransactionHandler} />
-      {isEditMode && (
-        <AddOrEditTransaction
-          type="EDIT"
-          order={order}
-          handleCloseEditMode={handleCloseEditMode}
-        />
+            {/* total */}
+            <View style={styles.itemRowContainer}>
+              <Text style={styleUtils.mediumText}>Total</Text>
+              <TextHighlight
+                innerText={`$ ${totalAmount}`}
+                type="info"
+                size="medium"
+              />
+            </View>
+            {/* paid by customer */}
+            <View style={styles.itemRowContainer}>
+              <Text style={styles.textStyle}>
+                John Paid{" "}
+                <Text style={styleUtils.subText}>
+                  (on {order_date?.toDateString()})
+                </Text>
+              </Text>
+              <TextHighlight
+                innerText={`$ ${paid_by_customer}`}
+                type="success"
+                size="medium"
+              />
+            </View>
+            {/* carryover */}
+            <View style={styles.itemRowContainer}>
+              <Text style={styleUtils.mediumText}>Carryover so far</Text>
+              <TextHighlight
+                type="warning"
+                innerText={`$ ${paid_by_customer}`}
+                size="medium"
+              />
+            </View>
+          </View>
+          <Button type="EDIT" onPress={editTransactionHandler} />
+          {isEditMode && (
+            <AddOrEditTransaction
+              type="EDIT"
+              order={order}
+              handleCloseEditMode={handleCloseEditMode}
+            />
+          )}
+        </>
       )}
     </SafeAreaView>
   );
@@ -158,9 +168,6 @@ const CustomerOrder = () => {
 export default CustomerOrder;
 
 type ItemProps = {
-  // name: string
-  // pricePerItem: number
-  // quantity: number
   item: ItemSchema;
 };
 

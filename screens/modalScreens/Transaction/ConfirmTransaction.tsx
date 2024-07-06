@@ -7,7 +7,7 @@ import {
   TextInput,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import {
   colors,
   dimensions,
@@ -19,6 +19,7 @@ import MultipleButtons from "../../../components/Buttons/MultipleButtons";
 import { AntDesign } from "@expo/vector-icons";
 import { Formik } from "formik";
 import { PriceSchema } from "../../../utils/FormValidators";
+import { formatDate } from "../../../utils/formatDate";
 
 interface ConfirmTransactionProps {
   isConfirmTransactionShown: boolean;
@@ -26,6 +27,7 @@ interface ConfirmTransactionProps {
   newCarryOver: number;
   onConfirmTransaction: ({ amountPaid }: { amountPaid: number }) => void;
   transactionTotalAmount: number;
+  orderDate: Date;
 }
 
 const ConfirmTransaction = ({
@@ -34,6 +36,7 @@ const ConfirmTransaction = ({
   newCarryOver,
   onConfirmTransaction,
   transactionTotalAmount,
+  orderDate,
 }: ConfirmTransactionProps) => {
   return (
     <Modal visible={isConfirmTransactionShown} animationType="fade">
@@ -80,7 +83,7 @@ const ConfirmTransaction = ({
                 <View style={styles.itemsContainer}>
                   <View style={styleUtils.itemRowContainer}>
                     <Text>Transaction date</Text>
-                    <Text>{new Date().toDateString()}</Text>
+                    <Text>{formatDate(orderDate).date}</Text>
                   </View>
 
                   <View style={styleUtils.itemRowContainer}>
@@ -134,8 +137,11 @@ const ConfirmTransaction = ({
                       onChangeText={handleChange("amountPaid")}
                       style={styles.amountPaidInput}
                       keyboardType="numeric"
-                      value={`${values.amountPaid}`}
+                      value={
+                        values.amountPaid === 0 ? "" : `${values.amountPaid}`
+                      }
                       placeholder="0"
+                      defaultValue="0"
                     />
                     <View>
                       <Text style={userFormStyles.error}>
