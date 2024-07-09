@@ -30,7 +30,7 @@ const Customer: React.FC<CustomerProps> = ({ customer }) => {
                 ...styleUtils.itemRowContainer,
               }}
             >
-              <Text style={styleUtils.largeText}>{name}</Text>
+              <Text>{name}</Text>
               <MaterialIcons
                 style={{
                   top: -5,
@@ -44,7 +44,7 @@ const Customer: React.FC<CustomerProps> = ({ customer }) => {
             <TextHighlight
               type="success"
               size="small"
-              innerText="Outstanding"
+              innerText="Balance"
               outerText="$100"
             />
           </View>

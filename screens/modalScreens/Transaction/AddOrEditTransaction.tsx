@@ -41,6 +41,7 @@ type TransactionEdit = {
 
 type TransactionAdd = {
   type: "ADD";
+  customerID: string;
 };
 
 type TransactionProps = TransactionAdd | TransactionEdit;
@@ -67,6 +68,7 @@ const AddOrEditTransaction = ({ type = "ADD", ...props }: TransactionProps) => {
   const [newCarryOverAmount, setNewCarryOverAmount] = useState(100);
 
   const { order, handleCloseEditMode } = props as TransactionEdit;
+  const { customerID } = props as TransactionAdd;
 
   const transactionTotalAmount = useMemo(() => {
     return itemsAdded.reduce((acc, current) => {
@@ -145,7 +147,7 @@ const AddOrEditTransaction = ({ type = "ADD", ...props }: TransactionProps) => {
         user_id: user.id,
         order_price: transactionTotalAmount,
         paid_by_customer: +amountPaid,
-        customer_id: "664b2eefefe2d173655afce1",
+        customer_id: customerID,
         carry_over: -111,
         order_date: orderDate,
         items: transformedItems,

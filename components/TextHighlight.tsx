@@ -41,7 +41,7 @@ const TextHighlight = ({
       </View>
       {outerText && (
         <View>
-          <Text style={styleUtils.mediumText}>{outerText}</Text>
+          <Text style={styleUtils.smallText}>{outerText}</Text>
         </View>
       )}
     </View>

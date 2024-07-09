@@ -39,7 +39,7 @@ function RealmContext({ children }: { children: React.ReactNode }) {
         signed_up_on: new Date(),
         balance: 0,
         user_id: user.id,
-        orders: orders,
+        // orders: orders,
         _id: new Realm.BSON.ObjectId(),
       });
       console.log("The created customer is", createdCustomer);

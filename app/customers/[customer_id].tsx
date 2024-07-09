@@ -102,7 +102,7 @@ const CustomerTransactions = () => {
       />
       {/* MODAL */}
 
-      <AddOrEditTransaction type="ADD" />
+      <AddOrEditTransaction customerID={customer_id.toString()} type="ADD" />
     </SafeAreaView>
   );
 };
