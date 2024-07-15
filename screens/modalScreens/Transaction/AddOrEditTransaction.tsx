@@ -7,13 +7,15 @@ import { ItemAddedInFeFormat, ItemInBeFormat } from "../../../utils/types";
 import AddedItems from "../../../components/AddedItems";
 import AddTransactionInput from "../../../components/AddTransactionInput";
 import DatePicker from "../../../components/DatePicker";
-import { useRealm, useUser } from "@realm/react";
+import { useObject, useRealm, useUser } from "@realm/react";
 import TextHighlight from "../../../components/TextHighlight";
 import ConfirmTransaction from "./ConfirmTransaction";
 import {
   itemsToBeFormat,
   itemsToFeFormat,
 } from "../../../utils/transformItems";
+import { Customer } from "../../../models/CustomerSchema";
+import { BSON } from "realm";
 
 // TODO: Remove this test code block of addedItems later
 const addedItems: ItemAddedInFeFormat[] = [
@@ -55,8 +57,7 @@ const AddOrEditTransaction = ({ type = "ADD", ...props }: TransactionProps) => {
   const realm = useRealm();
   const user = useUser();
 
-  const [itemsAdded, setItemsAdded] =
-    useState<ItemAddedInFeFormat[]>(addedItems);
+  const [itemsAdded, setItemsAdded] = useState<ItemAddedInFeFormat[]>([]);
   // ? If Item is in add mode, then currentItemInEdit mode will be null.
   // ? Else if Item is in edit mode, then currentItemInEdit mode will be an object that also contains id.
   const [currentItemInEdit, setCurrentItemInEdit] =
@@ -69,6 +70,11 @@ const AddOrEditTransaction = ({ type = "ADD", ...props }: TransactionProps) => {
 
   const { order, handleCloseEditMode } = props as TransactionEdit;
   const { customerID } = props as TransactionAdd;
+
+  const customer = useObject(Customer, new BSON.ObjectID(customerID));
+  console.log("The customer id in AddOrEditTransaction is", customerID);
+
+  console.log("The customer from db in", customer);
 
   const transactionTotalAmount = useMemo(() => {
     return itemsAdded.reduce((acc, current) => {
@@ -127,6 +133,8 @@ const AddOrEditTransaction = ({ type = "ADD", ...props }: TransactionProps) => {
   };
 
   const handleItemsConfirm = () => {
+    console.log("REACHED");
+
     setIsConfirmTransactionShown(true);
   };
 
@@ -141,6 +149,7 @@ const AddOrEditTransaction = ({ type = "ADD", ...props }: TransactionProps) => {
     amountPaid: number;
   }) => {
     const transformedItems = itemsToBeFormat(itemsAdded);
+
     realm.write(() => {
       realm.create("Order", {
         _id: new Realm.BSON.ObjectId(),
@@ -152,6 +161,10 @@ const AddOrEditTransaction = ({ type = "ADD", ...props }: TransactionProps) => {
         order_date: orderDate,
         items: transformedItems,
       });
+      if (customer) {
+        customer.balance =
+          customer.balance + transactionTotalAmount - +amountPaid;
+      }
     });
     setItemsAdded([]);
     hideConfirmTransaction();
@@ -274,6 +287,7 @@ const AddOrEditTransaction = ({ type = "ADD", ...props }: TransactionProps) => {
           transactionTotalAmount={transactionTotalAmount}
           newCarryOver={newCarryOverAmount}
           orderDate={orderDate}
+          customer={customer!}
           onConfirmTransaction={
             type === "ADD"
               ? handleConfirmNewTransaction

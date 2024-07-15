@@ -20,6 +20,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { Formik } from "formik";
 import { PriceSchema } from "../../../utils/FormValidators";
 import { formatDate } from "../../../utils/formatDate";
+import { Customer } from "../../../models/CustomerSchema";
 
 interface ConfirmTransactionProps {
   isConfirmTransactionShown: boolean;
@@ -28,6 +29,7 @@ interface ConfirmTransactionProps {
   onConfirmTransaction: ({ amountPaid }: { amountPaid: number }) => void;
   transactionTotalAmount: number;
   orderDate: Date;
+  customer?: Customer;
 }
 
 const ConfirmTransaction = ({
@@ -37,6 +39,7 @@ const ConfirmTransaction = ({
   onConfirmTransaction,
   transactionTotalAmount,
   orderDate,
+  customer,
 }: ConfirmTransactionProps) => {
   return (
     <Modal visible={isConfirmTransactionShown} animationType="fade">
@@ -94,17 +97,22 @@ const ConfirmTransaction = ({
                       size="medium"
                     />
                   </View>
+                  {customer ? (
+                    <View style={styleUtils.itemRowContainer}>
+                      <Text>
+                        {customer.balance > 0
+                          ? "Customer has balance of"
+                          : "Customer overpaid so far"}
+                      </Text>
+                      <TextHighlight
+                        innerText={`${customer.balance}$`}
+                        type={`${customer.balance > 0 ? "warning" : "success"}`}
+                        size="medium"
+                      />
+                    </View>
+                  ) : null}
 
-                  <View style={styleUtils.itemRowContainer}>
-                    <Text>Carry over amount so far</Text>
-                    <TextHighlight
-                      innerText="$ 100"
-                      type="warning"
-                      size="medium"
-                    />
-                  </View>
-
-                  <View style={styles.carryOverContainer}>
+                  {/* <View style={styles.carryOverContainer}>
                     <View style={styles.descriptionTextContainer}>
                       <AntDesign
                         name="infocirlce"
@@ -119,7 +127,7 @@ const ConfirmTransaction = ({
                       innerText={`$ ${newCarryOver - transactionTotalAmount}`}
                       type="warning"
                     />
-                  </View>
+                  </View> */}
 
                   <View
                     style={{

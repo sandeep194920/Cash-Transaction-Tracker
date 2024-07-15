@@ -20,7 +20,6 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
   transaction,
   customer_name,
   customer_id,
-  // setRecentlyModifiedOrder,
 }) => {
   const {
     order_price,
@@ -45,9 +44,8 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
   const onPressHandler = () => {
     router.push({
       pathname: `/customers/orders/[order_id]`,
-      params: { order_id: order_id.toString() },
+      params: { order_id: order_id.toString(), customer_id },
     });
-    // setRecentlyModifiedOrder(order_id.toString());
   };
 
   return (

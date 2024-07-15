@@ -9,7 +9,7 @@ import {
   Item as ItemSchema,
 } from "../../../models/OrderSchema";
 
-import { Customer as CustomerSchema } from "../../../models/CustomerSchema";
+import { Customer } from "../../../models/CustomerSchema";
 
 import { BSON } from "realm";
 import TextHighlight from "../../../components/TextHighlight";
@@ -17,14 +17,13 @@ import AddOrEditTransaction from "../../../screens/modalScreens/Transaction/AddO
 import { useGlobalContext } from "../../../utils/AppContext";
 import { formatDate } from "../../../utils/formatDate";
 
+type CustomerProps = { order_id: string; customer_id: string };
+
 const CustomerOrder = () => {
-  const { order_id } = useLocalSearchParams<{ order_id: string }>();
-  const [customerDetails, setCustomerDetails] =
-    useState<CustomerSchema | null>();
+  const { order_id, customer_id } = useLocalSearchParams<CustomerProps>();
+  const customer = useObject(Customer, new BSON.ObjectID(customer_id));
   const { showTransactionModal } = useGlobalContext();
-
   const order = useObject(OrderSchema, new BSON.ObjectID(order_id));
-
   const [isEditMode, setIsEditMode] = useState(false);
 
   // const order = useQuery(Order, (orders) => {
@@ -37,38 +36,32 @@ const CustomerOrder = () => {
   //   setCustomerDetails(result);
   // }
 
-  useEffect(() => {
-    if (!order) return;
+  // useEffect(() => {
+  //   if (!order) return;
 
-    const fetchCustomerDetails = () => {
-      try {
-        const customer = order.linkingObjects<CustomerSchema>(
-          "Customer",
-          "orders"
-        )[0];
-        setCustomerDetails(customer);
-      } catch (error) {
-        console.error("Failed to fetch customer details:", error);
-      }
-    };
+  //   const fetchCustomerDetails = () => {
+  //     try {
+  //       const customer = order.linkingObjects<CustomerSchema>(
+  //         "Customer",
+  //         "orders"
+  //       )[0];
+  //       setCustomerDetails(customer);
+  //     } catch (error) {
+  //       console.error("Failed to fetch customer details:", error);
+  //     }
+  //   };
 
-    fetchCustomerDetails();
-  }, [order]);
+  //   fetchCustomerDetails();
+  // }, [order]);
 
-  const customer = useMemo(() => customerDetails, [customerDetails]);
-  console.log("THE CUSTOMER IS", customer);
+  // const customer = useMemo(() => customerDetails, [customerDetails]);
+  // console.log("THE CUSTOMER IS", customer);
 
-  const { order_date, order_price, items, paid_by_customer, carry_over } =
-    order ?? {
-      order_price: 0,
-      paid_by_customer: 0,
-      carry_over: 0,
-    };
-  let type = "Carryover till date";
-
-  if (order_price - paid_by_customer <= 0) {
-    type = "Overpayment till date";
-  }
+  const { order_date, order_price, items, paid_by_customer } = order ?? {
+    order_price: 0,
+    paid_by_customer: 0,
+    carry_over: 0,
+  };
 
   const totalAmount = useMemo(() => {
     return items?.reduce((acc, current) => {
@@ -130,10 +123,10 @@ const CustomerOrder = () => {
             {/* paid by customer */}
             <View style={styles.itemRowContainer}>
               <Text style={styles.textStyle}>
-                John Paid{" "}
-                <Text style={styleUtils.subText}>
+                {customer?.name} Paid{" "}
+                {/* <Text style={styleUtils.subText}>
                   (on {order_date?.toDateString()})
-                </Text>
+                </Text> */}
               </Text>
               <TextHighlight
                 innerText={`$ ${paid_by_customer}`}
@@ -142,14 +135,20 @@ const CustomerOrder = () => {
               />
             </View>
             {/* carryover */}
-            <View style={styles.itemRowContainer}>
-              <Text style={styleUtils.mediumText}>Carryover so far</Text>
-              <TextHighlight
-                type="warning"
-                innerText={`$ ${paid_by_customer}`}
-                size="medium"
-              />
-            </View>
+            {customer && (
+              <View style={styles.itemRowContainer}>
+                <Text style={styleUtils.mediumText}>{`${
+                  customer.balance > 0
+                    ? "Carryover so far"
+                    : "Overpayment so far"
+                }`}</Text>
+                <TextHighlight
+                  type={customer.balance > 0 ? "warning" : "success"}
+                  innerText={`$ ${Math.abs(customer.balance)}`}
+                  size="medium"
+                />
+              </View>
+            )}
           </View>
           <Button type="EDIT" onPress={editTransactionHandler} />
           {isEditMode && (

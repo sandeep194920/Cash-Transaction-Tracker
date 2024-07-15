@@ -3,10 +3,11 @@ import { CustomerType } from "./types";
 import { useQuery, useRealm, useUser } from "@realm/react";
 import Realm from "realm";
 import { Order } from "../models/OrderSchema";
+import { Customer } from "../models/CustomerSchema";
 
 type RealmContextT = {
   addNewCustomerHandler: (customerData: CustomerType) => void;
-  addNewTransactionHandler:(transaction:any) => void;
+  addNewTransactionHandler: (transaction: any) => void;
 };
 
 const RealmCtxProvider = createContext<RealmContextT | undefined>(undefined);
@@ -39,7 +40,7 @@ function RealmContext({ children }: { children: React.ReactNode }) {
         signed_up_on: new Date(),
         balance: 0,
         user_id: user.id,
-        // orders: orders,
+        orders: [],
         _id: new Realm.BSON.ObjectId(),
       });
       console.log("The created customer is", createdCustomer);
@@ -67,13 +68,13 @@ function RealmContext({ children }: { children: React.ReactNode }) {
     // });
   };
 
-  const addNewTransactionHandler = (transaction:any) => {
-    console.log('Adding the transaction to db',transaction);
-  }
+  const addNewTransactionHandler = (transaction: any) => {
+    console.log("Adding the transaction to db", transaction);
+  };
 
   const contextValues = {
     addNewCustomerHandler,
-    addNewTransactionHandler
+    addNewTransactionHandler,
   };
 
   return (

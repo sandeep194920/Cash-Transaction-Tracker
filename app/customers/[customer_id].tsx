@@ -17,10 +17,13 @@ import AddEditButton from "../../components/Buttons/AddEditButton";
 import { useGlobalContext } from "../../utils/AppContext";
 import AddOrEditTransaction from "../../screens/modalScreens/Transaction/AddOrEditTransaction";
 import useAnimateEntry from "../../hooks/useAnimateEntry";
+import TextHighlight from "../../components/TextHighlight";
 
 const CustomerTransactions = () => {
-  const { customer_id, customer_name } = useLocalSearchParams();
+  const { customer_id, customer_name, balance } = useLocalSearchParams();
   const user = useUser();
+
+  console.log("NOW THE BALANCE IS", balance);
 
   console.log("The customer_id here is", customer_id);
 
@@ -69,33 +72,75 @@ const CustomerTransactions = () => {
         <Text style={styleUtils.headerText}>{customer_name}</Text>
         <Text style={styleUtils.smallText}>({customer_id})</Text>
       </View>
-      <FlatList
-        ref={animateRef}
-        data={customerTransactions}
-        renderItem={({ item, index }) => {
-          // console.log("the recently modified order is", recentlyModifiedOrder);
-
-          // console.log("The item is", item._id);
-
-          // const isLastItem = index === customerTransactions.length - 1;
-          return (
-            <Animated.View
-            // style={
-            //   recentlyModifiedOrder?.toString() === item._id.toString()
-            //     ? { opacity: flashAnim }
-            //     : null
-            // }
-            >
-              <CustomerTransaction
-                // setRecentlyModifiedOrder={setRecentlyModifiedOrder}
-                transaction={item}
-                customer_id={customer_id.toString()}
-                customer_name={customer_name.toString()}
+      {customerTransactions.length > 0 ? (
+        <>
+          <View
+            style={{
+              ...styleUtils.itemRowContainer,
+              justifyContent: "space-between",
+              alignSelf: "center",
+              marginBottom: 20,
+            }}
+          >
+            <Text style={styleUtils.mediumText}>
+              has{" "}
+              {+balance === 0
+                ? "no balance left"
+                : +balance > 0
+                ? "a balance of"
+                : "overpaid"}
+              {"  "}
+            </Text>
+            {+balance !== 0 && (
+              <TextHighlight
+                type={+balance > 0 ? "warning" : "success"}
+                innerText={`${balance}$`}
               />
-            </Animated.View>
-          );
-        }}
-      />
+            )}
+          </View>
+          <FlatList
+            ref={animateRef}
+            data={customerTransactions}
+            renderItem={({ item, index }) => {
+              // console.log("the recently modified order is", recentlyModifiedOrder);
+
+              // console.log("The item is", item._id);
+
+              // const isLastItem = index === customerTransactions.length - 1;
+              return (
+                <Animated.View
+                // style={
+                //   recentlyModifiedOrder?.toString() === item._id.toString()
+                //     ? { opacity: flashAnim }
+                //     : null
+                // }
+                >
+                  <CustomerTransaction
+                    transaction={item}
+                    customer_id={customer_id.toString()}
+                    customer_name={customer_name.toString()}
+                  />
+                </Animated.View>
+              );
+            }}
+          />
+        </>
+      ) : (
+        <View
+          style={{ flex: 1, alignSelf: "center", justifyContent: "center" }}
+        >
+          <Text
+            style={{
+              ...styleUtils.largeText,
+              textAlign: "center",
+              lineHeight: 27,
+              padding: 50,
+            }}
+          >
+            Add your first transaction by clicking + icon below
+          </Text>
+        </View>
+      )}
       <AddEditButton
         type="ADD"
         onPress={showTransactionModal.bind(this, true)}

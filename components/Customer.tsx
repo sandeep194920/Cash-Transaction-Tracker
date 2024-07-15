@@ -19,7 +19,7 @@ const Customer: React.FC<CustomerProps> = ({ customer }) => {
         onPress={() =>
           router.push({
             pathname: `/customers/${customer_id.toString()}`,
-            params: { customer_name: name },
+            params: { customer_name: name, balance },
           })
         }
       >
@@ -42,10 +42,10 @@ const Customer: React.FC<CustomerProps> = ({ customer }) => {
               />
             </View>
             <TextHighlight
-              type="success"
+              type={balance > 0 ? "warning" : "success"}
               size="small"
-              innerText="Balance"
-              outerText="$100"
+              innerText={balance > 0 ? "Balance" : "Overpaid"}
+              outerText={`${balance}$`}
             />
           </View>
 
