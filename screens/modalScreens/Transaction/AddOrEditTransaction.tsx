@@ -157,7 +157,9 @@ const AddOrEditTransaction = ({ type = "ADD", ...props }: TransactionProps) => {
         order_price: transactionTotalAmount,
         paid_by_customer: +amountPaid,
         customer_id: customerID,
-        carry_over: -111,
+        carry_over: customer
+          ? customer.balance + transactionTotalAmount - +amountPaid
+          : 0,
         order_date: orderDate,
         items: transformedItems,
       });
@@ -184,7 +186,9 @@ const AddOrEditTransaction = ({ type = "ADD", ...props }: TransactionProps) => {
       order.order_price = transactionTotalAmount;
       order.order_date = orderDate;
       // TODO:
-      // carry_over=
+      order.carry_over = customer
+        ? customer.balance + transactionTotalAmount - +amountPaid
+        : transactionTotalAmount - +amountPaid;
     });
     setItemsAdded([]);
     hideConfirmTransaction();

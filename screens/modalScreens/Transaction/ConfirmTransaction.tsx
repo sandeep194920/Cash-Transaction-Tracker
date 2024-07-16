@@ -41,6 +41,39 @@ const ConfirmTransaction = ({
   orderDate,
   customer,
 }: ConfirmTransactionProps) => {
+  const customerBalance = () => {
+    if (!customer) return;
+
+    const totalBalanceAmount = customer.balance + transactionTotalAmount;
+
+    const totalAmount = (
+      <View style={styleUtils.itemRowContainer}>
+        <Text style={styleUtils.largeText}>Total Amount</Text>
+        <TextHighlight
+          innerText={`${totalBalanceAmount}$`}
+          type={`${totalBalanceAmount > 0 ? "warning" : "info"}`}
+          size="medium"
+        />
+      </View>
+    );
+
+    return (
+      <>
+        <View style={styleUtils.itemRowContainer}>
+          <Text>
+            {customer.balance > 0 ? "Previous balance" : "Overpaid so far"}
+          </Text>
+          <TextHighlight
+            innerText={`${customer.balance}$`}
+            type={`${customer.balance > 0 ? "warning" : "success"}`}
+            size="medium"
+          />
+        </View>
+        {totalBalanceAmount > 0 ? totalAmount : null}
+      </>
+    );
+  };
+
   return (
     <Modal visible={isConfirmTransactionShown} animationType="fade">
       <Formik
@@ -97,7 +130,8 @@ const ConfirmTransaction = ({
                       size="medium"
                     />
                   </View>
-                  {customer ? (
+                  {customerBalance()}
+                  {/* {customer ? (
                     <View style={styleUtils.itemRowContainer}>
                       <Text>
                         {customer.balance > 0
@@ -110,7 +144,7 @@ const ConfirmTransaction = ({
                         size="medium"
                       />
                     </View>
-                  ) : null}
+                  ) : null} */}
 
                   {/* <View style={styles.carryOverContainer}>
                     <View style={styles.descriptionTextContainer}>

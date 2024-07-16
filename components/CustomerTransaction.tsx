@@ -8,6 +8,8 @@ import { Order } from "../models/OrderSchema";
 import { Customer as CustomerSchema } from "../models/CustomerSchema";
 import TextHighlight from "./TextHighlight";
 import { formatDate } from "../utils/formatDate";
+import { useObject } from "@realm/react";
+import { BSON } from "realm";
 
 interface CustomerTransactionProps {
   transaction: Order;
@@ -24,22 +26,27 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
   const {
     order_price,
     order_date,
+    carry_over,
     _id: order_id,
     paid_by_customer,
   } = transaction;
 
-  const getLinkedCustomer = (order: Order) => {
-    const customers = order.linkingObjects<CustomerSchema>(
-      "Customer",
-      "orders"
-    );
-    if (customers.length > 0) return customers[0];
-    else return null;
-  };
+  // const getLinkedCustomer = (order: Order) => {
+  //   const customers = order.linkingObjects<CustomerSchema>(
+  //     "Customer",
+  //     "orders"
+  //   );
+  //   if (customers.length > 0) return customers[0];
+  //   else return null;
+  // };
 
-  const result = getLinkedCustomer(transaction);
-  console.log("The result is", result);
-  console.log("The order id type is", typeof order_id);
+  // const result = getLinkedCustomer(transaction);
+  // console.log("The result is", result);
+  // console.log("The order id type is", typeof order_id);
+
+  const customer = useObject(CustomerSchema, new BSON.ObjectID(customer_id));
+
+  console.log("The customer here is", customer);
 
   const onPressHandler = () => {
     router.push({
@@ -80,7 +87,7 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
             type="info"
             size="small"
             innerText="Overpayment"
-            outerText={`$${order_price}`}
+            outerText={`$${carry_over}`}
           />
         </View>
       </View>

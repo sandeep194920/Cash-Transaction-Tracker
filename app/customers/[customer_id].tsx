@@ -7,10 +7,10 @@ import {
   SafeAreaView,
   Animated,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import CustomerTransaction from "../../components/CustomerTransaction";
 import { styleUtils } from "../../utils/styles";
-import { useQuery, useUser } from "@realm/react";
+import { useObject, useQuery, useUser } from "@realm/react";
 import { useLocalSearchParams } from "expo-router";
 import { Order } from "../../models/OrderSchema";
 import AddEditButton from "../../components/Buttons/AddEditButton";
@@ -18,14 +18,16 @@ import { useGlobalContext } from "../../utils/AppContext";
 import AddOrEditTransaction from "../../screens/modalScreens/Transaction/AddOrEditTransaction";
 import useAnimateEntry from "../../hooks/useAnimateEntry";
 import TextHighlight from "../../components/TextHighlight";
+import { Customer } from "../../models/CustomerSchema";
+import { BSON } from "realm";
 
 const CustomerTransactions = () => {
-  const { customer_id, customer_name, balance } = useLocalSearchParams();
+  const { customer_id } = useLocalSearchParams();
   const user = useUser();
-
-  console.log("NOW THE BALANCE IS", balance);
-
-  console.log("The customer_id here is", customer_id);
+  const customer = useObject(
+    Customer,
+    new BSON.ObjectID(customer_id.toString())
+  );
 
   // * Note - No need to wrap the below code customerTransactions in useMemo
   // * as useQuery takes care of that internally. However, if we are adding additional logic
@@ -66,10 +68,12 @@ const CustomerTransactions = () => {
   //   customerTransactions
   // );
 
+  if (!customer) return;
+
   return (
     <SafeAreaView style={styleUtils.flexContainer}>
       <View style={styleUtils.headerTextContainer}>
-        <Text style={styleUtils.headerText}>{customer_name}</Text>
+        <Text style={styleUtils.headerText}>{customer.name}</Text>
         <Text style={styleUtils.smallText}>({customer_id})</Text>
       </View>
       {customerTransactions.length > 0 ? (
@@ -84,17 +88,17 @@ const CustomerTransactions = () => {
           >
             <Text style={styleUtils.mediumText}>
               has{" "}
-              {+balance === 0
+              {+customer.balance === 0
                 ? "no balance left"
-                : +balance > 0
+                : +customer.balance > 0
                 ? "a balance of"
                 : "overpaid"}
               {"  "}
             </Text>
-            {+balance !== 0 && (
+            {+customer.balance !== 0 && (
               <TextHighlight
-                type={+balance > 0 ? "warning" : "success"}
-                innerText={`${balance}$`}
+                type={+customer.balance > 0 ? "warning" : "success"}
+                innerText={`${customer.balance}$`}
               />
             )}
           </View>
@@ -118,7 +122,7 @@ const CustomerTransactions = () => {
                   <CustomerTransaction
                     transaction={item}
                     customer_id={customer_id.toString()}
-                    customer_name={customer_name.toString()}
+                    customer_name={customer.name.toString()}
                   />
                 </Animated.View>
               );
