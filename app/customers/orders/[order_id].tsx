@@ -154,6 +154,7 @@ const CustomerOrder = () => {
           {isEditMode && (
             <AddOrEditTransaction
               type="EDIT"
+              customerID={customer_id.toString()}
               order={order}
               handleCloseEditMode={handleCloseEditMode}
             />

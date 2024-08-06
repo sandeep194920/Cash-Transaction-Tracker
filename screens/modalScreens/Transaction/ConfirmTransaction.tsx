@@ -25,33 +25,35 @@ import { Customer } from "../../../models/CustomerSchema";
 interface ConfirmTransactionProps {
   isConfirmTransactionShown: boolean;
   onHideConfirmation: () => void;
-  newCarryOver: number;
   onConfirmTransaction: ({ amountPaid }: { amountPaid: number }) => void;
   transactionTotalAmount: number;
+  updatedTransactionTotalAmount: number;
   orderDate: Date;
   customer?: Customer;
+  previousBalance: number;
+  newBalance: number;
 }
 
 const ConfirmTransaction = ({
   isConfirmTransactionShown,
   onHideConfirmation,
-  newCarryOver,
   onConfirmTransaction,
   transactionTotalAmount,
+  updatedTransactionTotalAmount,
   orderDate,
   customer,
+  previousBalance,
+  newBalance,
 }: ConfirmTransactionProps) => {
-  const customerBalance = () => {
+  const amountInfo = () => {
     if (!customer) return;
-
-    const totalBalanceAmount = customer.balance + transactionTotalAmount;
 
     const totalAmount = (
       <View style={styleUtils.itemRowContainer}>
         <Text style={styleUtils.largeText}>Total Amount</Text>
         <TextHighlight
-          innerText={`${totalBalanceAmount}$`}
-          type={`${totalBalanceAmount > 0 ? "warning" : "info"}`}
+          innerText={`${newBalance}$`}
+          type={`${newBalance > 0 ? "warning" : "info"}`}
           size="medium"
         />
       </View>
@@ -59,17 +61,27 @@ const ConfirmTransaction = ({
 
     return (
       <>
+        {updatedTransactionTotalAmount !== transactionTotalAmount && (
+          <View style={styleUtils.itemRowContainer}>
+            <Text>Remaining Amount</Text>
+            <TextHighlight
+              innerText={`$ ${updatedTransactionTotalAmount}`}
+              type="info"
+              size="medium"
+            />
+          </View>
+        )}
         <View style={styleUtils.itemRowContainer}>
           <Text>
-            {customer.balance > 0 ? "Previous balance" : "Overpaid so far"}
+            {previousBalance > 0 ? "Previous balance" : "Overpaid so far"}
           </Text>
           <TextHighlight
-            innerText={`${customer.balance}$`}
-            type={`${customer.balance > 0 ? "warning" : "success"}`}
+            innerText={`${previousBalance}$`}
+            type={`${previousBalance > 0 ? "warning" : "success"}`}
             size="medium"
           />
         </View>
-        {totalBalanceAmount > 0 ? totalAmount : null}
+        {newBalance > 0 ? totalAmount : null}
       </>
     );
   };
@@ -123,45 +135,15 @@ const ConfirmTransaction = ({
                   </View>
 
                   <View style={styleUtils.itemRowContainer}>
-                    <Text>Today's Total Amount</Text>
+                    <Text>Order total</Text>
                     <TextHighlight
                       innerText={`$ ${transactionTotalAmount}`}
                       type="info"
                       size="medium"
                     />
                   </View>
-                  {customerBalance()}
-                  {/* {customer ? (
-                    <View style={styleUtils.itemRowContainer}>
-                      <Text>
-                        {customer.balance > 0
-                          ? "Customer has balance of"
-                          : "Customer overpaid so far"}
-                      </Text>
-                      <TextHighlight
-                        innerText={`${customer.balance}$`}
-                        type={`${customer.balance > 0 ? "warning" : "success"}`}
-                        size="medium"
-                      />
-                    </View>
-                  ) : null} */}
 
-                  {/* <View style={styles.carryOverContainer}>
-                    <View style={styles.descriptionTextContainer}>
-                      <AntDesign
-                        name="infocirlce"
-                        size={15}
-                        color={colors.darkGray1}
-                      />
-                      <Text style={styles.description}>
-                        Customer's balance amount
-                      </Text>
-                    </View>
-                    <TextHighlight
-                      innerText={`$ ${newCarryOver - transactionTotalAmount}`}
-                      type="warning"
-                    />
-                  </View> */}
+                  {amountInfo()}
 
                   <View
                     style={{

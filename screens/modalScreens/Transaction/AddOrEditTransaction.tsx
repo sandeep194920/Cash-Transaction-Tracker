@@ -43,12 +43,19 @@ type TransactionEdit = {
 
 type TransactionAdd = {
   type: "ADD";
+};
+
+type CommonProps = {
   customerID: string;
 };
 
-type TransactionProps = TransactionAdd | TransactionEdit;
+type TransactionProps = (TransactionAdd | TransactionEdit) & CommonProps;
 
-const AddOrEditTransaction = ({ type = "ADD", ...props }: TransactionProps) => {
+const AddOrEditTransaction = ({
+  type = "ADD",
+  customerID,
+  ...props
+}: TransactionProps) => {
   const { isTransactionModalOpen, showTransactionModal } = useGlobalContext();
 
   const [isConfirmTransactionShown, setIsConfirmTransactionShown] =
@@ -69,9 +76,11 @@ const AddOrEditTransaction = ({ type = "ADD", ...props }: TransactionProps) => {
   const [newCarryOverAmount, setNewCarryOverAmount] = useState(100);
 
   const { order, handleCloseEditMode } = props as TransactionEdit;
-  const { customerID } = props as TransactionAdd;
 
   const customer = useObject(Customer, new BSON.ObjectID(customerID));
+
+  if (!customer) return;
+
   console.log("The customer id in AddOrEditTransaction is", customerID);
 
   console.log("The customer from db in", customer);
@@ -81,6 +90,18 @@ const AddOrEditTransaction = ({ type = "ADD", ...props }: TransactionProps) => {
       return acc + parseFloat(current.total.toFixed(2));
     }, 0);
   }, [itemsAdded]);
+
+  // if order exists
+  const updatedTransactionTotalAmount = useMemo(() => {
+    if (order) {
+      return transactionTotalAmount - order.order_price;
+    }
+    return transactionTotalAmount;
+  }, [order, transactionTotalAmount]);
+
+  const newBalance = useMemo(() => {
+    return customer.balance + updatedTransactionTotalAmount;
+  }, [transactionTotalAmount, customer]);
 
   const handleCloseInputModal = () => {
     if (itemsAdded.length === 0) {
@@ -163,10 +184,8 @@ const AddOrEditTransaction = ({ type = "ADD", ...props }: TransactionProps) => {
         order_date: orderDate,
         items: transformedItems,
       });
-      if (customer) {
-        customer.balance =
-          customer.balance + transactionTotalAmount - +amountPaid;
-      }
+      customer.balance =
+        customer.balance + transactionTotalAmount - +amountPaid;
     });
     setItemsAdded([]);
     hideConfirmTransaction();
@@ -185,10 +204,10 @@ const AddOrEditTransaction = ({ type = "ADD", ...props }: TransactionProps) => {
       order.paid_by_customer = +amountPaid;
       order.order_price = transactionTotalAmount;
       order.order_date = orderDate;
-      // TODO:
-      order.carry_over = customer
-        ? customer.balance + transactionTotalAmount - +amountPaid
-        : transactionTotalAmount - +amountPaid;
+      order.carry_over =
+        customer.balance + updatedTransactionTotalAmount - +amountPaid;
+      customer.balance =
+        customer.balance + updatedTransactionTotalAmount - +amountPaid;
     });
     setItemsAdded([]);
     hideConfirmTransaction();
@@ -289,8 +308,10 @@ const AddOrEditTransaction = ({ type = "ADD", ...props }: TransactionProps) => {
           isConfirmTransactionShown={isConfirmTransactionShown}
           onHideConfirmation={hideConfirmTransaction}
           transactionTotalAmount={transactionTotalAmount}
-          newCarryOver={newCarryOverAmount}
+          updatedTransactionTotalAmount={updatedTransactionTotalAmount}
           orderDate={orderDate}
+          previousBalance={customer.balance}
+          newBalance={newBalance}
           customer={customer!}
           onConfirmTransaction={
             type === "ADD"

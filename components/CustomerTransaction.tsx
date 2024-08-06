@@ -84,9 +84,9 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
             </Text>
           </View>
           <TextHighlight
-            type="info"
+            type={carry_over > 0 ? `warning` : `info`}
             size="small"
-            innerText="Overpayment"
+            innerText={carry_over > 0 ? `Balance` : `Overpayment`}
             outerText={`$${carry_over}`}
           />
         </View>
