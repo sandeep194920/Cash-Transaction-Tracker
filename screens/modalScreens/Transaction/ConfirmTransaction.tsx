@@ -16,7 +16,6 @@ import {
 } from "../../../utils/styles";
 import TextHighlight from "../../../components/TextHighlight";
 import MultipleButtons from "../../../components/Buttons/MultipleButtons";
-import { AntDesign } from "@expo/vector-icons";
 import { Formik } from "formik";
 import { PriceSchema } from "../../../utils/FormValidators";
 import { formatDate } from "../../../utils/formatDate";
