@@ -10,7 +10,6 @@ import { useGlobalContext } from "../utils/AppContext";
 import { colors, dimensions, styleUtils } from "../utils/styles";
 import { StyleSheet } from "react-native";
 import { useAuth, useQuery } from "@realm/react";
-import Loading from "../components/Loading";
 
 const Customers = () => {
   const { showCustomerModal, isLoading } = useGlobalContext();
@@ -45,8 +44,6 @@ const Customers = () => {
     </SafeAreaView>
   );
 };
-
-
 
 export default Customers;
 

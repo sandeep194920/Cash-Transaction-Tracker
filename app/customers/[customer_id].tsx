@@ -40,19 +40,7 @@ const CustomerTransactions = () => {
     );
   });
 
-  // ! Memoize the customerTransactions array if needed for transformations
-  // const memoizedTransactions = useMemo(() => {
-  //   return customerTransactions.map(transaction => ({
-  //     ...transaction,
-  //  Any additional transformation
-  //   }));
-  // }, [customerTransactions]);
-
-  // TODO: highlight added/modified item
-  // const [recentlyModifiedOrder, setRecentlyModifiedOrder] = useState<
-  //   null | string
-  // >(null);
-  const { animateRef, flashAnim } = useAnimateEntry(customerTransactions);
+  const { animateRef } = useAnimateEntry(customerTransactions);
 
   const { showTransactionModal } = useGlobalContext();
 
@@ -60,13 +48,6 @@ const CustomerTransactions = () => {
   useEffect(() => {
     showTransactionModal(false);
   }, []);
-
-  // console.log(
-  //   "The recently modified order",
-  //   recentlyModifiedOrder,
-  //   " item id is",
-  //   customerTransactions
-  // );
 
   if (!customer) return;
 
@@ -105,20 +86,9 @@ const CustomerTransactions = () => {
           <FlatList
             ref={animateRef}
             data={customerTransactions}
-            renderItem={({ item, index }) => {
-              // console.log("the recently modified order is", recentlyModifiedOrder);
-
-              // console.log("The item is", item._id);
-
-              // const isLastItem = index === customerTransactions.length - 1;
+            renderItem={({ item }) => {
               return (
-                <Animated.View
-                // style={
-                //   recentlyModifiedOrder?.toString() === item._id.toString()
-                //     ? { opacity: flashAnim }
-                //     : null
-                // }
-                >
+                <Animated.View>
                   <CustomerTransaction
                     transaction={item}
                     customer_id={customer_id.toString()}

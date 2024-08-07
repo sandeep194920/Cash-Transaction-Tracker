@@ -1,9 +1,8 @@
-import { View, StyleSheet, Pressable } from 'react-native'
-import React from 'react'
-import { colors, styleUtils } from '../../utils/styles'
+import { View, StyleSheet, Pressable } from "react-native";
+import React from "react";
+import { colors, styleUtils } from "../../utils/styles";
 import { RoundButtonType } from "../../utils/types";
-import { Entypo, Ionicons } from '@expo/vector-icons'
-import { useGlobalContext } from '../../utils/AppContext'
+import { Entypo, Ionicons } from "@expo/vector-icons";
 
 const AddEditButton = ({ type, onPress }: RoundButtonType) => {
   const RoundButtonTypes = {
@@ -26,6 +25,6 @@ const AddEditButton = ({ type, onPress }: RoundButtonType) => {
   );
 };
 
-export default AddEditButton
+export default AddEditButton;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

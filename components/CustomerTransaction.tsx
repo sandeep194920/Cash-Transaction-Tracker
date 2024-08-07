@@ -1,26 +1,22 @@
+import React, { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-
-import React, { Dispatch } from "react";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { colors, dimensions, styleUtils } from "../utils/styles";
 import { Order } from "../models/OrderSchema";
-import { Customer as CustomerSchema } from "../models/CustomerSchema";
 import TextHighlight from "./TextHighlight";
 import { formatDate } from "../utils/formatDate";
-import { useObject } from "@realm/react";
-import { BSON } from "realm";
+import CardOptions from "./CardOptions";
+import { useRealm } from "@realm/react";
 
 interface CustomerTransactionProps {
   transaction: Order;
   customer_id: string;
   customer_name: string;
-  // setRecentlyModifiedOrder: Dispatch<React.SetStateAction<null | string>>;
 }
 
 const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
   transaction,
-  customer_name,
   customer_id,
 }) => {
   const {
@@ -31,22 +27,8 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
     paid_by_customer,
   } = transaction;
 
-  // const getLinkedCustomer = (order: Order) => {
-  //   const customers = order.linkingObjects<CustomerSchema>(
-  //     "Customer",
-  //     "orders"
-  //   );
-  //   if (customers.length > 0) return customers[0];
-  //   else return null;
-  // };
-
-  // const result = getLinkedCustomer(transaction);
-  // console.log("The result is", result);
-  // console.log("The order id type is", typeof order_id);
-
-  const customer = useObject(CustomerSchema, new BSON.ObjectID(customer_id));
-
-  console.log("The customer here is", customer);
+  const [optionsShown, setOptionsShown] = useState(false);
+  const realm = useRealm();
 
   const onPressHandler = () => {
     router.push({
@@ -55,41 +37,64 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
     });
   };
 
-  return (
-    <Pressable onPress={onPressHandler}>
-      <View style={styles.itemColumnContainer}>
-        <View style={styles.itemRowContainer}>
-          <View style={styleUtils.itemRowContainer}>
-            <Text style={styleUtils.smallText}>
-              {formatDate(order_date, "short").day}
-              {", "}
-            </Text>
-            <Text style={styleUtils.smallText}>
-              {formatDate(order_date).date}
-            </Text>
-          </View>
-          <TextHighlight
-            type="success"
-            size="small"
-            innerText="Paid"
-            outerText={`$${paid_by_customer}`}
-          />
-        </View>
+  const onLongPressHandler = () => {
+    setOptionsShown(true);
+  };
 
-        <View style={styles.itemRowContainer}>
-          <View style={{ ...styleUtils.flexRow, justifyContent: "center" }}>
-            <Ionicons name="pricetag" size={20} color={colors.lightGreen1} />
-            <Text style={{ marginLeft: 10, fontWeight: "bold" }}>
-              ${order_price}
-            </Text>
+  const onHideOption = () => {
+    setOptionsShown(false);
+  };
+
+  const onDeleteOption = () => {
+    realm.write(() => {
+      realm.delete(transaction);
+    });
+  };
+
+  const optionsView = () => {
+    if (!optionsShown) return;
+    return (
+      <CardOptions hideOption={onHideOption} deleteOption={onDeleteOption} />
+    );
+  };
+
+  return (
+    <Pressable onPress={onPressHandler} onLongPress={onLongPressHandler}>
+      <View style={styles.rowContainer}>
+        <View style={[styles.itemColumnContainer, { flex: 1 }]}>
+          <View style={styles.itemRowContainer}>
+            <View style={styleUtils.itemRowContainer}>
+              <Text style={styleUtils.smallText}>
+                {formatDate(order_date, "short").day}
+                {", "}
+              </Text>
+              <Text style={styleUtils.smallText}>
+                {formatDate(order_date).date}
+              </Text>
+            </View>
+            <TextHighlight
+              type="success"
+              size="small"
+              innerText="Paid"
+              outerText={`$${paid_by_customer}`}
+            />
           </View>
-          <TextHighlight
-            type={carry_over > 0 ? `warning` : `info`}
-            size="small"
-            innerText={carry_over > 0 ? `Balance` : `Overpayment`}
-            outerText={`$${carry_over}`}
-          />
+          <View style={styles.itemRowContainer}>
+            <View style={{ ...styleUtils.flexRow, justifyContent: "center" }}>
+              <Ionicons name="pricetag" size={20} color={colors.lightGreen1} />
+              <Text style={{ marginLeft: 10, fontWeight: "bold" }}>
+                ${order_price}
+              </Text>
+            </View>
+            <TextHighlight
+              type={carry_over > 0 ? `warning` : `info`}
+              size="small"
+              innerText={carry_over > 0 ? `Balance` : `Overpayment`}
+              outerText={`$${carry_over}`}
+            />
+          </View>
         </View>
+        {optionsView()}
       </View>
     </Pressable>
   );
@@ -108,5 +113,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: dimensions.paddingMedium,
     backgroundColor: colors.lightGray1,
     marginBottom: dimensions.marginMedium,
+  },
+  rowContainer: {
+    flexDirection: "row",
+    gap: 2,
   },
 });
