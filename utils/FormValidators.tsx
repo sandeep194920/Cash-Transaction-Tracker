@@ -1,4 +1,4 @@
-import * as yup from 'yup'
+import * as yup from "yup";
 
 export const customerValidationSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
@@ -24,9 +24,6 @@ export const AuthValidationSchema = yup.object().shape({
     .min(6, "Password must be at least 6 characters long"),
 });
 
-
-
-
 export const ItemInputSchema = yup.object().shape({
   itemName: yup.string().required("Please enter the item name"),
   price: yup
@@ -47,4 +44,12 @@ export const PriceSchema = yup.object().shape({
     .typeError("Amount paid must be a number")
     .required("Amount paid by customer for this transaction?")
     .min(0, "Amount paid must be 0 or more"),
+});
+
+export const Balance = yup.object().shape({
+  balance: yup
+    .number()
+    .typeError("Amount paid must be a number")
+    .required("Enter the new balance amount")
+    .min(0, "New balance must be atleast 0"),
 });

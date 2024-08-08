@@ -73,8 +73,6 @@ const CustomerOrder = () => {
 
   // * EDIT TRANSACTION
   const editTransactionHandler = () => {
-    console.log("The edit button is clicked");
-
     setIsEditMode((prev) => !prev);
     showTransactionModal(true);
   };

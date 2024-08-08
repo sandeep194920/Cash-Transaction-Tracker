@@ -7,9 +7,9 @@ import {
   SafeAreaView,
   Animated,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import CustomerTransaction from "../../components/CustomerTransaction";
-import { styleUtils } from "../../utils/styles";
+import { colors, styleUtils } from "../../utils/styles";
 import { useObject, useQuery, useUser } from "@realm/react";
 import { useLocalSearchParams } from "expo-router";
 import { Order } from "../../models/OrderSchema";
@@ -20,9 +20,14 @@ import useAnimateEntry from "../../hooks/useAnimateEntry";
 import TextHighlight from "../../components/TextHighlight";
 import { Customer } from "../../models/CustomerSchema";
 import { BSON } from "realm";
+import { Feather, Ionicons } from "@expo/vector-icons";
+import BalanceAdjust from "../../screens/modalScreens/BalanceAdjust";
 
 const CustomerTransactions = () => {
   const { customer_id } = useLocalSearchParams();
+
+  const [isBalanceModalShown, setIsBalanceModalShown] = useState(false);
+
   const user = useUser();
   const customer = useObject(
     Customer,
@@ -50,6 +55,10 @@ const CustomerTransactions = () => {
   }, []);
 
   if (!customer) return;
+
+  const hideBalanceModal = () => {
+    setIsBalanceModalShown(false);
+  };
 
   return (
     <SafeAreaView style={styleUtils.flexContainer}>
@@ -82,6 +91,14 @@ const CustomerTransactions = () => {
                 innerText={`${customer.balance}$`}
               />
             )}
+
+            <Feather
+              style={{ marginLeft: 10 }}
+              onPress={() => setIsBalanceModalShown(true)}
+              name="edit"
+              size={15}
+              color={colors.black}
+            />
           </View>
           <FlatList
             ref={animateRef}
@@ -89,28 +106,15 @@ const CustomerTransactions = () => {
             renderItem={({ item }) => {
               return (
                 <Animated.View>
-                  <CustomerTransaction
-                    transaction={item}
-                    customer_id={customer_id.toString()}
-                    customer_name={customer.name.toString()}
-                  />
+                  <CustomerTransaction customer={customer} transaction={item} />
                 </Animated.View>
               );
             }}
           />
         </>
       ) : (
-        <View
-          style={{ flex: 1, alignSelf: "center", justifyContent: "center" }}
-        >
-          <Text
-            style={{
-              ...styleUtils.largeText,
-              textAlign: "center",
-              lineHeight: 27,
-              padding: 50,
-            }}
-          >
+        <View style={styles.noTransactions}>
+          <Text style={styles.noTransactionsText}>
             Add your first transaction by clicking + icon below
           </Text>
         </View>
@@ -122,10 +126,27 @@ const CustomerTransactions = () => {
       {/* MODAL */}
 
       <AddOrEditTransaction customerID={customer_id.toString()} type="ADD" />
+      <BalanceAdjust
+        customer={customer}
+        isBalanceModalShown={isBalanceModalShown}
+        hideBalanceModal={hideBalanceModal}
+      />
     </SafeAreaView>
   );
 };
 
 export default CustomerTransactions;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  noTransactions: {
+    flex: 1,
+    alignSelf: "center",
+    justifyContent: "center",
+  },
+  noTransactionsText: {
+    ...styleUtils.largeText,
+    textAlign: "center",
+    lineHeight: 27,
+    padding: 50,
+  },
+});

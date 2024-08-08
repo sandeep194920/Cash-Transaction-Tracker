@@ -8,16 +8,16 @@ import TextHighlight from "./TextHighlight";
 import { formatDate } from "../utils/formatDate";
 import CardOptions from "./CardOptions";
 import { useRealm } from "@realm/react";
+import { Customer } from "../models/CustomerSchema";
 
 interface CustomerTransactionProps {
   transaction: Order;
-  customer_id: string;
-  customer_name: string;
+  customer: Customer;
 }
 
 const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
   transaction,
-  customer_id,
+  customer,
 }) => {
   const {
     order_price,
@@ -33,7 +33,10 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
   const onPressHandler = () => {
     router.push({
       pathname: `/customers/orders/[order_id]`,
-      params: { order_id: order_id.toString(), customer_id },
+      params: {
+        order_id: order_id.toString(),
+        customer_id: customer._id.toString(),
+      },
     });
   };
 
@@ -47,6 +50,9 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
 
   const onDeleteOption = () => {
     realm.write(() => {
+      // * first customer's balance need to be updated and then the transaction must be deleted.
+      // * Otherwise we won't be able to access order.order_price if it's deleted first.
+      customer.balance = customer.balance - +transaction.order_price;
       realm.delete(transaction);
     });
   };
