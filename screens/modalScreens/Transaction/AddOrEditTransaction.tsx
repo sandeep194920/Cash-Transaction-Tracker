@@ -178,6 +178,7 @@ const AddOrEditTransaction = ({
         order_price: transactionTotalAmount,
         paid_by_customer: +amountPaid,
         customer_id: customerID,
+        transactionType: "balanceUpdate",
         carry_over: customer
           ? customer.balance + transactionTotalAmount - +amountPaid
           : 0,

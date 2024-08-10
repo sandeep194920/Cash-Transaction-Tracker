@@ -45,6 +45,8 @@ const CustomerTransactions = () => {
     );
   });
 
+  console.log("The transactions are", customerTransactions);
+
   const { animateRef } = useAnimateEntry(customerTransactions);
 
   const { showTransactionModal } = useGlobalContext();

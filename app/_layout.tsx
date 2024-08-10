@@ -1,11 +1,11 @@
-import { Stack } from 'expo-router/stack'
-import AppContext from '../utils/AppContext'
-import { AppProvider, RealmProvider, UserProvider } from '@realm/react'
-import { Customer } from '../models/CustomerSchema'
-import { Order, Item } from '../models/OrderSchema'
+import { Stack } from "expo-router/stack";
+import AppContext from "../utils/AppContext";
+import { AppProvider, RealmProvider, UserProvider } from "@realm/react";
+import { Customer } from "../models/CustomerSchema";
+import { Order, Item, BalanceUpdate } from "../models/OrderSchema";
 import Authenticate from "../screens/Authenticate";
-import RealmContext from '../utils/RealmContext'
-import { AppConstants } from '../constants'
+import RealmContext from "../utils/RealmContext";
+import { AppConstants } from "../constants";
 import { useEffect } from "react";
 import { Alert, BackHandler } from "react-native";
 
@@ -16,7 +16,7 @@ export default function Layout() {
       <AppProvider id={AppConstants.APP_ID}>
         <UserProvider fallback={<Authenticate />}>
           <RealmProvider
-            schema={[Customer, Order, Item]} // Item is required here even though it is embedded
+            schema={[Customer, Order, Item, BalanceUpdate]} // Item is required here even though it is embedded
             // deleteRealmIfMigrationNeeded={true} // for local development when below sync is not used
             sync={{
               flexible: true,

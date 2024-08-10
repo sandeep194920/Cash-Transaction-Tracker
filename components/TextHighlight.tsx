@@ -6,13 +6,14 @@ const colorMap: Record<TextHighlightProps["type"], keyof typeof colors> = {
   info: "lightBlue1",
   success: "lightGreen1",
   warning: "red",
+  highlight: "highlight",
 };
 
 interface TextHighlightProps {
   innerText: string;
   size?: "small" | "medium";
   outerText?: string;
-  type: "info" | "success" | "warning";
+  type: "info" | "success" | "warning" | "highlight";
 }
 
 const TextHighlight = ({

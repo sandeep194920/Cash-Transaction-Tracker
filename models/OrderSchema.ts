@@ -15,16 +15,38 @@ export class Item extends Object {
     },
   };
 }
+
+/* BALANCE UPDATE
+I want to show the transaction even if it's just about updating the balance. 
+Hence, we include transactionType prop inside Order to differentiate if it's order or balanceUpdate
+*/
+export class BalanceUpdate extends Object {
+  old_balance!: number;
+  new_balance!: number;
+
+  static schema: ObjectSchema = {
+    name: "BalanceUpdate",
+    embedded: true, // Indicates this is an embedded object
+    properties: {
+      old_balance: "double",
+      new_balance: "double",
+    },
+  };
+}
+
 export class Order extends Object<Order> {
   _id: BSON.ObjectID = new BSON.ObjectId();
   user_id!: string;
   customer_id!: string;
-  order_price!: number;
-  paid_by_customer!: number;
-  carry_over!: number;
   order_date!: Date;
-  items!: Realm.List<Item>;
-  // items!: { type: "list"; objectType: "Item" };
+  transactionType: "order" | "balanceUpdate" | null = "order"; // Default to "order"
+
+  order_price?: number;
+  paid_by_customer?: number;
+  carry_over?: number;
+  items?: Realm.List<Item>;
+
+  balanceUpdate?: BalanceUpdate;
 
   static schema: ObjectSchema = {
     name: "Order",
@@ -37,6 +59,8 @@ export class Order extends Object<Order> {
       carry_over: "double",
       order_date: "date",
       items: "Item[]",
+      transactionType: "string",
+      balanceUpdate: "BalanceUpdate?",
       customer: {
         type: "linkingObjects",
         objectType: "Customer",

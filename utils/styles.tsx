@@ -8,8 +8,10 @@ export const colors = {
   lightGreen1: "#8aaf05",
   lightGreen2: "#1caa5c",
   lightBlue1: "#1caaaa",
+  lightBlue2: "#d8e5ea",
   red: "#bc412b",
   black: "#121111",
+  highlight: "#1d88cb",
 } as const;
 
 export const dimensions = {
@@ -72,7 +74,6 @@ export const styleUtils = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-
 
   // Each item in the list
   columnContainer: {

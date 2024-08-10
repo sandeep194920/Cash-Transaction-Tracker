@@ -20,7 +20,7 @@ import {
 import { Formik } from "formik";
 import { Balance } from "../../utils/FormValidators";
 import { Ionicons } from "@expo/vector-icons";
-import { useRealm } from "@realm/react";
+import { useRealm, useUser } from "@realm/react";
 
 interface BalanceAdjustProps {
   customer: Customer;
@@ -63,11 +63,30 @@ const BalanceAdjust: React.FC<BalanceAdjustProps> = ({
       ]
     );
   };
+  const user = useUser();
 
   const confirmBalanceHandler = (newBalance: number) => {
     realm.write(() => {
+      realm.create("Order", {
+        _id: new Realm.BSON.ObjectId(),
+        user_id: user.id,
+        order_date: new Date(),
+        transactionType: "balanceUpdate",
+        customer_id: customer._id.toString(),
+        balanceUpdate: {
+          old_balance: customer.balance,
+          new_balance: +newBalance,
+        },
+
+        // OPTIONAL FILEDS
+        order_price: -1,
+        paid_by_customer: -1,
+        carry_over: -1,
+        items: [],
+      });
       customer.balance = +newBalance;
     });
+
     hideBalanceModal();
   };
 
@@ -106,7 +125,9 @@ const BalanceAdjust: React.FC<BalanceAdjustProps> = ({
             }}
             validationSchema={Balance}
             onSubmit={({ balance }) => {
-              if (+balance === customer.balance) {
+              // this is a string so let's first convert that to number
+              balance = +balance;
+              if (balance === customer.balance) {
                 return setBriefInfo("sameBalance");
               }
               confirmBlanceAlert(balance);
