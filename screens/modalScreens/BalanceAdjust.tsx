@@ -5,14 +5,22 @@ import {
   Text,
   TextInput,
   View,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import MultipleButtons from "../../components/Buttons/MultipleButtons";
 import { Customer } from "../../models/CustomerSchema";
 import TextHighlight from "../../components/TextHighlight";
-import { dimensions, styleUtils, userFormStyles } from "../../utils/styles";
+import {
+  colors,
+  dimensions,
+  styleUtils,
+  userFormStyles,
+} from "../../utils/styles";
 import { Formik } from "formik";
 import { Balance } from "../../utils/FormValidators";
+import { Ionicons } from "@expo/vector-icons";
+import { useRealm } from "@realm/react";
 
 interface BalanceAdjustProps {
   customer: Customer;
@@ -30,12 +38,37 @@ const BalanceAdjust: React.FC<BalanceAdjustProps> = ({
   hideBalanceModal,
 }) => {
   const [info, setInfo] = useState("");
+  const realm = useRealm();
 
   const setBriefInfo = (message: keyof typeof INFO_MESSAGES) => {
     setInfo(INFO_MESSAGES[message]);
     setTimeout(() => {
       setInfo("");
-    }, 1000);
+    }, 4000);
+  };
+
+  const confirmBlanceAlert = (newBalance: number) => {
+    Alert.alert(
+      "Are you sure you want to update the balance?",
+      `You're updating the balance of this customer from ${customer.balance} to ${newBalance} and this cannot be reversed`,
+      [
+        {
+          text: "Cancel",
+          style: "destructive",
+        },
+        {
+          text: "Update the balance",
+          onPress: () => confirmBalanceHandler(newBalance),
+        },
+      ]
+    );
+  };
+
+  const confirmBalanceHandler = (newBalance: number) => {
+    realm.write(() => {
+      customer.balance = +newBalance;
+    });
+    hideBalanceModal();
   };
 
   return (
@@ -72,13 +105,11 @@ const BalanceAdjust: React.FC<BalanceAdjustProps> = ({
               balance: 0,
             }}
             validationSchema={Balance}
-            // onSubmit={onConfirmTransaction} // * - We can pass the values like amountPaid to parent component
             onSubmit={({ balance }) => {
-              //   onConfirmTransaction(values);
               if (+balance === customer.balance) {
                 return setBriefInfo("sameBalance");
               }
-              console.log("REACHED", balance);
+              confirmBlanceAlert(balance);
             }}
           >
             {({
@@ -115,7 +146,7 @@ const BalanceAdjust: React.FC<BalanceAdjustProps> = ({
                         <TextInput
                           onBlur={handleBlur("balance")}
                           onChangeText={handleChange("balance")}
-                          style={styles.amountPaidInput}
+                          style={styles.balanceInput}
                           keyboardType="numeric"
                           value={`${values.balance}`}
                           placeholder="0"
@@ -126,10 +157,19 @@ const BalanceAdjust: React.FC<BalanceAdjustProps> = ({
                             {touched.balance && errors.balance}
                           </Text>
                         </View>
+                        {info && (
+                          <View style={styles.alertContainer}>
+                            <Ionicons
+                              color={colors.red}
+                              name="information-circle"
+                              size={24}
+                            />
+                            <Text style={styles.alertText}>{info}</Text>
+                          </View>
+                        )}
                       </View>
                     </View>
                   </View>
-                  <Text>{info}</Text>
                   <MultipleButtons
                     buttons={[
                       {
@@ -157,12 +197,20 @@ const BalanceAdjust: React.FC<BalanceAdjustProps> = ({
 export default BalanceAdjust;
 
 const styles = StyleSheet.create({
-  amountPaidInput: {
+  balanceInput: {
     ...userFormStyles.textInput,
     textAlign: "center",
     alignSelf: "center",
     justifyContent: "center",
     minWidth: dimensions.mediumWidth1,
     paddingHorizontal: 20,
+  },
+  alertContainer: {
+    backgroundColor: colors.lightGray0,
+    ...styleUtils.itemRowContainer,
+    gap: dimensions.smallMargin,
+  },
+  alertText: {
+    color: colors.red,
   },
 });
