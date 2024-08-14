@@ -24,21 +24,20 @@ const Customers = () => {
           <Text style={styles.buttonText}>Sign out</Text>
         </Pressable>
       </View>
-      <>
-        <FlatList
-          data={customers}
-          renderItem={({ item }) => {
-            // const customerProps = { ...item, _id: item._id.toString() };
-            // return <Customer {...customerProps} />;
-            return <Customer customer={item} />;
-          }}
-        />
-        <AddEditButton
-          type="ADD"
-          // pressHandler={() => showCustomerModal( true)}
-          onPress={showCustomerModal.bind(this, true)} // this is same as above commented code
-        />
-      </>
+      <FlatList
+        contentContainerStyle={{ gap: 10 }}
+        data={customers}
+        renderItem={({ item }) => {
+          // const customerProps = { ...item, _id: item._id.toString() };
+          // return <Customer {...customerProps} />;
+          return <Customer customer={item} />;
+        }}
+      />
+      <AddEditButton
+        type="ADD"
+        // pressHandler={() => showCustomerModal( true)}
+        onPress={showCustomerModal.bind(this, true)} // this is same as above commented code
+      />
       {/* MODAL */}
       <AddNewCustomer />
     </SafeAreaView>

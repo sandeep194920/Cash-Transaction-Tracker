@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, ViewStyle } from "react-native";
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { colors, dimensions } from "../utils/styles";
@@ -6,14 +6,24 @@ import { colors, dimensions } from "../utils/styles";
 interface CardOptionsProps {
   hideOption: () => void;
   deleteOption: () => void;
+  direction?: ViewStyle["flexDirection"];
 }
 
 const CardOptions: React.FC<CardOptionsProps> = ({
   hideOption,
   deleteOption,
+  direction = "row",
 }) => {
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {
+          flexDirection: direction,
+          padding: dimensions.paddingSmall3,
+        },
+      ]}
+    >
       <Ionicons
         name="trash-sharp"
         size={20}
@@ -34,7 +44,7 @@ export default CardOptions;
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: dimensions.paddingSmall3,
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
+    marginHorizontal: dimensions.smallGap,
   },
 });

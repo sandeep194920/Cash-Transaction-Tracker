@@ -20,7 +20,7 @@ import useAnimateEntry from "../../hooks/useAnimateEntry";
 import TextHighlight from "../../components/TextHighlight";
 import { Customer } from "../../models/CustomerSchema";
 import { BSON } from "realm";
-import { Feather, Ionicons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import BalanceAdjust from "../../screens/modalScreens/BalanceAdjust";
 
 const CustomerTransactions = () => {
@@ -73,7 +73,6 @@ const CustomerTransactions = () => {
           <View
             style={{
               ...styleUtils.itemRowContainer,
-              justifyContent: "space-between",
               alignSelf: "center",
               marginBottom: 20,
             }}
@@ -103,15 +102,12 @@ const CustomerTransactions = () => {
             />
           </View>
           <FlatList
+            contentContainerStyle={{ gap: 10 }}
             ref={animateRef}
             data={customerTransactions}
-            renderItem={({ item }) => {
-              return (
-                <Animated.View>
-                  <CustomerTransaction customer={customer} transaction={item} />
-                </Animated.View>
-              );
-            }}
+            renderItem={({ item }) => (
+              <CustomerTransaction customer={customer} transaction={item} />
+            )}
           />
         </>
       ) : (

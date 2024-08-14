@@ -9,6 +9,7 @@ import { formatDate } from "../utils/formatDate";
 import CardOptions from "./CardOptions";
 import { useRealm } from "@realm/react";
 import { Customer } from "../models/CustomerSchema";
+import WithCardOptions from "./Wrappers/WithCardOptions";
 
 interface CustomerTransactionProps {
   transaction: Order;
@@ -131,7 +132,7 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
   } else {
     transactionDetailsView = () => {
       return (
-        <>
+        <WithCardOptions containerDirection="row" optionsDirection="column">
           <View style={[styles.itemColumnContainer, { flex: 1 }]}>
             <View style={styles.itemRowContainer}>
               <View style={styleUtils.itemRowContainer}>
@@ -169,15 +170,14 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
               />
             </View>
           </View>
-          {optionsView()}
-        </>
+        </WithCardOptions>
       );
     };
   }
 
   return (
     <Pressable onPress={onPressHandler} onLongPress={onLongPressHandler}>
-      <View style={styles.rowContainer}>{transactionDetailsView()}</View>
+      {transactionDetailsView()}
     </Pressable>
   );
 };
@@ -194,10 +194,5 @@ const styles = StyleSheet.create({
     paddingVertical: dimensions.paddingSmall3,
     paddingHorizontal: dimensions.paddingMedium,
     backgroundColor: colors.lightGray1,
-    marginBottom: dimensions.marginMedium,
-  },
-  rowContainer: {
-    flexDirection: "row",
-    gap: 2,
   },
 });
