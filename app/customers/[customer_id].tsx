@@ -1,12 +1,5 @@
 // SCREEN 2
-import {
-  View,
-  FlatList,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  Animated,
-} from "react-native";
+import { View, FlatList, Text, StyleSheet, SafeAreaView } from "react-native";
 import React, { useEffect, useState } from "react";
 import CustomerTransaction from "../../components/CustomerTransaction";
 import { colors, styleUtils } from "../../utils/styles";

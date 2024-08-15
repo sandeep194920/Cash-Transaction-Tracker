@@ -135,7 +135,6 @@ export default AddedItems;
 const styles = StyleSheet.create({
   itemsContainer: {
     marginHorizontal: dimensions.marginLarge1,
-    // backgroundColor: "lightblue",
   },
   itemContainer: {
     ...styleUtils.cardContainer,

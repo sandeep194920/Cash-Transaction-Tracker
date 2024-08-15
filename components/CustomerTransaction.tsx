@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { router } from "expo-router";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { colors, dimensions, styleUtils } from "../utils/styles";
 import { Order } from "../models/OrderSchema";
 import TextHighlight from "./TextHighlight";
 import { formatDate } from "../utils/formatDate";
-import CardOptions from "./CardOptions";
 import { useRealm } from "@realm/react";
 import { Customer } from "../models/CustomerSchema";
 import WithCardOptions from "./Wrappers/WithCardOptions";
+import useCardOptions from "../hooks/useCardOptions";
 
 interface CustomerTransactionProps {
   transaction: Order;
@@ -29,9 +29,7 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
     balanceUpdate,
   } = transaction;
 
-  const [optionsShown, setOptionsShown] = useState(false);
   const realm = useRealm();
-
   const onPressHandler = () => {
     if (transaction?.transactionType === "balanceUpdate") {
       return;
@@ -50,28 +48,25 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
     if (transaction?.transactionType === "balanceUpdate") {
       return;
     }
-    setOptionsShown(true);
+    showCardOptions();
   };
 
-  const onHideOption = () => {
-    setOptionsShown(false);
+  const confirmDeleteTransaction = () => {
+    hideCardOptions();
+    try {
+      realm.write(() => {
+        // * first customer's balance need to be updated and then the transaction must be deleted.
+        // * Otherwise we won't be able to access order.order_price if it's deleted first.
+        customer.balance = customer.balance - +transaction.order_price!;
+        realm.delete(transaction);
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const onDeleteOption = () => {
-    realm.write(() => {
-      // * first customer's balance need to be updated and then the transaction must be deleted.
-      // * Otherwise we won't be able to access order.order_price if it's deleted first.
-      customer.balance = customer.balance - +transaction.order_price!;
-      realm.delete(transaction);
-    });
-  };
-
-  const optionsView = () => {
-    if (!optionsShown) return;
-    return (
-      <CardOptions hideOption={onHideOption} deleteOption={onDeleteOption} />
-    );
-  };
+  const { isShowCardOptions, deleteHandler, showCardOptions, hideCardOptions } =
+    useCardOptions();
 
   let transactionDetailsView;
   if (transaction?.transactionType === "balanceUpdate" && balanceUpdate) {
@@ -132,7 +127,18 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
   } else {
     transactionDetailsView = () => {
       return (
-        <WithCardOptions containerDirection="row" optionsDirection="column">
+        <WithCardOptions
+          optionsDirection="column"
+          onHideOption={hideCardOptions}
+          onDeleteOption={() =>
+            deleteHandler({
+              header: "Do you want to delete this transaction?",
+              message: `You can't undo this once you delete the transaction. Do you want to continue?`,
+              confirmDeleteCallback: confirmDeleteTransaction,
+            })
+          }
+          showCardOptions={isShowCardOptions}
+        >
           <View style={[styles.itemColumnContainer, { flex: 1 }]}>
             <View style={styles.itemRowContainer}>
               <View style={styleUtils.itemRowContainer}>

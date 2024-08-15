@@ -18,6 +18,7 @@ export const dimensions = {
   paddingSmall1: 2,
   paddingSmall2: 6,
   paddingSmall3: 10,
+  paddingSmall4: 14,
   paddingMedium: 18,
   paddingExtraLarge: 50,
   smallWidth1: 0.4,

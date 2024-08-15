@@ -1,30 +1,40 @@
 import { StyleSheet, View, ViewStyle } from "react-native";
-import React, { PropsWithChildren } from "react";
+import React, { PropsWithChildren, useState } from "react";
 import CardOptions from "../CardOptions";
 
 type WithCardOptionsT = {
   containerDirection?: ViewStyle["flexDirection"]; // This can be 'row' | 'row-reverse' | 'column' | 'column-reverse' and so on. Instead of typing it manually I can use existing props from ViewStyle
   optionsDirection?: ViewStyle["flexDirection"];
+  onHideOption: () => void;
+  onDeleteOption: () => void;
+  showCardOptions: boolean;
 };
 
 const WithCardOptions: React.FC<PropsWithChildren<WithCardOptionsT>> = ({
   children,
   containerDirection = "row",
   optionsDirection = "row",
+  onHideOption,
+  onDeleteOption,
+  showCardOptions,
 }) => {
   const dynamicStyles = {
     flex: 1,
     flexDirection: containerDirection,
   };
 
+  // const [showOptions, setShowOptions] = useState(false);
+
   return (
     <View style={dynamicStyles}>
       {children}
-      <CardOptions
-        direction={optionsDirection}
-        hideOption={() => {}}
-        deleteOption={() => {}}
-      />
+      {showCardOptions && (
+        <CardOptions
+          direction={optionsDirection}
+          hideOption={onHideOption}
+          deleteOption={onDeleteOption}
+        />
+      )}
     </View>
   );
 };

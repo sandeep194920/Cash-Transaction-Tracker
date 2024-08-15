@@ -20,7 +20,12 @@ const CardOptions: React.FC<CardOptionsProps> = ({
         styles.container,
         {
           flexDirection: direction,
-          padding: dimensions.paddingSmall3,
+          ...(direction === "row"
+            ? { paddingHorizontal: dimensions.paddingSmall3 }
+            : {
+                paddingVertical: dimensions.paddingSmall1,
+                paddingHorizontal: dimensions.paddingSmall2,
+              }),
         },
       ]}
     >
