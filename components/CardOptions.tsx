@@ -4,13 +4,15 @@ import { Ionicons } from "@expo/vector-icons";
 import { colors, dimensions } from "../utils/styles";
 
 interface CardOptionsProps {
-  hideOption: () => void;
   deleteOption: () => void;
+  editOption: () => void;
+  hideOption: () => void;
   direction?: ViewStyle["flexDirection"];
 }
 
 const CardOptions: React.FC<CardOptionsProps> = ({
   hideOption,
+  editOption,
   deleteOption,
   direction = "row",
 }) => {
@@ -34,6 +36,12 @@ const CardOptions: React.FC<CardOptionsProps> = ({
         size={20}
         color={colors.red}
         onPress={deleteOption}
+      />
+      <Ionicons
+        name="cog-outline"
+        size={20}
+        color={colors.highlight}
+        onPress={editOption}
       />
       <Ionicons
         name="chevron-forward"

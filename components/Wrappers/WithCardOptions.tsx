@@ -5,8 +5,9 @@ import CardOptions from "../CardOptions";
 type WithCardOptionsT = {
   containerDirection?: ViewStyle["flexDirection"]; // This can be 'row' | 'row-reverse' | 'column' | 'column-reverse' and so on. Instead of typing it manually I can use existing props from ViewStyle
   optionsDirection?: ViewStyle["flexDirection"];
-  onHideOption: () => void;
   onDeleteOption: () => void;
+  onEditOption: () => void;
+  onHideOption: () => void;
   showCardOptions: boolean;
 };
 
@@ -14,8 +15,9 @@ const WithCardOptions: React.FC<PropsWithChildren<WithCardOptionsT>> = ({
   children,
   containerDirection = "row",
   optionsDirection = "row",
-  onHideOption,
   onDeleteOption,
+  onEditOption,
+  onHideOption,
   showCardOptions,
 }) => {
   const dynamicStyles = {
@@ -31,8 +33,9 @@ const WithCardOptions: React.FC<PropsWithChildren<WithCardOptionsT>> = ({
       {showCardOptions && (
         <CardOptions
           direction={optionsDirection}
-          hideOption={onHideOption}
           deleteOption={onDeleteOption}
+          editOption={onEditOption}
+          hideOption={onHideOption}
         />
       )}
     </View>

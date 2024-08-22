@@ -2,8 +2,6 @@ import React, { createContext, useContext, useRef, useState } from "react";
 import { CustomerType } from "./types";
 import { useQuery, useRealm, useUser } from "@realm/react";
 import Realm from "realm";
-import { Order } from "../models/OrderSchema";
-import { Customer } from "../models/CustomerSchema";
 
 type RealmContextT = {
   addNewCustomerHandler: (customerData: CustomerType) => void;
@@ -15,10 +13,6 @@ const RealmCtxProvider = createContext<RealmContextT | undefined>(undefined);
 function RealmContext({ children }: { children: React.ReactNode }) {
   const realm = useRealm();
   const user = useUser();
-
-  const orders = useQuery(Order);
-  console.log("The orders retreived are", orders);
-
   const createdCustomerRef = useRef("");
 
   /*  add new customer */

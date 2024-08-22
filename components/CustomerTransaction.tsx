@@ -35,6 +35,8 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
       return;
     }
 
+    hideCardOptions();
+
     router.push({
       pathname: `/customers/orders/[order_id]`,
       params: {
@@ -48,11 +50,17 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
     if (transaction?.transactionType === "balanceUpdate") {
       return;
     }
-    showCardOptions();
+    toggleCardOptions();
   };
 
   const confirmDeleteTransaction = () => {
     hideCardOptions();
+    console.log(
+      "The customer balance currently is",
+      customer.balance,
+      "and order price is",
+      transaction.order_price
+    );
     try {
       realm.write(() => {
         // * first customer's balance need to be updated and then the transaction must be deleted.
@@ -65,8 +73,12 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
     }
   };
 
-  const { isShowCardOptions, deleteHandler, showCardOptions, hideCardOptions } =
-    useCardOptions();
+  const {
+    isShowCardOptions,
+    deleteHandler,
+    hideCardOptions,
+    toggleCardOptions,
+  } = useCardOptions();
 
   let transactionDetailsView;
   if (transaction?.transactionType === "balanceUpdate" && balanceUpdate) {
@@ -129,7 +141,6 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
       return (
         <WithCardOptions
           optionsDirection="column"
-          onHideOption={hideCardOptions}
           onDeleteOption={() =>
             deleteHandler({
               header: "Do you want to delete this transaction?",
@@ -137,6 +148,8 @@ const CustomerTransaction: React.FC<CustomerTransactionProps> = ({
               confirmDeleteCallback: confirmDeleteTransaction,
             })
           }
+          onEditOption={onPressHandler}
+          onHideOption={hideCardOptions}
           showCardOptions={isShowCardOptions}
         >
           <View style={[styles.itemColumnContainer, { flex: 1 }]}>

@@ -18,6 +18,10 @@ function useCardOptions() {
     setIsShowCardOptions(false);
   };
 
+  const toggleCardOptions = () => {
+    setIsShowCardOptions((prev) => !prev);
+  };
+
   const deleteHandler = ({
     header,
     message,
@@ -44,6 +48,7 @@ function useCardOptions() {
   return {
     isShowCardOptions,
     showCardOptions,
+    toggleCardOptions,
     hideCardOptions,
     deleteHandler,
   };

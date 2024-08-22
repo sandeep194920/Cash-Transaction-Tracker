@@ -82,7 +82,7 @@ const CustomerTransactions = () => {
             {+customer.balance !== 0 && (
               <TextHighlight
                 type={+customer.balance > 0 ? "warning" : "success"}
-                innerText={`${customer.balance}$`}
+                innerText={`${Math.abs(customer.balance)}$`}
               />
             )}
 
