@@ -31,11 +31,8 @@ const Customer: React.FC<CustomerProps> = ({ customer }) => {
   );
 
   const allCustomerOrders = deletableOrders.filter(
-    (order) =>
-      order.transactionType === "order" || order.transactionType === null
+    (order) => order.transactionType !== "balanceUpdate"
   );
-
-  console.log("Deletable orders are", deletableOrders);
 
   const onDeleteHandler = () => {
     hideCardOptions();

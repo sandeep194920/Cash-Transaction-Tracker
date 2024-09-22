@@ -1,5 +1,5 @@
-import { BSON, ObjectSchema, Object } from 'realm'
-import { Order } from './OrderSchema'
+import { BSON, ObjectSchema, Object } from "realm";
+import { Order } from "./OrderSchema";
 
 export class Customer extends Object<Customer> {
   _id: BSON.ObjectID = new BSON.ObjectId();
