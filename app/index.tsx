@@ -17,6 +17,28 @@ const Customers = () => {
   const { logOut } = useAuth();
   const customers = useQuery(CustomerSchema);
 
+  let content = (
+    <FlatList
+      contentContainerStyle={{ gap: 10 }}
+      data={customers}
+      renderItem={({ item }) => {
+        // const customerProps = { ...item, _id: item._id.toString() };
+        // return <Customer {...customerProps} />;
+        return <Customer customer={item} />;
+      }}
+    />
+  );
+
+  if (!customers.length) {
+    content = (
+      <View style={styles.container}>
+        <Text style={styles.noCustomersText}>
+          Press + button below to add customers
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <SafeAreaView style={styleUtils.flexContainer}>
       <View style={styles.buttonContainer}>
@@ -24,15 +46,7 @@ const Customers = () => {
           <Text style={styles.buttonText}>Sign out</Text>
         </Pressable>
       </View>
-      <FlatList
-        contentContainerStyle={{ gap: 10 }}
-        data={customers}
-        renderItem={({ item }) => {
-          // const customerProps = { ...item, _id: item._id.toString() };
-          // return <Customer {...customerProps} />;
-          return <Customer customer={item} />;
-        }}
-      />
+      {content}
       <AddEditButton
         type="ADD"
         // pressHandler={() => showCustomerModal( true)}
@@ -47,10 +61,18 @@ const Customers = () => {
 export default Customers;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noCustomersText: {
+    fontSize: dimensions.marginLarge1,
+  },
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "flex-end",
-    margin: 10,
+    margin: dimensions.paddingSmall3,
   },
   buttonText: {
     color: colors.white,
